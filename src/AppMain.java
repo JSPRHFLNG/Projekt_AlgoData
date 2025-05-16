@@ -1,2 +1,4 @@
-public class AppMain {
+public class AppMain
+{
+
 }

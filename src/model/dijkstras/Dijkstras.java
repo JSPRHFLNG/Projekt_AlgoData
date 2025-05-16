@@ -1,4 +1,4 @@
-package model.structures;
+package model.dijkstras;
 
 public class Dijkstras {
 }
