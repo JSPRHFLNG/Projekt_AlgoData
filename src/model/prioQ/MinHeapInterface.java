@@ -1,6 +1,6 @@
 package model.prioQ;
 
-public interface HeapInterface<T>
+public interface MinHeapInterface<T>
 {
     void insert(T data);
     T extract();

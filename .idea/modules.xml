@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Interfaces/Interfaces.iml" filepath="$PROJECT_DIR$/Interfaces/Interfaces.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Projekt_AlgoData.iml" filepath="$PROJECT_DIR$/.idea/Projekt_AlgoData.iml" />
     </modules>
   </component>

@@ -5,14 +5,14 @@ import java.lang.reflect.Array;
 public class PriorityQueue<DATA, WEIGHT extends Comparable<WEIGHT>> implements PriorityQueueInterface<DATA, WEIGHT>
 {
 
-    private HeapInterface<QueueNode> heap;
+    private MinHeap<QueueNode> heap;
 
     public PriorityQueue(int capacity) {
         @SuppressWarnings("unchecked")
         QueueNode[] array = (QueueNode[]) Array.newInstance(
                 QueueNode.class, capacity
         );
-        heap = new Heap<QueueNode>(array);
+        heap = new MinHeap<QueueNode>(array);
 
     }
     private class QueueNode implements Comparable<QueueNode>
