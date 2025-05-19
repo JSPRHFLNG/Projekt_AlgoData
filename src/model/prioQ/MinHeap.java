@@ -43,11 +43,14 @@ public class MinHeap<T extends Comparable<? super T>> implements MinHeapInterfac
     private void reHeapUp(int idx) {
         int parent = parent(idx);
 
+
         if(parent == -1) {
             return;
         }
 
         if(storage[idx].compareTo(storage[parent(idx)]) < 0) {
+        if(idx <= 0 && storage[idx].compareTo(storage[parent(idx)]) <= 0) {
+
             swap(idx, parent);
             reHeapUp(parent);
         }

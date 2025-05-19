@@ -32,6 +32,7 @@ public class PriorityQueueTest
         assertThrows(IllegalArgumentException.class, queue::dequeue);
     }
 
+
     @Test
     public void testPriorityQueueThrowsOnOverflow() {
         PriorityQueue<String, Integer> queue = new PriorityQueue<>(2);
@@ -39,4 +40,17 @@ public class PriorityQueueTest
         queue.enqueue("B", 2);
         assertThrows(IllegalArgumentException.class, () -> queue.enqueue("C", 3));
     }
+
+            assertTrue(cities.isEmpty());
+        }
+
+        @Test
+        public void testInitiallyEmpty() {
+            assertTrue(queue.isEmpty());
+        }
+
+        @Test
+        public void testEmptyQueueReturnsNull() {
+            assertNull(queue.dequeue());
+        }
 }
