@@ -28,7 +28,7 @@ public class MinHeap<T extends Comparable<? super T>> implements MinHeapInterfac
 
     private void reHeapUp(int idx) {
         int parent = parent(idx);
-        if(idx <= 0 && storage[idx].compareTo(storage[parent(idx)]) <= 0) {
+        while(idx <= 0 && storage[idx].compareTo(storage[parent(idx)]) <= 0) {
            return;
         }
         swap(idx, parent);
@@ -36,20 +36,22 @@ public class MinHeap<T extends Comparable<? super T>> implements MinHeapInterfac
     }
 
     private void reHeapDown(int idx) {
-        int left = leftChild(idx);
-        int right = rightChild(idx);
-        int smallest = idx;
+        while(true) {
+            int left = leftChild(idx);
+            int right = rightChild(idx);
+            int smallest = idx;
 
-        if(left < size && storage[left].compareTo(storage[smallest]) < 0) {
-            smallest = left;
-        }
+            if (left < size && storage[left].compareTo(storage[smallest]) < 0) {
+                smallest = left;
+            }
 
-        if(right < size && storage[right].compareTo(storage[smallest]) < 0) {
-            smallest = right;
-        }
-        if(smallest != idx) {
-            swap(idx, smallest);
-            reHeapDown(smallest);
+            if (right < size && storage[right].compareTo(storage[smallest]) < 0) {
+                smallest = right;
+            }
+            if (smallest != idx) {
+                swap(idx, smallest);
+                reHeapDown(smallest);
+            }
         }
     }
 

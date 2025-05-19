@@ -1,17 +1,24 @@
 import model.prioQ.PriorityQueue;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PriorityQueueTest
 {
+    PriorityQueue<String, Integer> cities;
+    PriorityQueue<String, Integer> queue;
+
+    @BeforeEach
+    public void setUp() {
+        cities = new PriorityQueue<>(5);
+        queue = new PriorityQueue<>(10);
+    }
         /**
          * Enqueues cities, dequeues in order by priority (WEIGHT).
          * Lower weight equals higher priority.
          */
         @Test
         public void testEnqueueDequeue() {
-            PriorityQueue<String, Integer> cities = new PriorityQueue<>(5);
-
             cities.enqueue("Falun", 250000);
             cities.enqueue("Sao Paulo", 2400000);
             cities.enqueue("Valbo", 75);
@@ -29,14 +36,12 @@ public class PriorityQueueTest
 
         @Test
         public void testInitiallyEmpty() {
-            PriorityQueue<String, Integer> queue = new PriorityQueue<>(10);
             assertTrue(queue.isEmpty());
         }
 
 
         @Test
         public void testEmptyQueueReturnsNull() {
-            PriorityQueue<String, Integer> queue = new PriorityQueue<>(10);
             assertNull(queue.dequeue());
         }
 }
