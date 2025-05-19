@@ -59,11 +59,11 @@ public class MinHeap<T extends Comparable<? super T>> implements MinHeapInterfac
         int right = rightChild(idx);
         int smallest = idx;
 
-        if (left < size && storage[left].compareTo(storage[smallest]) < 0) {
+        if (left != -1 && storage[left].compareTo(storage[smallest]) < 0) {
             smallest = left;
         }
 
-        if (right < size && storage[right].compareTo(storage[smallest]) < 0) {
+        if (right != -1 && storage[right].compareTo(storage[smallest]) < 0) {
             smallest = right;
         }
         if (smallest != idx) {
