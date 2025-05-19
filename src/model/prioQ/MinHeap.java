@@ -15,44 +15,62 @@ public class MinHeap<T extends Comparable<? super T>> implements MinHeapInterfac
     }
 
     private int parent(int idx) {
+        if(idx == 0) {
+            return -1; // ingen förälder
+        }
         return (idx - 1) / 2;
     }
 
     private int leftChild(int idx) {
-        return idx * 2 + 1;
+        int leftIdx = 2 * idx + 1;
+
+        if(leftIdx >= size) {
+            return -1;
+        }
+        return leftIdx;
     }
 
     private int rightChild(int idx) {
-        return idx * 2 + 2;
+        int rightIdx = 2 * idx + 2;
+
+        if(rightIdx >= size)
+        {
+            return -1;
+        }
+        return rightIdx;
     }
 
     private void reHeapUp(int idx) {
         int parent = parent(idx);
-        while(idx <= 0 && storage[idx].compareTo(storage[parent(idx)]) <= 0) {
-           return;
+
+        if(parent == -1) {
+            return;
         }
-        swap(idx, parent);
-        reHeapUp(parent);
+
+        if(storage[idx].compareTo(storage[parent(idx)]) < 0) {
+            swap(idx, parent);
+            reHeapUp(parent);
+        }
     }
 
     private void reHeapDown(int idx) {
-        while(true) {
-            int left = leftChild(idx);
-            int right = rightChild(idx);
-            int smallest = idx;
 
-            if (left < size && storage[left].compareTo(storage[smallest]) < 0) {
-                smallest = left;
-            }
+        int left = leftChild(idx);
+        int right = rightChild(idx);
+        int smallest = idx;
 
-            if (right < size && storage[right].compareTo(storage[smallest]) < 0) {
-                smallest = right;
-            }
-            if (smallest != idx) {
-                swap(idx, smallest);
-                reHeapDown(smallest);
-            }
+        if (left < size && storage[left].compareTo(storage[smallest]) < 0) {
+            smallest = left;
         }
+
+        if (right < size && storage[right].compareTo(storage[smallest]) < 0) {
+            smallest = right;
+        }
+        if (smallest != idx) {
+            swap(idx, smallest);
+            reHeapDown(smallest);
+        }
+
     }
 
     private void swap(int i, int j) {
