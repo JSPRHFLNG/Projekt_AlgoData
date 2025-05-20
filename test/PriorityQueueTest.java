@@ -3,8 +3,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PriorityQueueTest
-{
+public class PriorityQueueTest {
+
     @Test
     public void testPriorityQueueWithCities() {
         PriorityQueue<String, Integer> cities = new PriorityQueue<>(10);
@@ -39,18 +39,19 @@ public class PriorityQueueTest
         queue.enqueue("A", 1);
         queue.enqueue("B", 2);
         assertThrows(IllegalArgumentException.class, () -> queue.enqueue("C", 3));
+        assertTrue(queue.isEmpty());
     }
 
-            assertTrue(cities.isEmpty());
-        }
+    @Test
+    public void testInitiallyEmpty() {
+        PriorityQueue<String, Integer> queue = new PriorityQueue<>(2);
+        assertTrue(queue.isEmpty());
+    }
 
-        @Test
-        public void testInitiallyEmpty() {
-            assertTrue(queue.isEmpty());
-        }
-
-        @Test
-        public void testEmptyQueueReturnsNull() {
-            assertNull(queue.dequeue());
-        }
+    @Test
+    public void testEmptyQueueReturnsNull() {
+        PriorityQueue<String, Integer> queue = new PriorityQueue<>(2);
+        assertNull(queue.dequeue());
+    }
 }
+

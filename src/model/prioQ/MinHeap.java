@@ -43,16 +43,15 @@ public class MinHeap<T extends Comparable<? super T>> implements MinHeapInterfac
     private void reHeapUp(int idx) {
         int parent = parent(idx);
 
-
-        if(parent == -1) {
+        if (parent == -1) {
             return;
         }
+        if (storage[idx].compareTo(storage[parent(idx)]) < 0) {
+            if (idx <= 0 && storage[idx].compareTo(storage[parent(idx)]) <= 0) {
 
-        if(storage[idx].compareTo(storage[parent(idx)]) < 0) {
-        if(idx <= 0 && storage[idx].compareTo(storage[parent(idx)]) <= 0) {
-
-            swap(idx, parent);
-            reHeapUp(parent);
+                swap(idx, parent);
+                reHeapUp(parent);
+            }
         }
     }
 
@@ -83,8 +82,7 @@ public class MinHeap<T extends Comparable<? super T>> implements MinHeapInterfac
     }
 
     @Override
-    public void insert(T data)
-    {
+    public void insert(T data) {
         if(size >= maxSize) {
            throw new IllegalArgumentException("Heap is full!");
         }
@@ -95,8 +93,7 @@ public class MinHeap<T extends Comparable<? super T>> implements MinHeapInterfac
     }
 
     @Override
-    public T extract()
-    {
+    public T extract() {
         if(size <= 0) {
             throw new IllegalArgumentException("Heap is empty");
         }
@@ -111,21 +108,18 @@ public class MinHeap<T extends Comparable<? super T>> implements MinHeapInterfac
     }
 
     @Override
-    public void clear()
-    {
+    public void clear() {
         size = 0;
         storage = null;
     }
 
     @Override
-    public int size()
-    {
+    public int size() {
         return this.size;
     }
 
     @Override
-    public int maxSize()
-    {
+    public int maxSize() {
         return this.maxSize;
     }
 }
