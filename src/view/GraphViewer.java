@@ -19,7 +19,7 @@ public class GraphViewer<T> extends JFrame {
         setLocationRelativeTo(null); // centrerad
 
         List<Vertex<T>> vertices = graph.getAllVertices();
-        GraphPanel<T> panel = new GraphPanel<>(vertices);
+        GraphPanel<T> panel = new GraphPanel<>(vertices, graph);
 
         JTable table = GraphPanel.createVertexTable(vertices);
         JScrollPane tableScroll = new JScrollPane(table);
@@ -30,10 +30,8 @@ public class GraphViewer<T> extends JFrame {
     }
 
     private static class GraphPanel<T> extends JPanel {
-        private final Graph<T> graph = new Graph<>();
-        //private final int RADIUS = 16;
+        private final Graph<T> graph;
         private final List<Vertex<T>> vertices;
-        private double minX, minY, maxX, maxY;
         private final int PADDING = 40;
         private Image backgroundMap;
         private final double MIN_LAT = 55.0;
@@ -43,37 +41,20 @@ public class GraphViewer<T> extends JFrame {
 
         private int lonToX(double lon) {
             double normalized = (lon - MIN_LON) / (MAX_LON - MIN_LON);
-            return (int)(normalized * getWidth());
+            return (int) (normalized * getWidth());
         }
 
         private int latToY(double lat) {
             double normalized = (lat - MIN_LAT) / (MAX_LAT - MIN_LAT);
-            return (int)((1 - normalized) * getHeight());
+            return (int) ((1 - normalized) * getHeight());
         }
 
-        public GraphPanel(List<Vertex<T>> vertices) {
+        public GraphPanel(List<Vertex<T>> vertices, Graph<T> graph) {
             this.vertices = vertices;
+            this.graph = graph;
             setBackground(Color.WHITE);
             backgroundMap = new ImageIcon("data/Map.png").getImage();
         }
-
-        private void computeBounds() {
-            minX = Double.MAX_VALUE;
-            minY = Double.MAX_VALUE;
-            maxX = Double.MIN_VALUE;
-            maxY = Double.MIN_VALUE;
-
-            for(Vertex<T> v : vertices) {
-                double x = v.getX();
-                double y = v.getY();
-                if(x < minX) minX = x;
-                if(y < minY) minY = y;
-                if(x > maxX) maxX = x;
-                if(y > maxY) maxY = y;
-            }
-        }
-
-
 
         /*
         private double zoom = 0.01;
@@ -148,10 +129,10 @@ public class GraphViewer<T> extends JFrame {
          */
 
         private static <T> JTable createVertexTable(List<Vertex<T>> vertices) {
-            String[] columnNames = {"Place: ", "X", "Y"};
+            String[] columnNames = {"Place", "X", "Y"};
             DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
-            for(Vertex<T> v : vertices) {
+            for (Vertex<T> v : vertices) {
                 Object[] row = {
                         v.getInfo().toString(),
                         String.format("%.2f", v.getX()),
@@ -162,28 +143,52 @@ public class GraphViewer<T> extends JFrame {
             return new JTable(model);
         }
 
+        @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            g.setColor(Color.red);
             Graphics2D g2 = (Graphics2D) g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g.drawImage(backgroundMap, 0, 0, getWidth(), getHeight(), this);
-            computeBounds();
 
-            for(Vertex<T> v : vertices) {
+            // Rita bakgrundskarta
+            g.drawImage(backgroundMap, 0, 0, getWidth(), getHeight(), this);
+
+            // Rita alla kanter
+            g2.setColor(Color.BLUE);
+            for (Edge<T> edge : graph.getAllEdges()) {
+                Vertex<T> from = edge.getFrom();
+                Vertex<T> to = edge.getTo();
+
+                int x1 = lonToX(from.getX());
+                int y1 = latToY(from.getY());
+                int x2 = lonToX(to.getX());
+                int y2 = latToY(to.getY());
+
+                g2.drawLine(x1, y1, x2, y2);
+            }
+
+            // Rita alla noder
+            for (Vertex<T> v : vertices) {
                 double lon = v.getX();
                 double lat = v.getY();
                 int x = lonToX(lon);
                 int y = latToY(lat);
                 String place = v.getInfo().toString();
-                g2.setColor(Color.red);
+
+                g2.setColor(Color.RED);
                 g2.fillOval(x - 3, y - 3, 6, 6);
 
-                g2.setColor(Color.black);
+                g2.setColor(Color.BLACK);
                 g2.drawString(place, x + 5, y - 5);
+            }
+
+            // Debug-utskrift
+            System.out.println("Edges in graph:");
+            for (Edge<T> e : graph.getAllEdges()) {
+                System.out.println(e.getFrom().getInfo() + " -> " + e.getTo().getInfo());
             }
         }
     }
+
 
     // --- Testprogram ---
     public static void main(String[] args) {
@@ -193,6 +198,7 @@ public class GraphViewer<T> extends JFrame {
             for(Vertex<String> v : vertexList) {
                 graph.addVertex(v);
             }
+            graph.triangulate(); // Bygger trianguleringen
 
             GraphViewer<String> viewer = new GraphViewer<>(graph);
             viewer.setVisible(true);
