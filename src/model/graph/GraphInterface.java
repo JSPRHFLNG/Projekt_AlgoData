@@ -30,6 +30,7 @@ public interface GraphInterface<T> {
 
     public void addVertex(double x, double y, T info);
 
+    public void addVertex(Vertex<T> vertex);
 
     /**
      * Adds an undirected edge between two vertices, internally stored as

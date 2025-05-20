@@ -1,11 +1,12 @@
 package view;
 
-
 import model.graph.Edge;
 import model.graph.Graph;
+import model.graph.ReadFromJSON;
 import model.graph.Vertex;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
@@ -17,19 +18,78 @@ public class GraphViewer<T> extends JFrame {
         setSize(800, 600);
         setLocationRelativeTo(null); // centrerad
 
-        GraphPanel<T> panel = new GraphPanel<>(graph);
-        add(panel);
+        List<Vertex<T>> vertices = graph.getAllVertices();
+        GraphPanel<T> panel = new GraphPanel<>(vertices);
+
+        JTable table = GraphPanel.createVertexTable(vertices);
+        JScrollPane tableScroll = new JScrollPane(table);
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panel, tableScroll);
+        splitPane.setDividerLocation(600);
+        add(splitPane);
     }
 
-    private class GraphPanel<T> extends JPanel {
-        private final Graph<T> graph;
-        private final int RADIUS = 16;
+    private static class GraphPanel<T> extends JPanel {
+        private final Graph<T> graph = new Graph<>();
+        //private final int RADIUS = 16;
+        private final List<Vertex<T>> vertices;
+        private double minX, minY, maxX, maxY;
+        private final int PADDING = 40;
+        private Image backgroundMap;
+        private final double MIN_LAT = 55.0;
+        private final double MAX_LAT = 69.0;
+        private final double MIN_LON = 11.0;
+        private final double MAX_LON = 24.0;
 
-        public GraphPanel(Graph<T> graph) {
-            this.graph = graph;
-            setBackground(Color.WHITE);
+        private int lonToX(double lon) {
+            double normalized = (lon - MIN_LON) / (MAX_LON - MIN_LON);
+            return (int)(normalized * getWidth());
         }
 
+        private int latToY(double lat) {
+            double normalized = (lat - MIN_LAT) / (MAX_LAT - MIN_LAT);
+            return (int)((1 - normalized) * getHeight());
+        }
+
+        public GraphPanel(List<Vertex<T>> vertices) {
+            this.vertices = vertices;
+            setBackground(Color.WHITE);
+            backgroundMap = new ImageIcon("data/Map.png").getImage();
+        }
+
+        private void computeBounds() {
+            minX = Double.MAX_VALUE;
+            minY = Double.MAX_VALUE;
+            maxX = Double.MIN_VALUE;
+            maxY = Double.MIN_VALUE;
+
+            for(Vertex<T> v : vertices) {
+                double x = v.getX();
+                double y = v.getY();
+                if(x < minX) minX = x;
+                if(y < minY) minY = y;
+                if(x > maxX) maxX = x;
+                if(y > maxY) maxY = y;
+            }
+        }
+
+
+
+        /*
+        private double zoom = 0.01;
+        private int transformX(double x) {
+            double scale = (getWidth() - 2 * PADDING) / (maxX - minX);
+            return (int) ((x - minX) * scale + zoom + PADDING);
+        }
+
+        private int transformY(double y) {
+            double scale = (getHeight() - 2 * PADDING) / (maxY - minY);
+            return (int) ((maxY - y) * scale + zoom + PADDING);
+        }
+
+         */
+
+        /*
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -60,6 +120,8 @@ public class GraphViewer<T> extends JFrame {
                 }
             }
 
+         */
+        /*
             // Rita noder
             for (Vertex<T> v : graph.getAllVertices()) {
                 int x = (int) v.getX();
@@ -79,32 +141,59 @@ public class GraphViewer<T> extends JFrame {
                 g2.setColor(Color.GREEN);
                 g2.drawString(zText, x - textWidth / 2, y + textHeight / 4); // Center it inside the node
             }
+
+
+        }
+
+         */
+
+        private static <T> JTable createVertexTable(List<Vertex<T>> vertices) {
+            String[] columnNames = {"Place: ", "X", "Y"};
+            DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+
+            for(Vertex<T> v : vertices) {
+                Object[] row = {
+                        v.getInfo().toString(),
+                        String.format("%.2f", v.getX()),
+                        String.format("%.2f", v.getY())
+                };
+                model.addRow(row);
+            }
+            return new JTable(model);
+        }
+
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.setColor(Color.red);
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g.drawImage(backgroundMap, 0, 0, getWidth(), getHeight(), this);
+            computeBounds();
+
+            for(Vertex<T> v : vertices) {
+                double lon = v.getX();
+                double lat = v.getY();
+                int x = lonToX(lon);
+                int y = latToY(lat);
+                String place = v.getInfo().toString();
+                g2.setColor(Color.red);
+                g2.fillOval(x - 3, y - 3, 6, 6);
+
+                g2.setColor(Color.black);
+                g2.drawString(place, x + 5, y - 5);
+            }
         }
     }
 
     // --- Testprogram ---
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
+            List<Vertex<String>> vertexList = ReadFromJSON.readData("data/svenska-orter.json");
             Graph<String> graph = new Graph<>();
-
-            graph.addVertex(100, 100, 2, "A");
-            graph.addVertex(200, 150, 4,"B");
-            graph.addVertex(300, 100, 400,"C");
-
-            //graph.getAllVertices().get(0).setColor(Color.RED);
-            //graph.getAllVertices().get(1).setColor(Color.BLUE);
-            //graph.getAllVertices().get(2).setColor(Color.GREEN);
-
-            graph.addEdge("A", "B");
-            graph.addEdge("B", "C");
-            graph.addEdge("C", "A");
-
-            // Sätt färger på kanterna om du vill
-            for (Vertex<String> v : graph.getAllVertices()) {
-                for (Edge e : graph.getEdges(v.getInfo())) {
-                    e.setColor(Color.LIGHT_GRAY); // för enkelhet, annars kan du variera dem
-                }
+            for(Vertex<String> v : vertexList) {
+                graph.addVertex(v);
             }
+
             GraphViewer<String> viewer = new GraphViewer<>(graph);
             viewer.setVisible(true);
         });

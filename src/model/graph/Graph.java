@@ -64,6 +64,14 @@ public class Graph<T> implements GraphInterface<T>
         }
     }
 
+    @Override
+    public void addVertex(Vertex<T> vertex) {
+        if(!vertices.containsKey(vertex.getInfo())) {
+            vertices.put(vertex.getInfo(), vertex);
+            edges.put(vertex.getInfo(), new ArrayList<>());
+        }
+    }
+
 
     /**
      * Adds a new {@link Vertex} to the graph at the given position.
