@@ -1,6 +1,8 @@
-out/production/Projekt_AlgoData/
-.idea/misc.xml
-out/production/Projekt_AlgoData/
-.idea/misc.xml
-out/production/Projekt_AlgoData/
-.idea/misc.xml
+# IntelliJ IDEA
+.idea/
+*.iml
+!.idea/codeStyles
+!.idea/inspectionProfiles
+
+# Build output
+out/
