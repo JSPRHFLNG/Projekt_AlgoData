@@ -10,7 +10,7 @@ import java.util.List;
 
 public class JsonToVertex
 {
-    private static final String jsonFilePath = "data/svenska-orter.json";
+    private static final String jsonFilePath = "data/svenska-servrar.json";
 
     public static List<Vertex<String>> readJson() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
