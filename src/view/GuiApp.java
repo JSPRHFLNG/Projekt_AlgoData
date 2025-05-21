@@ -27,6 +27,8 @@ public class GuiApp
                 graph.addVertex(v);
             }
 
+            graph.triangulate();
+
             GraphViewer<String> viewer = new GraphViewer<>(graph);
             viewer.setVisible(true);
         });

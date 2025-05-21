@@ -23,7 +23,7 @@ public class GraphViewer<T> extends JFrame
         setLocationRelativeTo(null);
 
         List<Vertex<T>> vertices = graph.getAllVertices();
-        GraphPanel<T> panel = new GraphPanel<>(vertices);
+        GraphPanel<T> panel = new GraphPanel<>(vertices, graph);
 
         JTable table = GraphPanel.createVertexTable(vertices);
         JScrollPane tableScroll = new JScrollPane(table);
@@ -35,6 +35,7 @@ public class GraphViewer<T> extends JFrame
 
     public class GraphPanel<T> extends JPanel {
         private final List<Vertex<T>> vertices;
+        private final Graph<T> graph;
         private Image backgroundMap;
 
         // These must correspond exactly to your map's SWEREF99TM bounding box in meters
@@ -48,8 +49,9 @@ public class GraphViewer<T> extends JFrame
         private double panY = 0;
         private Point lastDragPoint;
 
-        public GraphPanel(List<Vertex<T>> vertices) {
+        public GraphPanel(List<Vertex<T>> vertices, Graph<T> graph) {
             this.vertices = vertices;
+            this.graph = graph;
             setBackground(Color.WHITE);
 
             backgroundMap = new ImageIcon("data/sverigekarta450x900.png").getImage();
@@ -111,6 +113,19 @@ public class GraphViewer<T> extends JFrame
             // Calculate scaling factors based on panel size and map coordinate extents
             double scaleX = (double) getWidth() / (MAP_MAX_X - MAP_MIN_X);
             double scaleY = (double) getHeight() / (MAP_MAX_Y - MAP_MIN_Y);
+
+            g2.setColor(Color.BLUE);
+            for (Edge<T> edge : graph.getAllEdges()) {
+                Vertex<T> from = edge.getFrom();
+                Vertex<T> to = edge.getTo();
+
+                int x1 = (int) ((from.getX() - MAP_MIN_X) * scaleX);
+                int y1 = (int) (getHeight() - (from.getY() - MAP_MIN_Y) * scaleY);
+                int x2 = (int) ((to.getX() - MAP_MIN_X) * scaleX);
+                int y2 = (int) (getHeight() - (to.getY() - MAP_MIN_Y) * scaleY);
+
+                g2.drawLine(x1, y1, x2, y2);
+            }
 
             for (Vertex<T> v : vertices) {
                 double coordX = v.getX();
