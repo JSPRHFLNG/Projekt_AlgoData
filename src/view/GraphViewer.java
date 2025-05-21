@@ -19,7 +19,7 @@ public class GraphViewer<T> extends JFrame
     {
         setTitle("Graph Viewer");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(650, 900);
+        setSize(650, 920);
         setLocationRelativeTo(null);
 
         List<Vertex<T>> vertices = graph.getAllVertices();
@@ -29,7 +29,7 @@ public class GraphViewer<T> extends JFrame
         JScrollPane tableScroll = new JScrollPane(table);
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panel, tableScroll);
-        splitPane.setDividerLocation(450);
+        splitPane.setDividerLocation(390);
         add(splitPane);
     }
 
@@ -39,9 +39,9 @@ public class GraphViewer<T> extends JFrame
         private Image backgroundMap;
 
         // These must correspond exactly to your map's SWEREF99TM bounding box in meters
-        private final double MAP_MIN_X = 280000;   // Lower-left corner X
-        private final double MAP_MAX_X = 900000;   // Upper-right corner X
-        private final double MAP_MIN_Y = 6150000;  // Lower-left corner Y
+        private final double MAP_MIN_X = 258000;   // Lower-left corner X
+        private final double MAP_MAX_X = 930000;   // Upper-right corner X
+        private final double MAP_MIN_Y = 6120000;  // Lower-left corner Y
         private final double MAP_MAX_Y = 7700000;  // Upper-right corner Y
 
         private double zoom = 1.0;
@@ -54,7 +54,7 @@ public class GraphViewer<T> extends JFrame
             this.graph = graph;
             setBackground(Color.WHITE);
 
-            backgroundMap = new ImageIcon("data/sverigekarta450x900.png").getImage();
+            backgroundMap = new ImageIcon("data/serverkarta-sverige390x920.png").getImage();
 
             // Zoom with mouse wheel
             addMouseWheelListener(e -> {
