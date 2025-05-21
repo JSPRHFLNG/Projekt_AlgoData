@@ -38,3 +38,6 @@ build/
 *.swp
 *.tmp
 *~
+
+.idea/misc.xml
+
