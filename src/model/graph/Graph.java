@@ -184,14 +184,16 @@ public class Graph<T> implements GraphInterface<T>
         return nVertices;
     }
 
-    public void triangulate() {
+    public void triangulate()
+    {
         GeometryFactory geomFactory = new GeometryFactory();
         DelaunayTriangulationBuilder triangulator = new DelaunayTriangulationBuilder();
 
         List<Coordinate> coords = new ArrayList<>();
         Map<String, Vertex<T>> coordToVertex = new HashMap<>();
 
-        for (Vertex<T> v : getAllVertices()) {
+        for (Vertex<T> v : getAllVertices())
+        {
             Coordinate coord = new Coordinate(v.getX(), v.getY());
             coords.add(coord);
 
@@ -217,6 +219,5 @@ public class Graph<T> implements GraphInterface<T>
             }
         }
     }
-
 
 }
