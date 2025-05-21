@@ -27,8 +27,7 @@ public class Edge<T>
     {
         double dX = pow(from.getX() - to.getX(),2);
         double dY = pow(from.getY() - to.getY(),2);
-        double dZ = pow(from.getZ() - to.getZ(),2);
-        return distance = sqrt(dX+dY+dZ);
+        return distance = sqrt(dX+dY);
     }
 
     public Color getColor() {
