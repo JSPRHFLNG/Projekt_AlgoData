@@ -5,7 +5,7 @@ import java.awt.*;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
-public class Edge<T>
+public class Edge<T> implements Comparable<Edge<T>>
 {
     private Vertex<T> from;
     private Vertex<T> to;
@@ -25,9 +25,9 @@ public class Edge<T>
 
     private double calcEuclideanDist(Vertex<T> from, Vertex<T> to)
     {
-        double dX = pow(from.getX() - to.getX(),2);
-        double dY = pow(from.getY() - to.getY(),2);
-        return distance = sqrt(dX+dY);
+        double dX = from.getX() - to.getX();
+        double dY = from.getY() - to.getY();
+        return sqrt(dX*dX+dY*dY);
     }
 
     public Color getColor() {
@@ -60,5 +60,11 @@ public class Edge<T>
 
     public void setFrom(Vertex<T> from) {
         this.from = from;
+    }
+
+
+    @Override
+    public int compareTo(Edge<T> other) {
+        return Double.compare(this.distance, other.distance);
     }
 }
