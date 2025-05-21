@@ -39,16 +39,15 @@ public class GuiApp
 
             // Ex. MST tar emot "kartans" grundläggande Graph som är triangulariserad och skapar ett ny MST-graph som kan visas på kartan.
             MST<String> mst = new MST<>();
-            //GraphViewer<String> viewer = new GraphViewer<>(mst.createMST(graph, graph.getAllVertices().getFirst()));
 
             // Ex. Dijkstras tar emot "kartans" grundläggande Graph som är triangulariserad och skapar en ny Dijksta-graph som innehåller noder och edges för den kortaste vägen
             Dijkstra<String> dickstra = new Dijkstra<>();
-            Graph<String> dickGraph = dickstra.createShortestPathTree(graph, graph.getAllVertices().getFirst());
+            Graph<String> dickGraph = dickstra.createShortestPathToAllGraph(graph, graph.getAllVertices().getFirst());
+            Graph<String> dickGraph2 = dickstra.createShortestPathTwoVerticesGraph(dtGraph, graph.getAllVertices().getFirst(), graph.getAllVertices().getLast());
 
-            Graph<String> dickGraph2 = dickstra.findShortestPathGraph(dtGraph, graph.getAllVertices().getFirst(), graph.getAllVertices().getLast());
 
-
-            GraphViewer<String> viewer = new GraphViewer<>(dtGraph);
+            // Ett MST läggs ut på kartan.
+            GraphViewer<String> viewer = new GraphViewer<>(mst.createMST(dtGraph, graph.getAllVertices().getFirst()));
             viewer.setVisible(true);
         });
     }

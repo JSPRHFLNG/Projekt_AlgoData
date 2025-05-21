@@ -9,7 +9,7 @@ import java.util.*;
 public class Dijkstra<T>
 {
 
-    public Graph<T> createShortestPathTree(Graph<T> graph, Vertex<T> startVertex)
+    public Graph<T> createShortestPathToAllGraph(Graph<T> graph, Vertex<T> startVertex)
     {
         Graph<T> shortestPath = new Graph<>();
 
@@ -58,7 +58,7 @@ public class Dijkstra<T>
     }
 
 
-    public Graph<T> findShortestPathGraph(Graph<T> graph, Vertex<T> startVertex, Vertex<T> endVertex)
+    public Graph<T> createShortestPathTwoVerticesGraph(Graph<T> graph, Vertex<T> startVertex, Vertex<T> endVertex)
     {
         Map<T, Double> dist = new HashMap<>();
         Map<T, Vertex<T>> prev = new HashMap<>();
