@@ -7,10 +7,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.util.List;
 
-public class ReadFromJSON {
+public class ReadFromJSON
+{
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class VertexDTO {
+    public static class VertexDTO
+    {
         public String locality;
         public String municipality;
         @com.fasterxml.jackson.annotation.JsonProperty("lat")
