@@ -7,7 +7,7 @@ public class Vertex<T>
     private T info;
     private double x;
     private double y;
-    private double bw;
+    private double z;
     private Color color;
 
 
@@ -27,14 +27,14 @@ public class Vertex<T>
      * Creates a Vertex object with x, y and z coordinate.
      * @param xCoordinate
      * @param yCoordinate
-     * @param bandwidth
+     * @param zElevation
      * @param info the object identifier of generic class type T.
      */
-    public Vertex(double xCoordinate, double yCoordinate, double bandwidth, T info)
+    public Vertex(double xCoordinate, double yCoordinate, double zElevation, T info)
     {
         this.x=xCoordinate;
         this.y=yCoordinate;
-        this.bw=bandwidth;
+        this.z=zElevation;
         this.info = info;
         this.color = Color.BLACK;
     }
@@ -92,11 +92,11 @@ public class Vertex<T>
         this.color = color;
     }
 
-    public double getBW() {
-        return bw;
+    public double getZ() {
+        return z;
     }
 
-    public void setZ(double bw) {
-        this.bw = bw;
+    public void setZ(double z) {
+        this.z = z;
     }
 }
