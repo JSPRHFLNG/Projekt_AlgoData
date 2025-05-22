@@ -36,7 +36,7 @@ public class Vertex<T>
         this.y=yCoordinate;
         this.bw=bandwidth;
         this.info = info;
-        this.color = Color.BLACK;
+        this.color = Color.RED;
     }
 
 

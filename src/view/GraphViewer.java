@@ -7,11 +7,14 @@ import model.graph.Vertex;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class GraphViewer<T> extends JFrame
 {
@@ -66,6 +69,36 @@ public class GraphViewer<T> extends JFrame
         to.setMaximumSize(new Dimension(Integer.MAX_VALUE, to.getPreferredSize().height));
         leftAlignment.apply(to);
         functionPanel.add(Box.createVerticalStrut(5));
+
+        // Mappar namn till vertex för lättare lookup
+        Map<String, Vertex<T>> nameToVertex = vertices.stream()
+                .collect(Collectors.toMap(v -> v.getInfo().toString(), v -> v));
+
+        // Lyssnare för highlighting
+        ActionListener highlightListener = e -> {
+            String fromName = (String) from.getSelectedItem();
+            String toName = (String) to.getSelectedItem();
+
+            // Nollställ alla färger
+            for (Vertex<T> v : vertices) {
+                v.setColor(Color.RED);
+            }
+
+            if (fromName != null && nameToVertex.containsKey(fromName)) {
+                nameToVertex.get(fromName).setColor(Color.YELLOW);
+            }
+
+            if (toName != null && nameToVertex.containsKey(toName)) {
+                nameToVertex.get(toName).setColor(Color.GREEN);
+            }
+
+            mainPanel.repaint(); // uppdatera kartan
+        };
+
+        // Lägg till lyssnare på båda comboboxarna
+        from.addActionListener(highlightListener);
+        to.addActionListener(highlightListener);
+
 
         // Calculate shortest path
         leftAlignment.apply(new JButton("Calculate shortest path"));
@@ -190,7 +223,7 @@ public class GraphViewer<T> extends JFrame
                 int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY); // invert Y axis because pixel y=0 is top
 
                 // Draw point
-                g2.setColor(Color.RED);
+                g2.setColor(v.getColor());
                 g2.fillOval(x - 4, y - 4, 8, 8);
 
                 // Draw label
