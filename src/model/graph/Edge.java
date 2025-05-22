@@ -74,9 +74,16 @@ public class Edge<T> implements Comparable<Edge<T>>
         this.from = from;
     }
 
-
     @Override
     public int compareTo(Edge<T> other) {
         return Double.compare(this.weight, other.weight);
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
     }
 }

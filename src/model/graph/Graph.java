@@ -83,6 +83,7 @@ public class Graph<T> implements GraphInterface<T>
         if(!vertices.containsKey(vertex.getInfo())) {
             vertices.put(vertex.getInfo(), vertex);
             edges.put(vertex.getInfo(), new ArrayList<>());
+            nVertices++;
         }
     }
 
@@ -186,7 +187,7 @@ public class Graph<T> implements GraphInterface<T>
     }
 
     @Override
-    public void addEdge(Vertex<T> fromVertex, Vertex<T> toVertex, double distance)
+    public void addEdge(Vertex<T> fromVertex, Vertex<T> toVertex, double weight)
     {
         if (fromVertex != null && toVertex != null) {
             addEdge(fromVertex.getInfo(), toVertex.getInfo());
