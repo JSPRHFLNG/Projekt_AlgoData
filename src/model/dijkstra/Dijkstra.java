@@ -11,7 +11,7 @@ public class Dijkstra<T>
 
     public Graph<T> createShortestPathToAllGraph(Graph<T> graph, Vertex<T> startVertex)
     {
-        Graph<T> shortestPath = new Graph<>();
+        Graph<T> pathGraph = new Graph<>();
 
         Map<T, Double> dist = new HashMap<>();
         PriorityQueue<VertexDistance<T>> pq = new PriorityQueue<>();
@@ -31,9 +31,9 @@ public class Dijkstra<T>
             if (current.distance > dist.get(u.getInfo())){continue;}
 
 
-            if (shortestPath.getVertex(u.getInfo()) == null)
+            if (pathGraph.getVertex(u.getInfo()) == null)
             {
-                shortestPath.addVertex(u);
+                pathGraph.addVertex(u);
             }
 
             for (Edge<T> edge : graph.getEdges(u.getInfo()))
@@ -46,15 +46,15 @@ public class Dijkstra<T>
                     dist.put(v.getInfo(), altDist);
                     pq.add(new VertexDistance<>(v, altDist));
 
-                    if (shortestPath.getVertex(v.getInfo()) == null)
+                    if (pathGraph.getVertex(v.getInfo()) == null)
                     {
-                        shortestPath.addVertex(v);
+                        pathGraph.addVertex(v);
                     }
-                    shortestPath.addEdge(u, v, edge.getDistance());
+                    pathGraph.addEdge(u, v, edge.getDistance());
                 }
             }
         }
-        return shortestPath;
+        return pathGraph;
     }
 
 

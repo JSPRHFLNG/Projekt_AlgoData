@@ -47,7 +47,7 @@ public class GuiApp
 
 
             // Ett MST läggs ut på kartan.
-            GraphViewer<String> viewer = new GraphViewer<>(mst.createMST(dtGraph, graph.getAllVertices().getFirst()));
+            GraphViewer<String> viewer = new GraphViewer<>(dtGraph);
             viewer.setVisible(true);
         });
     }
