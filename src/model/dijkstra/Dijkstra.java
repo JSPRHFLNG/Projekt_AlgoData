@@ -15,7 +15,7 @@ public class Dijkstra<T>
     public Graph<T> getLowWeightPathGraph(Graph<T> graph, Vertex<T> startVertex, Vertex<T> endVertex)
     {
         // Try catch? graph != null && startVertex != null && endVertex != null
-        
+
 
         Map<T, Double> accumulatedWeights = new HashMap<>();
         Map<T, Vertex<T>> accumulatedSteps = new HashMap<>();
