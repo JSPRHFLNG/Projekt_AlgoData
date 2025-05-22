@@ -99,4 +99,9 @@ public class Vertex<T>
     public void setZ(double bw) {
         this.bw = bw;
     }
+
+    @Override
+    public String toString() {
+        return info != null ? info.toString() : "null";
+    }
 }

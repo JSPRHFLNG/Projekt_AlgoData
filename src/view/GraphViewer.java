@@ -11,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.List;
+import java.util.function.Function;
 
 public class GraphViewer<T> extends JFrame
 {
@@ -23,13 +24,64 @@ public class GraphViewer<T> extends JFrame
         setLocationRelativeTo(null);
 
         List<Vertex<T>> vertices = graph.getAllVertices();
-        GraphPanel<T> panel = new GraphPanel<>(vertices);
+        GraphPanel<T> mainPanel = new GraphPanel<>(vertices);
 
         JTable table = GraphPanel.createVertexTable(vertices);
         JScrollPane tableScroll = new JScrollPane(table);
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panel, tableScroll);
+        JPanel functionPanel = new JPanel();
+        functionPanel.setLayout(new BoxLayout(functionPanel, BoxLayout.Y_AXIS));
+        functionPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        Function<JComponent, JComponent> leftAlignment = comp -> {
+            comp.setAlignmentX(Component.LEFT_ALIGNMENT);
+            functionPanel.add(comp);
+            return comp;
+        };
+        leftAlignment.apply(new JLabel("Functions"));
+        functionPanel.add(Box.createVerticalStrut(10));
+
+        // Add data function
+        leftAlignment.apply(new JButton("Add data"));
+        functionPanel.add(Box.createVerticalStrut(10));
+
+        // Hämtar alla vertex
+        String[] vertexNames = vertices.stream()
+                .map(Vertex::toString)
+                .toArray(String[]::new);
+
+        // From combobox
+        leftAlignment.apply(new JLabel("From:"));
+
+        JComboBox<String> from = new JComboBox<>(vertexNames);
+        from.setMaximumSize(new Dimension(Integer.MAX_VALUE, from.getPreferredSize().height));
+        leftAlignment.apply(from);
+        functionPanel.add(Box.createVerticalStrut(5));
+
+        // To combobox
+        leftAlignment.apply(new JLabel("To:"));
+        JComboBox<String> to = new JComboBox<>(vertexNames);
+        to.setMaximumSize(new Dimension(Integer.MAX_VALUE, to.getPreferredSize().height));
+        leftAlignment.apply(to);
+        functionPanel.add(Box.createVerticalStrut(5));
+
+        // Calculate shortest path
+        leftAlignment.apply(new JButton("Calculate shortest path"));
+        functionPanel.add(Box.createVerticalStrut(5));
+
+        // Highlight node, keep??
+        leftAlignment.apply(new JButton("Highlight node"));
+        functionPanel.add(Box.createVerticalStrut(5));
+
+        JScrollPane functionScroll = new JScrollPane(functionPanel);
+        JSplitPane rightVerticalPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tableScroll, functionScroll);
+        rightVerticalPane.setResizeWeight(0.7);
+        rightVerticalPane.setDividerLocation(350);
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mainPanel, rightVerticalPane);
+        splitPane.setResizeWeight(0.65);
         splitPane.setDividerLocation(450);
+
         add(splitPane);
     }
 
@@ -218,11 +270,5 @@ public class GraphViewer<T> extends JFrame
             }
             return new JTable(model);
         }
-
-
-
-
-
-
     }
 }
