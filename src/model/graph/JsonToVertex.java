@@ -27,11 +27,11 @@ public class JsonToVertex
             double rawX = node.get("x-sweref99tm").asDouble();
             double rawY = node.get("y-sweref99tm").asDouble();
 
-            double population = node.get("population").asDouble();
+            double bandwidth = node.get("bandwidth").asDouble();
             String info = node.get("locality").asText();
 
             // Store raw SWEREF99TM coordinates directly (no normalization)
-            result.add(new Vertex<>(rawX, rawY, population, info));
+            result.add(new Vertex<>(rawX, rawY, bandwidth, info));
         }
 
         return result;
