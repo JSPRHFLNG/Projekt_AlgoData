@@ -10,6 +10,7 @@ public class Edge<T> implements Comparable<Edge<T>>
     private Vertex<T> from;
     private Vertex<T> to;
     private double distance;
+    private double weight;
     private Color color;
 
     public Edge(Vertex<T> from, Vertex<T> to)
@@ -19,6 +20,7 @@ public class Edge<T> implements Comparable<Edge<T>>
             this.from = from;
             this.to = to;
             this.distance = calcEuclideanDist(this.from, this.to);
+            this.weight = distance + (this.from.getBW() + this.to.getBW() * 0.01);
         }
     }
 
