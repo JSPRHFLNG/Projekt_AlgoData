@@ -20,7 +20,17 @@ public class Edge<T> implements Comparable<Edge<T>>
             this.from = from;
             this.to = to;
             this.distance = calcEuclideanDist(this.from, this.to);
-            this.weight = distance + (this.from.getBW() + this.to.getBW() * 0.01);
+
+            double bwFrom = from.getBW();
+            double bwTo = to.getBW();
+
+            // Skydd mot noll bandbredd
+            if (bwFrom > 0 && bwTo > 0) {
+                this.weight = this.distance / Math.sqrt(bwFrom * bwTo);
+            } else {
+                // Fallback: stor vikt om ingen bandbredd finns
+                this.weight = Double.MAX_VALUE;
+            }
         }
     }
 
@@ -67,6 +77,6 @@ public class Edge<T> implements Comparable<Edge<T>>
 
     @Override
     public int compareTo(Edge<T> other) {
-        return Double.compare(this.distance, other.distance);
+        return Double.compare(this.weight, other.weight);
     }
 }

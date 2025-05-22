@@ -20,7 +20,7 @@ public class GraphViewer<T> extends JFrame
     {
         setTitle("Graph Viewer");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(650, 920);
+        setSize(670, 920);
         setLocationRelativeTo(null);
 
         List<Vertex<T>> vertices = graph.getAllVertices();
