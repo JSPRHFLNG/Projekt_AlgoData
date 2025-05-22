@@ -11,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.List;
+import java.util.function.Function;
 
 public class GraphViewer<T> extends JFrame
 {
@@ -19,28 +20,82 @@ public class GraphViewer<T> extends JFrame
     {
         setTitle("Graph Viewer");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(650, 900);
+        setSize(650, 920);
         setLocationRelativeTo(null);
 
         List<Vertex<T>> vertices = graph.getAllVertices();
-        GraphPanel<T> panel = new GraphPanel<>(vertices);
+
+        GraphPanel<T> mainPanel = new GraphPanel<>(vertices, graph);
 
         JTable table = GraphPanel.createVertexTable(vertices);
         JScrollPane tableScroll = new JScrollPane(table);
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panel, tableScroll);
+
+        JPanel functionPanel = new JPanel();
+        functionPanel.setLayout(new BoxLayout(functionPanel, BoxLayout.Y_AXIS));
+        functionPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        Function<JComponent, JComponent> leftAlignment = comp -> {
+            comp.setAlignmentX(Component.LEFT_ALIGNMENT);
+            functionPanel.add(comp);
+            return comp;
+        };
+        leftAlignment.apply(new JLabel("Functions"));
+        functionPanel.add(Box.createVerticalStrut(10));
+
+        // Add data function
+        leftAlignment.apply(new JButton("Add data"));
+        functionPanel.add(Box.createVerticalStrut(10));
+
+        // Hämtar alla vertex
+        String[] vertexNames = vertices.stream()
+                .map(Vertex::toString)
+                .toArray(String[]::new);
+
+        // From combobox
+        leftAlignment.apply(new JLabel("From:"));
+
+        JComboBox<String> from = new JComboBox<>(vertexNames);
+        from.setMaximumSize(new Dimension(Integer.MAX_VALUE, from.getPreferredSize().height));
+        leftAlignment.apply(from);
+        functionPanel.add(Box.createVerticalStrut(5));
+
+        // To combobox
+        leftAlignment.apply(new JLabel("To:"));
+        JComboBox<String> to = new JComboBox<>(vertexNames);
+        to.setMaximumSize(new Dimension(Integer.MAX_VALUE, to.getPreferredSize().height));
+        leftAlignment.apply(to);
+        functionPanel.add(Box.createVerticalStrut(5));
+
+        // Calculate shortest path
+        leftAlignment.apply(new JButton("Calculate shortest path"));
+        functionPanel.add(Box.createVerticalStrut(5));
+
+        // Highlight node, keep??
+        leftAlignment.apply(new JButton("Highlight node"));
+        functionPanel.add(Box.createVerticalStrut(5));
+
+        JScrollPane functionScroll = new JScrollPane(functionPanel);
+        JSplitPane rightVerticalPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tableScroll, functionScroll);
+        rightVerticalPane.setResizeWeight(0.7);
+        rightVerticalPane.setDividerLocation(350);
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mainPanel, rightVerticalPane);
+        splitPane.setResizeWeight(0.65);
         splitPane.setDividerLocation(450);
+
         add(splitPane);
     }
 
     public class GraphPanel<T> extends JPanel {
         private final List<Vertex<T>> vertices;
+        private final Graph<T> graph;
         private Image backgroundMap;
 
         // These must correspond exactly to your map's SWEREF99TM bounding box in meters
-        private final double MAP_MIN_X = 280000;   // Lower-left corner X
-        private final double MAP_MAX_X = 900000;   // Upper-right corner X
-        private final double MAP_MIN_Y = 6150000;  // Lower-left corner Y
+        private final double MAP_MIN_X = 258000;   // Lower-left corner X
+        private final double MAP_MAX_X = 930000;   // Upper-right corner X
+        private final double MAP_MIN_Y = 6120000;  // Lower-left corner Y
         private final double MAP_MAX_Y = 7700000;  // Upper-right corner Y
 
         private double zoom = 1.0;
@@ -48,11 +103,12 @@ public class GraphViewer<T> extends JFrame
         private double panY = 0;
         private Point lastDragPoint;
 
-        public GraphPanel(List<Vertex<T>> vertices) {
+        public GraphPanel(List<Vertex<T>> vertices, Graph<T> graph) {
             this.vertices = vertices;
+            this.graph = graph;
             setBackground(Color.WHITE);
 
-            backgroundMap = new ImageIcon("data/sverigekarta450x900.png").getImage();
+            backgroundMap = new ImageIcon("data/serverkarta-sverige390x920.png").getImage();
 
             // Zoom with mouse wheel
             addMouseWheelListener(e -> {
@@ -111,6 +167,19 @@ public class GraphViewer<T> extends JFrame
             // Calculate scaling factors based on panel size and map coordinate extents
             double scaleX = (double) getWidth() / (MAP_MAX_X - MAP_MIN_X);
             double scaleY = (double) getHeight() / (MAP_MAX_Y - MAP_MIN_Y);
+
+            g2.setColor(Color.BLUE);
+            for (Edge<T> edge : graph.getAllEdges()) {
+                Vertex<T> from = edge.getFrom();
+                Vertex<T> to = edge.getTo();
+
+                int x1 = (int) ((from.getX() - MAP_MIN_X) * scaleX);
+                int y1 = (int) (getHeight() - (from.getY() - MAP_MIN_Y) * scaleY);
+                int x2 = (int) ((to.getX() - MAP_MIN_X) * scaleX);
+                int y2 = (int) (getHeight() - (to.getY() - MAP_MIN_Y) * scaleY);
+
+                g2.drawLine(x1, y1, x2, y2);
+            }
 
             for (Vertex<T> v : vertices) {
                 double coordX = v.getX();
@@ -218,11 +287,5 @@ public class GraphViewer<T> extends JFrame
             }
             return new JTable(model);
         }
-
-
-
-
-
-
     }
 }

@@ -3,6 +3,8 @@ package model.quadtree;
 import java.util.ArrayList;
 import java.util.List;
 
+// https://www.geeksforgeeks.org/quad-tree/
+
 class Point {
     double x, y;
     public Point(double x, double y) {

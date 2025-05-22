@@ -60,4 +60,6 @@ public interface GraphInterface<T> {
      * @return number of vertices
      */
     public int numberOfVertices();
+
+    void addEdge(Vertex<T> fromVertex, Vertex<T> toVertex, double distance);
 }

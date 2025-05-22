@@ -12,6 +12,7 @@ public class PriorityQueue<DATA, WEIGHT extends Comparable<WEIGHT>> implements P
         QueueNode[] array = (QueueNode[]) Array.newInstance(
                 QueueNode.class, capacity
         );
+
         heap = new MinHeap<QueueNode>(array);
 
     }
