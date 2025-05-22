@@ -12,103 +12,102 @@ import java.util.Map;
 public class Dijkstra<T>
 {
 
-/*
-
-
-
-    public Graph<T> createShortestPathTwoVerticesGraph(Graph<T> graph, Vertex<T> startVertex, Vertex<T> endVertex)
+    public Graph<T> getLowWeightPathGraph(Graph<T> graph, Vertex<T> startVertex, Vertex<T> endVertex)
     {
-        Map<T, Double> dist = new HashMap<>();
-        Map<T, Vertex<T>> prev = new HashMap<>();
-        PriorityQueue<String, Double> pq = new PriorityQueue<>(graph.getAllVertices().size());
+        // Try catch? graph != null && startVertex != null && endVertex != null
+        
+
+        Map<T, Double> accumulatedWeights = new HashMap<>();
+        Map<T, Vertex<T>> accumulatedSteps = new HashMap<>();
+        PriorityQueue<Vertex<T>, Double> prioQ = new PriorityQueue<>(graph.getAllVertices().size());
 
         for (Vertex<T> v : graph.getAllVertices())
         {
-            dist.put(v.getInfo(), Double.POSITIVE_INFINITY);
+            accumulatedWeights.put(v.getInfo(), Double.POSITIVE_INFINITY);
         }
-        dist.put(startVertex.getInfo(), 0.0);
-        pq.enqueue(graph.get);
 
-        while (!pq.isEmpty())
+        accumulatedWeights.put(startVertex.getInfo(), 0.0);
+        prioQ.enqueue(startVertex, 0.0);
+
+        while (!prioQ.isEmpty())
         {
-            VertexDistance<T> current = pq.dequeue();
-            Vertex<T> u = current.vertex;
+            Vertex<T> currentVertex = prioQ.dequeue();
 
-            if (u.getInfo().equals(endVertex.getInfo()))
+            if (currentVertex.getInfo().equals(endVertex.getInfo()))
             {
+                System.out.println("Break !");
                 break;
             }
-
-            for (Edge<T> edge : graph.getEdges(u.getInfo()))
+            System.out.println("Dequeued: " + currentVertex.getInfo());
+            System.out.println("Processing edges:");
+            for (Edge<T> edge : graph.getEdges(currentVertex.getInfo()))
             {
-                Vertex<T> v = edge.getTo();
-                double alt = dist.get(u.getInfo()) + edge.getDistance();
+                System.out.println("  " + edge.getFrom().getInfo() + " -> " + edge.getTo().getInfo() + " (w: " + edge.getWeight() + ")");
+                Vertex<T> nextVertex = edge.getTo();
+                double compareNext = accumulatedWeights.get(currentVertex.getInfo()) + edge.getWeight();
 
-                if (alt < dist.get(v.getInfo())) {
-                    dist.put(v.getInfo(), alt);
-                    prev.put(v.getInfo(), u);
-                    pq.enqueue(new VertexDistance<>(v, alt));
+                if (compareNext < accumulatedWeights.get(nextVertex.getInfo()))
+                {
+                    accumulatedWeights.put(nextVertex.getInfo(), compareNext);
+
+                    accumulatedSteps.put(nextVertex.getInfo(), currentVertex);
+
+                    // Köa igen med uppdaterad weight.
+                    prioQ.enqueue(nextVertex, compareNext);
+                    System.out.println("Re queue..");
                 }
             }
         }
 
 
+        System.out.println("Back tracking");
+
+        // Skapa ett nytt graph-objekt för Dijkstras-väg, back-track.
         Graph<T> pathGraph = new Graph<>();
         Vertex<T> current = endVertex;
 
-        if (!prev.containsKey(current.getInfo()) && !current.getInfo().equals(startVertex.getInfo()))
+        if (!accumulatedSteps.containsKey(current.getInfo()))
         {
+            System.out.println("Does not contain!!");
             return pathGraph;
         }
 
-        while (current != null && prev.containsKey(current.getInfo()))
+        while (accumulatedSteps.containsKey(current.getInfo()))
         {
-            Vertex<T> previous = prev.get(current.getInfo());  // directly get Vertex<T>
+            Vertex<T> previous = accumulatedSteps.get(current.getInfo());
+            System.out.println("Backtracking from: " + endVertex.getInfo());
+            System.out.println("accumulatedSteps keys: " + accumulatedSteps.keySet());
 
-            if (previous == null) break;
+            if (previous == null)
+            {
+                System.out.println("Previous null == Break !");
+                break;
+            }
 
             if (pathGraph.getVertex(previous.getInfo()) == null)
             {
                 pathGraph.addVertex(previous);
             }
+
             if (pathGraph.getVertex(current.getInfo()) == null)
             {
                 pathGraph.addVertex(current);
             }
 
-            double distance = 0;
+            double weight = 0.0;
             for (Edge<T> edge : graph.getEdges(previous.getInfo()))
             {
                 if (edge.getTo().getInfo().equals(current.getInfo()))
                 {
-                    distance = edge.getDistance();
+                    weight = edge.getWeight();
                     break;
                 }
             }
 
-            pathGraph.addEdge(previous, current, distance);
+            pathGraph.addEdge(previous, current, weight);
             current = previous;
         }
-
+        System.out.println(" returning pathGraph..?");
         return pathGraph;
     }
-
-
-    // Kanske kan byggas in i den egna priority queue? Nu används Javas PriorityQueue.
-    private static class VertexDistance<T> implements Comparable<VertexDistance<T>> {
-        Vertex<T> vertex;
-        double distance;
-
-        VertexDistance(Vertex<T> vertex, double distance) {
-            this.vertex = vertex;
-            this.distance = distance;
-        }
-
-        @Override
-        public int compareTo(VertexDistance<T> other) {
-            return Double.compare(this.distance, other.distance);
-        }
-    }
-     
- */
 }

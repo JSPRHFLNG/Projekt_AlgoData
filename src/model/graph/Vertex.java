@@ -93,7 +93,7 @@ public class Vertex<T>
     }
 
     public double getBW() {
-        return -bw;
+        return bw;
     }
 
     public void setZ(double bw) {

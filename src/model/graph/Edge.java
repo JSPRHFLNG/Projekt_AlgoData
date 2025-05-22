@@ -26,7 +26,7 @@ public class Edge<T> implements Comparable<Edge<T>>
 
             // Skydd mot noll bandbredd
             if (bwFrom > 0 && bwTo > 0) {
-                this.weight = this.distance / Math.sqrt(bwFrom * bwTo);
+                this.weight = (this.distance*0.5 / bwFrom * bwTo);
             } else {
                 // Fallback: stor vikt om ingen bandbredd finns
                 this.weight = Double.MAX_VALUE;
