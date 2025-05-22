@@ -3,10 +3,7 @@ package model.graph;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.locationtech.jts.geom.*;
-import org.locationtech.jts.triangulate.DelaunayTriangulationBuilder;
 
 public class Graph<T> implements GraphInterface<T>
 {
@@ -59,6 +56,10 @@ public class Graph<T> implements GraphInterface<T>
         return allEdges;
     }
 
+    public Vertex<T> getVertex(T info)
+    {
+        return vertices.get(info);
+    }
 
     /**
      * Adds a new {@link Vertex} to the graph at the given position
@@ -184,39 +185,15 @@ public class Graph<T> implements GraphInterface<T>
         return nVertices;
     }
 
-    public void triangulate() {
-        GeometryFactory geomFactory = new GeometryFactory();
-        DelaunayTriangulationBuilder triangulator = new DelaunayTriangulationBuilder();
-
-        List<Coordinate> coords = new ArrayList<>();
-        Map<String, Vertex<T>> coordToVertex = new HashMap<>();
-
-        for (Vertex<T> v : getAllVertices()) {
-            Coordinate coord = new Coordinate(v.getX(), v.getY());
-            coords.add(coord);
-
-            String key = coord.x + "," + coord.y;
-            coordToVertex.put(key, v);
+    @Override
+    public void addEdge(Vertex<T> fromVertex, Vertex<T> toVertex, double distance)
+    {
+        if (fromVertex != null && toVertex != null) {
+            addEdge(fromVertex.getInfo(), toVertex.getInfo());
         }
 
-        triangulator.setSites(coords);
-        GeometryCollection edgeLines = (GeometryCollection) triangulator.getEdges(geomFactory);
-
-        for (int i = 0; i < edgeLines.getNumGeometries(); i++) {
-            LineString line = (LineString) edgeLines.getGeometryN(i);
-            Coordinate[] points = line.getCoordinates();
-
-            String key1 = points[0].x + "," + points[0].y;
-            String key2 = points[1].x + "," + points[1].y;
-
-            Vertex<T> from = coordToVertex.get(key1);
-            Vertex<T> to = coordToVertex.get(key2);
-
-            if (from != null && to != null) {
-                addEdge(from.getInfo(), to.getInfo());
-            }
-        }
     }
+
 
 
 }

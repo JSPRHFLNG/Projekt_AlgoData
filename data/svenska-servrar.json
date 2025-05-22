@@ -1,0 +1,906 @@
+[
+  {
+    "county": "Stockholm",
+    "municipality": "Stockholm",
+    "locality": "Stockholm",
+    "population": 1652895,
+    "x-sweref99tm": 668127.86,
+    "y-sweref99tm": 6579433.5,
+    "lat": 59.3202,
+    "lon": 17.9545
+  },
+  {
+    "county": "Västra Götaland",
+    "municipality": "Göteborg",
+    "locality": "Göteborg",
+    "population": 674529,
+    "x-sweref99tm": 320691.15,
+    "y-sweref99tm": 6394498.93,
+    "lat": 57.657,
+    "lon": 11.9946
+  },
+  {
+    "county": "Skåne",
+    "municipality": "Malmö",
+    "locality": "Malmö",
+    "population": 339316,
+    "x-sweref99tm": 374755.84,
+    "y-sweref99tm": 6163000.44,
+    "lat": 55.5968,
+    "lon": 13.0123
+  },
+  {
+    "county": "Uppsala",
+    "municipality": "Uppsala",
+    "locality": "Uppsala",
+    "population": 174982,
+    "x-sweref99tm": 642888.7,
+    "y-sweref99tm": 6636722.64,
+    "lat": 59.8434,
+    "lon": 17.5501
+  },
+  {
+    "county": "Västmanland",
+    "municipality": "Västerås",
+    "locality": "Västerås",
+    "population": 131643,
+    "x-sweref99tm": 587013.91,
+    "y-sweref99tm": 6611233.2,
+    "lat": 59.6301,
+    "lon": 16.5429
+  },
+  {
+    "county": "Örebro",
+    "municipality": "Örebro",
+    "locality": "Örebro",
+    "population": 128658,
+    "x-sweref99tm": 510914.86,
+    "y-sweref99tm": 6569118,
+    "lat": 59.2609,
+    "lon": 15.1914
+  },
+  {
+    "county": "Östergötland",
+    "municipality": "Linköping",
+    "locality": "Linköping",
+    "population": 116851,
+    "x-sweref99tm": 536611.57,
+    "y-sweref99tm": 6473260.61,
+    "lat": 58.3986,
+    "lon": 15.6264
+  },
+  {
+    "county": "Skåne",
+    "municipality": "Helsingborg",
+    "locality": "Helsingborg",
+    "population": 116029,
+    "x-sweref99tm": 358036.27,
+    "y-sweref99tm": 6212773.83,
+    "lat": 56.0391,
+    "lon": 12.7212
+  },
+  {
+    "county": "Jönköping",
+    "municipality": "Jönköping",
+    "locality": "Jönköping",
+    "population": 103032,
+    "x-sweref99tm": 448378.99,
+    "y-sweref99tm": 6400661.31,
+    "lat": 57.7451,
+    "lon": 14.1328
+  },
+  {
+    "county": "Skåne",
+    "municipality": "Lund",
+    "locality": "Lund",
+    "population": 98308,
+    "x-sweref99tm": 386881.74,
+    "y-sweref99tm": 6175039.44,
+    "lat": 55.7079,
+    "lon": 13.1997
+  },
+  {
+    "county": "Östergötland",
+    "municipality": "Norrköping",
+    "locality": "Norrköping",
+    "population": 98229,
+    "x-sweref99tm": 568886.44,
+    "y-sweref99tm": 6494376.71,
+    "lat": 58.5843,
+    "lon": 16.1848
+  },
+  {
+    "county": "Västerbotten",
+    "municipality": "Umeå",
+    "locality": "Umeå",
+    "population": 94243,
+    "x-sweref99tm": 758406.14,
+    "y-sweref99tm": 7088792.38,
+    "lat": 63.8307,
+    "lon": 20.2558
+  },
+  {
+    "county": "Gävleborg",
+    "municipality": "Gävle",
+    "locality": "Gävle",
+    "population": 86533,
+    "x-sweref99tm": 616307.7,
+    "y-sweref99tm": 6729787.87,
+    "lat": 60.6868,
+    "lon": 17.1297
+  },
+  {
+    "county": "Västra Götaland",
+    "municipality": "Borås",
+    "locality": "Borås",
+    "population": 75565,
+    "x-sweref99tm": 377624.56,
+    "y-sweref99tm": 6400312.92,
+    "lat": 57.7283,
+    "lon": 12.945
+  },
+  {
+    "county": "Kronoberg",
+    "municipality": "Växjö",
+    "locality": "Växjö",
+    "population": 74052,
+    "x-sweref99tm": 487306.83,
+    "y-sweref99tm": 6304857.73,
+    "lat": 56.8873,
+    "lon": 14.7917
+  },
+  {
+    "county": "Halland",
+    "municipality": "Halmstad",
+    "locality": "Halmstad",
+    "population": 72979,
+    "x-sweref99tm": 368303.45,
+    "y-sweref99tm": 6282405.45,
+    "lat": 56.6672,
+    "lon": 12.851
+  },
+  {
+    "county": "Västernorrland",
+    "municipality": "Sundsvall",
+    "locality": "Sundsvall och Timrå",
+    "population": 70918,
+    "x-sweref99tm": 614131.6,
+    "y-sweref99tm": 6922755.37,
+    "lat": 62.4185,
+    "lon": 17.2097
+  },
+  {
+    "county": "Södermanland",
+    "municipality": "Eskilstuna",
+    "locality": "Eskilstuna",
+    "population": 70646,
+    "x-sweref99tm": 584110.1,
+    "y-sweref99tm": 6580835.31,
+    "lat": 59.3579,
+    "lon": 16.4795
+  },
+  {
+    "county": "Värmland",
+    "municipality": "Karlstad",
+    "locality": "Karlstad",
+    "population": 69615,
+    "x-sweref99tm": 415169.32,
+    "y-sweref99tm": 6586055.63,
+    "lat": 59.4046,
+    "lon": 13.5058
+  },
+  {
+    "county": "Jämtland",
+    "municipality": "Östersund",
+    "locality": "Östersund",
+    "population": 53992,
+    "x-sweref99tm": 485737.81,
+    "y-sweref99tm": 7001808.84,
+    "lat": 63.1453,
+    "lon": 14.717
+  },
+  {
+    "county": "Västra Götaland",
+    "municipality": "Trollhättan",
+    "locality": "Trollhättan",
+    "population": 50069,
+    "x-sweref99tm": 341640.23,
+    "y-sweref99tm": 6464019.94,
+    "lat": 58.2886,
+    "lon": 12.2987
+  },
+  {
+    "county": "Norrbotten",
+    "municipality": "Luleå",
+    "locality": "Luleå",
+    "population": 49646,
+    "x-sweref99tm": 831037.85,
+    "y-sweref99tm": 7292929.2,
+    "lat": 65.5879,
+    "lon": 22.1906
+  },
+  {
+    "county": "Dalarna",
+    "municipality": "Borlänge",
+    "locality": "Borlänge",
+    "population": 44299,
+    "x-sweref99tm": 524575.99,
+    "y-sweref99tm": 6704568.64,
+    "lat": 60.4765,
+    "lon": 15.4471
+  },
+  {
+    "county": "Kalmar",
+    "municipality": "Kalmar",
+    "locality": "Kalmar",
+    "population": 42622,
+    "x-sweref99tm": 582209.87,
+    "y-sweref99tm": 6282914.72,
+    "lat": 56.6831,
+    "lon": 16.342
+  },
+  {
+    "county": "Västra Götaland",
+    "municipality": "Skövde",
+    "locality": "Skövde",
+    "population": 40422,
+    "x-sweref99tm": 433461.36,
+    "y-sweref99tm": 6473633.3,
+    "lat": 58.3984,
+    "lon": 13.8616
+  },
+  {
+    "county": "Dalarna",
+    "municipality": "Falun",
+    "locality": "Falun",
+    "population": 39939,
+    "x-sweref99tm": 533023.25,
+    "y-sweref99tm": 6718968.5,
+    "lat": 60.6052,
+    "lon": 15.6031
+  },
+  {
+    "county": "Södermanland",
+    "municipality": "Nyköping",
+    "locality": "Nyköping",
+    "population": 39770,
+    "x-sweref99tm": 617246.48,
+    "y-sweref99tm": 6513691.81,
+    "lat": 58.7473,
+    "lon": 17.0261
+  },
+  {
+    "county": "Västerbotten",
+    "municipality": "Skellefteå",
+    "locality": "Skellefteå",
+    "population": 39146,
+    "x-sweref99tm": 779135.1,
+    "y-sweref99tm": 7193862.58,
+    "lat": 64.7528,
+    "lon": 20.8717
+  },
+  {
+    "county": "Halland",
+    "municipality": "Varberg",
+    "locality": "Varberg",
+    "population": 38575,
+    "x-sweref99tm": 334070.19,
+    "y-sweref99tm": 6330931.31,
+    "lat": 57.0918,
+    "lon": 12.2614
+  },
+  {
+    "county": "Blekinge",
+    "municipality": "Karlskrona",
+    "locality": "Karlskrona",
+    "population": 36423,
+    "x-sweref99tm": 538963.02,
+    "y-sweref99tm": 6227638.53,
+    "lat": 56.1921,
+    "lon": 15.6279
+  },
+  {
+    "county": "Västernorrland",
+    "municipality": "Örnsköldsvik",
+    "locality": "Örnsköldsvik",
+    "population": 33399,
+    "x-sweref99tm": 678145.41,
+    "y-sweref99tm": 7023232.8,
+    "lat": 63.2935,
+    "lon": 18.5541
+  },
+  {
+    "county": "Östergötland",
+    "municipality": "Motala",
+    "locality": "Motala",
+    "population": 31367,
+    "x-sweref99tm": 501943.69,
+    "y-sweref99tm": 6489479.73,
+    "lat": 58.5458,
+    "lon": 15.0334
+  },
+  {
+    "county": "Skåne",
+    "municipality": "Trelleborg",
+    "locality": "Trelleborg",
+    "population": 31366,
+    "x-sweref99tm": 386696.91,
+    "y-sweref99tm": 6137215.85,
+    "lat": 55.3682,
+    "lon": 13.2123
+  },
+  {
+    "county": "Örebro",
+    "municipality": "Karlskoga",
+    "locality": "Karlskoga",
+    "population": 27261,
+    "x-sweref99tm": 473108.9,
+    "y-sweref99tm": 6577470.42,
+    "lat": 59.3352,
+    "lon": 14.5273
+  },
+
+  {
+    "county": "Gotland",
+    "municipality": "Gotland",
+    "locality": "Visby",
+    "population": 26305,
+    "x-sweref99tm": 697712.19,
+    "y-sweref99tm": 6392296.65,
+    "lat": 57.6296,
+    "lon": 18.3115
+  },
+  {
+    "county": "Gävleborg",
+    "municipality": "Sandviken",
+    "locality": "Sandviken",
+    "population": 24827,
+    "x-sweref99tm": 596662.57,
+    "y-sweref99tm": 6719841.54,
+    "lat": 60.6028,
+    "lon": 16.7654
+  },
+  {
+    "county": "Norrbotten",
+    "municipality": "Piteå",
+    "locality": "Piteå",
+    "population": 23824,
+    "x-sweref99tm": 802705.39,
+    "y-sweref99tm": 7257043.34,
+    "lat": 65.2958,
+    "lon": 21.5001
+  },
+  {
+    "county": "Västra Götaland",
+    "municipality": "Lidköping",
+    "locality": "Lidköping",
+    "population": 23585,
+    "x-sweref99tm": 391960.8,
+    "y-sweref99tm": 6485403.72,
+    "lat": 58.4958,
+    "lon": 13.1464
+  },
+  {
+    "county": "Skåne",
+    "municipality": "Ystad",
+    "locality": "Ystad",
+    "population": 21259,
+    "x-sweref99tm": 426190.58,
+    "y-sweref99tm": 6144122.01,
+    "lat": 55.4377,
+    "lon": 13.8334
+  },
+  {
+    "county": "Blekinge",
+    "municipality": "Karlshamn",
+    "locality": "Karlshamn",
+    "population": 19966,
+    "x-sweref99tm": 490245.55,
+    "y-sweref99tm": 6228579.41,
+    "lat": 56.2021,
+    "lon": 14.8428
+  },
+  {
+    "county": "Kalmar",
+    "municipality": "Oskarshamn",
+    "locality": "Oskarshamn",
+    "population": 18817,
+    "x-sweref99tm": 587286.34,
+    "y-sweref99tm": 6348525.56,
+    "lat": 57.2714,
+    "lon": 16.4475
+  },
+  {
+    "county": "Västernorrland",
+    "municipality": "Härnösand",
+    "locality": "Härnösand",
+    "population": 18236,
+    "x-sweref99tm": 650697.17,
+    "y-sweref99tm": 6947696.9,
+    "lat": 62.6291,
+    "lon": 17.9386
+  },
+  {
+    "county": "Norrbotten",
+    "municipality": "Kiruna",
+    "locality": "Kiruna",
+    "population": 17284,
+    "x-sweref99tm": 721411.21,
+    "y-sweref99tm": 7535832.1,
+    "lat": 67.8523,
+    "lon": 20.2681
+  },
+  {
+    "county": "Gävleborg",
+    "municipality": "Hudiksvall",
+    "locality": "Hudiksvall",
+    "population": 16792,
+    "x-sweref99tm": 612909.74,
+    "y-sweref99tm": 6846092.93,
+    "lat": 61.7312,
+    "lon": 17.1372
+  },
+  {
+    "county": "Norrbotten",
+    "municipality": "Boden",
+    "locality": "Boden",
+    "population": 16644,
+    "x-sweref99tm": 806122.81,
+    "y-sweref99tm": 7316474.88,
+    "lat": 65.8223,
+    "lon": 21.7084
+  },
+  {
+    "county": "Kronoberg",
+    "municipality": "Ljungby",
+    "locality": "Ljungby",
+    "population": 16076,
+    "x-sweref99tm": 435311.85,
+    "y-sweref99tm": 6298996.57,
+    "lat": 56.8303,
+    "lon": 13.9399
+  },
+  {
+    "county": "Dalarna",
+    "municipality": "Avesta",
+    "locality": "Avesta",
+    "population": 16055,
+    "x-sweref99tm": 563441.96,
+    "y-sweref99tm": 6668212.84,
+    "lat": 60.1459,
+    "lon": 16.1425
+  },
+  {
+    "county": "Östergötland",
+    "municipality": "Mjölby",
+    "locality": "Mjölby",
+    "population": 14282,
+    "x-sweref99tm": 506786.21,
+    "y-sweref99tm": 6465639.85,
+    "lat": 58.3316,
+    "lon": 15.1159
+  },
+  {
+    "county": "Värmland",
+    "municipality": "Arvika",
+    "locality": "Arvika",
+    "population": 14186,
+    "x-sweref99tm": 364722.96,
+    "y-sweref99tm": 6615875.15,
+    "lat": 59.6589,
+    "lon": 12.599
+  },
+  {
+    "county": "Gävleborg",
+    "municipality": "Bollnäs",
+    "locality": "Bollnäs",
+    "population": 12,
+    "x-sweref99tm": 574158.86,
+    "y-sweref99tm": 6801435.94,
+    "lat": 61.3399,
+    "lon": 16.386
+  },
+  {
+    "county": "Västmanland",
+    "municipality": "Sala",
+    "locality": "Sala",
+    "population": 13702,
+    "x-sweref99tm": 588625.32,
+    "y-sweref99tm": 6644393.18,
+    "lat": 59.9275,
+    "lon": 16.5855
+  },
+  {
+    "county": "Dalarna",
+    "municipality": "Mora",
+    "locality": "Mora",
+    "population": 12830,
+    "x-sweref99tm": 476418.63,
+    "y-sweref99tm": 6764427.13,
+    "lat": 61.014,
+    "lon": 14.5638
+  },
+  {
+    "county": "Blekinge",
+    "municipality": "Ronneby",
+    "locality": "Ronneby",
+    "population": 12636,
+    "x-sweref99tm": 517481.32,
+    "y-sweref99tm": 6229339.42,
+    "lat": 56.2087,
+    "lon": 15.2818
+  },
+  {
+    "county": "Halland",
+    "municipality": "Kungsbacka",
+    "locality": "Onsala",
+    "population": 12486,
+    "x-sweref99tm": 321168.51,
+    "y-sweref99tm": 6368024.12,
+    "lat": 57.4197,
+    "lon": 12.022
+  },
+  {
+    "county": "Norrbotten",
+    "municipality": "Gällivare",
+    "locality": "Gällivare",
+    "population": 12385,
+    "x-sweref99tm": 744942.84,
+    "y-sweref99tm": 7458564.06,
+    "lat": 67.1438,
+    "lon": 20.6575
+  },
+  {
+    "county": "Gävleborg",
+    "municipality": "Söderhamn",
+    "locality": "Söderhamn",
+    "population": 12038,
+    "x-sweref99tm": 611271.38,
+    "y-sweref99tm": 6799234.48,
+    "lat": 61.3113,
+    "lon": 17.0779
+  },
+  {
+    "county": "Västra Götaland",
+    "municipality": "Ulricehamn",
+    "locality": "Ulricehamn",
+    "population": 11794,
+    "x-sweref99tm": 406022.88,
+    "y-sweref99tm": 6406222.35,
+    "lat": 57.7882,
+    "lon": 13.4193
+  },
+  {
+    "county": "Västra Götaland",
+    "municipality": "Skara",
+    "locality": "Skara",
+    "population": 11475,
+    "x-sweref99tm": 408473.54,
+    "y-sweref99tm": 6472357.32,
+    "lat": 58.3825,
+    "lon": 13.4348
+  },
+  {
+    "county": "Västerbotten",
+    "municipality": "Lycksele",
+    "locality": "Lycksele",
+    "population": 8580,
+    "x-sweref99tm": 675579.93,
+    "y-sweref99tm": 7168016.56,
+    "lat": 64.5916,
+    "lon": 18.669
+  },
+  {
+    "county": "Västernorrland",
+    "municipality": "Sollefteå",
+    "locality": "Sollefteå",
+    "population": 8270,
+    "x-sweref99tm": 614175.72,
+    "y-sweref99tm": 7006460.67,
+    "lat": 63.1692,
+    "lon": 17.2676
+  },
+  {
+    "county": "Norrbotten",
+    "municipality": "Kalix",
+    "locality": "Kalix",
+    "population": 8226,
+    "x-sweref99tm": 871016.53,
+    "y-sweref99tm": 7328233.63,
+    "lat": 65.8582,
+    "lon": 23.1478
+  },
+  {
+    "county": "Norrbotten",
+    "municipality": "Haparanda",
+    "locality": "Haparanda",
+    "population": 6292,
+    "x-sweref99tm": 914393.5,
+    "y-sweref99tm": 7333788.17,
+    "lat": 65.8542,
+    "lon": 24.1041
+  },
+  {
+    "county": "Södermanland",
+    "municipality": "Flen",
+    "locality": "Flen",
+    "population": 6266,
+    "x-sweref99tm": 591276.85,
+    "y-sweref99tm": 6547860.07,
+    "lat": 59.0604,
+    "lon": 16.5916
+  },
+  {
+    "county": "Gävleborg",
+    "municipality": "Hofors",
+    "locality": "Hofors",
+    "population": 6037,
+    "x-sweref99tm": 571027.62,
+    "y-sweref99tm": 6712635.59,
+    "lat": 60.5435,
+    "lon": 16.2948
+  },
+  {
+    "county": "Dalarna",
+    "municipality": "Rättvik",
+    "locality": "Rättvik",
+    "population": 5369,
+    "x-sweref99tm": 505854.55,
+    "y-sweref99tm": 6748216.78,
+    "lat": 60.8691,
+    "lon": 15.1078
+  },
+  {
+    "county": "Uppsala",
+    "municipality": "Östhammar",
+    "locality": "Östhammar",
+    "population": 4986,
+    "x-sweref99tm": 685953.25,
+    "y-sweref99tm": 6684981.27,
+    "lat": 60.2589,
+    "lon": 18.3611
+  },
+  {
+    "county": "Norrbotten",
+    "municipality": "Arvidsjaur",
+    "locality": "Arvidsjaur",
+    "population": 4448,
+    "x-sweref99tm": 692600.43,
+    "y-sweref99tm": 7280783.23,
+    "lat": 65.5915,
+    "lon": 19.1793
+  },
+  {
+    "county": "Jämtland",
+    "municipality": "Åre",
+    "locality": "Åre",
+    "population": 3699,
+    "x-sweref99tm": 394315.38,
+    "y-sweref99tm": 7031442.89,
+    "lat": 63.3959,
+    "lon": 12.8846
+  },
+  {
+    "county": "Jämtland",
+    "municipality": "Strömsund",
+    "locality": "Strömsund",
+    "population": 3590,
+    "x-sweref99tm": 528460.56,
+    "y-sweref99tm": 7080881.83,
+    "lat": 63.8541,
+    "lon": 15.5789
+  },
+  {
+    "county": "Uppsala",
+    "municipality": "Uppsala",
+    "locality": "Björklinge",
+    "population": 3418,
+    "x-sweref99tm": 642229.14,
+    "y-sweref99tm": 6657678.58,
+    "lat": 60.0316,
+    "lon": 17.5528
+  },
+  {
+    "county": "Västerbotten",
+    "municipality": "Vilhelmina",
+    "locality": "Vilhelmina",
+    "population": 3245,
+    "x-sweref99tm": 579329.42,
+    "y-sweref99tm": 7167535.9,
+    "lat": 64.6235,
+    "lon": 16.6591
+  },
+  {
+    "county": "Västra Götaland",
+    "municipality": "Bengtsfors",
+    "locality": "Bengtsfors",
+    "population": 3102,
+    "x-sweref99tm": 340231.4,
+    "y-sweref99tm": 6546805.5,
+    "lat": 59.0308,
+    "lon": 12.2161
+  },
+  {
+    "county": "Uppsala",
+    "municipality": "Heby",
+    "locality": "Heby",
+    "population": 2962,
+    "x-sweref99tm": 603655.4,
+    "y-sweref99tm": 6646519.97,
+    "lat": 59.943,
+    "lon": 16.8553
+  },
+  {
+    "county": "Västmanland",
+    "municipality": "Västerås",
+    "locality": "Irsta",
+    "population": 2942,
+    "x-sweref99tm": 595773.45,
+    "y-sweref99tm": 6608398.18,
+    "lat": 59.6028,
+    "lon": 16.6969
+  },
+  {
+    "county": "Jönköping",
+    "municipality": "Jönköping",
+    "locality": "Barnarp och Odensjö",
+    "population": 2919,
+    "x-sweref99tm": 450869.22,
+    "y-sweref99tm": 6396440.55,
+    "lat": 57.7075,
+    "lon": 14.1755
+  },
+  {
+    "county": "Östergötland",
+    "municipality": "Linköping",
+    "locality": "Ekängen",
+    "population": 2906,
+    "x-sweref99tm": 537361.91,
+    "y-sweref99tm": 6481177.66,
+    "lat": 58.4696,
+    "lon": 15.6405
+  },
+  {
+    "county": "Västra Götaland",
+    "municipality": "Göteborg",
+    "locality": "Styrsö och Donsö",
+    "population": 2862,
+    "x-sweref99tm": 308272.69,
+    "y-sweref99tm": 6389629.43,
+    "lat": 57.6082,
+    "lon": 11.7906
+  },
+  {
+    "county": "Västernorrland",
+    "municipality": "Sundsvall",
+    "locality": "Njurundabommen",
+    "population": 2752,
+    "x-sweref99tm": 623323.97,
+    "y-sweref99tm": 6906160.63,
+    "lat": 62.2668,
+    "lon": 17.3757
+  },
+  {
+    "county": "Norrbotten",
+    "municipality": "Jokkmokk",
+    "locality": "Jokkmokk",
+    "population": 2711,
+    "x-sweref99tm": 713981.09,
+    "y-sweref99tm": 7395755.78,
+    "lat": 66.6061,
+    "lon": 19.8334
+  },
+  {
+    "county": "Örebro",
+    "municipality": "Ljusnarsberg",
+    "locality": "Kopparberg",
+    "population": 2697,
+    "x-sweref99tm": 499093.96,
+    "y-sweref99tm": 6636597.46,
+    "lat": 59.867,
+    "lon": 14.9838
+  },
+  {
+    "county": "Västernorrland",
+    "municipality": "Ånge",
+    "locality": "Ånge",
+    "population": 2688,
+    "x-sweref99tm": 531397.45,
+    "y-sweref99tm": 6932610.7,
+    "lat": 62.5232,
+    "lon": 15.6099
+  },
+  {
+    "county": "Uppsala",
+    "municipality": "Östhammar",
+    "locality": "Alunda",
+    "population": 2677,
+    "x-sweref99tm": 670914.65,
+    "y-sweref99tm": 6662867.58,
+    "lat": 60.0672,
+    "lon": 18.0712
+  },
+  {
+    "county": "Jönköping",
+    "municipality": "Jönköping",
+    "locality": "Gränna",
+    "population": 2649,
+    "x-sweref99tm": 468601.73,
+    "y-sweref99tm": 6431175.7,
+    "lat": 58.021,
+    "lon": 14.4685
+  },
+  {
+    "county": "Östergötland",
+    "municipality": "Ödeshög",
+    "locality": "Ödeshög",
+    "population": 2646,
+    "x-sweref99tm": 479805.78,
+    "y-sweref99tm": 6454411.27,
+    "lat": 58.2304,
+    "lon": 14.6561
+  },
+  {
+    "county": "Västerbotten",
+    "municipality": "Umeå",
+    "locality": "Hörnefors",
+    "population": 2547,
+    "x-sweref99tm": 743273.71,
+    "y-sweref99tm": 7064097.75,
+    "lat": 63.6207,
+    "lon": 19.9109
+  },
+  {
+    "county": "Västerbotten",
+    "municipality": "Vindeln",
+    "locality": "Vindeln",
+    "population": 2505,
+    "x-sweref99tm": 729396.94,
+    "y-sweref99tm": 7127810.62,
+    "lat": 64.1998,
+    "lon": 19.7271
+  },
+
+  {
+    "county": "Jämtland",
+    "municipality": "Härjedalen",
+    "locality": "Sveg",
+    "population": 2448,
+    "x-sweref99tm": 466730.57,
+    "y-sweref99tm": 6878251.28,
+    "lat": 62.0351,
+    "lon": 14.3641
+  },
+  {
+    "county": "Uppsala",
+    "municipality": "Östhammar",
+    "locality": "Österbybruk",
+    "population": 2344,
+    "x-sweref99tm": 660405.07,
+    "y-sweref99tm": 6676947.12,
+    "lat": 60.1977,
+    "lon": 17.8937
+  },
+  {
+    "county": "Uppsala",
+    "municipality": "Tierp",
+    "locality": "Örbyhus",
+    "population": 2275876,
+    "x-sweref99tm": 649970.91,
+    "y-sweref99tm": 6680232.4,
+    "lat": 60.2312,
+    "lon": 17.7081
+  },
+  {
+    "county": "Norrbotten",
+    "municipality": "Pajala",
+    "locality": "Pajala Sunrise",
+    "population": 1962,
+    "x-sweref99tm": 860882.98,
+    "y-sweref99tm": 7479646.65,
+    "lat": 67.2144,
+    "lon": 23.3712
+  }
+
+
+]
