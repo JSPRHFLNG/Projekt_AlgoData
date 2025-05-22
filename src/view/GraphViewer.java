@@ -50,15 +50,18 @@ public class GraphViewer<T> extends JFrame
         leftAlignment.apply(new JButton("Add data"));
         functionPanel.add(Box.createVerticalStrut(10));
 
-        // Hämtar alla vertex
-        String[] vertexNames = vertices.stream()
-                .map(Vertex::toString)
-                .toArray(String[]::new);
+        // Hämtar alla vertex och lägger till en placeholder först
+        String[] vertexNames = new String[vertices.size() + 1];
+        vertexNames[0] = "Choose a location...";
+        for (int i = 0; i < vertices.size(); i++) {
+            vertexNames[i + 1] = vertices.get(i).getInfo().toString();
+        }
 
         // From combobox
         leftAlignment.apply(new JLabel("From:"));
-
         JComboBox<String> from = new JComboBox<>(vertexNames);
+        from.setSelectedIndex(0);
+        from.setForeground(Color.DARK_GRAY);
         from.setMaximumSize(new Dimension(Integer.MAX_VALUE, from.getPreferredSize().height));
         leftAlignment.apply(from);
         functionPanel.add(Box.createVerticalStrut(5));
@@ -66,6 +69,8 @@ public class GraphViewer<T> extends JFrame
         // To combobox
         leftAlignment.apply(new JLabel("To:"));
         JComboBox<String> to = new JComboBox<>(vertexNames);
+        to.setSelectedIndex(0);
+        to.setForeground(Color.DARK_GRAY);
         to.setMaximumSize(new Dimension(Integer.MAX_VALUE, to.getPreferredSize().height));
         leftAlignment.apply(to);
         functionPanel.add(Box.createVerticalStrut(5));
@@ -79,33 +84,26 @@ public class GraphViewer<T> extends JFrame
             String fromName = (String) from.getSelectedItem();
             String toName = (String) to.getSelectedItem();
 
-            // Nollställ alla färger
             for (Vertex<T> v : vertices) {
                 v.setColor(Color.RED);
             }
 
-            if (fromName != null && nameToVertex.containsKey(fromName)) {
+            if (fromName != null && !fromName.equals("Choose a location...") && nameToVertex.containsKey(fromName)) {
                 nameToVertex.get(fromName).setColor(Color.YELLOW);
             }
 
-            if (toName != null && nameToVertex.containsKey(toName)) {
+            if (toName != null && !toName.equals("Choose a location...") && nameToVertex.containsKey(toName)) {
                 nameToVertex.get(toName).setColor(Color.GREEN);
             }
 
-            mainPanel.repaint(); // uppdatera kartan
+            mainPanel.repaint();
         };
 
-        // Lägg till lyssnare på båda comboboxarna
         from.addActionListener(highlightListener);
         to.addActionListener(highlightListener);
 
-
         // Calculate shortest path
         leftAlignment.apply(new JButton("Calculate shortest path"));
-        functionPanel.add(Box.createVerticalStrut(5));
-
-        // Highlight node, keep??
-        leftAlignment.apply(new JButton("Highlight node"));
         functionPanel.add(Box.createVerticalStrut(5));
 
         JScrollPane functionScroll = new JScrollPane(functionPanel);
