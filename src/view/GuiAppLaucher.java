@@ -1,5 +1,10 @@
 package view;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import model.delaunay.Delaunay;
 import model.dijkstra.Dijkstra;
 import model.graph.Graph;
@@ -16,6 +21,12 @@ public class GuiAppLaucher
     public void launch()
     {
         SwingUtilities.invokeLater(() -> {
+
+            try {
+                UIManager.setLookAndFeel(new FlatMacLightLaf());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
 
             // 1. Läser in en lista med Vertiser.
             List<Vertex<String>> vtxList;

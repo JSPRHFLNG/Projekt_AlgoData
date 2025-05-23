@@ -41,7 +41,6 @@ public class FunctionsPanel<T> extends JPanel
         setupPanel();
 
         setupDijkstraControls();
-        add(Box.createVerticalStrut(10));
         addRegionQueryButton(this, leftAlign);
         addRadiusSearchButton(this, leftAlign);
         addVisualizationControls(this, leftAlign);
@@ -80,9 +79,9 @@ public class FunctionsPanel<T> extends JPanel
     private void setupDijkstraControls()
     {
         leftAlign.apply(new JLabel("Functions"));
-        add(Box.createVerticalStrut(10));
-
+        add(Box.createVerticalStrut(5));
         leftAlign.apply(new JButton("Add data"));
+        add(Box.createVerticalStrut(10));
 
         vertexNames = new String[allVertices.size() + 1];
         vertexNames[0] = "Choose a location...";
@@ -98,7 +97,7 @@ public class FunctionsPanel<T> extends JPanel
         from.setForeground(Color.DARK_GRAY);
         from.setMaximumSize(new Dimension(Integer.MAX_VALUE, from.getPreferredSize().height));
         leftAlign.apply(from);
-        add(Box.createVerticalStrut(5));
+        add(Box.createVerticalStrut(10));
 
 
         // To combobox
@@ -108,11 +107,12 @@ public class FunctionsPanel<T> extends JPanel
         to.setForeground(Color.DARK_GRAY);
         to.setMaximumSize(new Dimension(Integer.MAX_VALUE, to.getPreferredSize().height));
         leftAlign.apply(to);
-        add(Box.createVerticalStrut(5));
+        add(Box.createVerticalStrut(10));
 
         pathButton = new JButton("Calculate shortest path");
         pathButton.addActionListener(e -> calculateShortestPath(this.graph));
         leftAlign.apply(pathButton);
+        add(Box.createVerticalStrut(10));
 
 
     }
@@ -217,10 +217,10 @@ public class FunctionsPanel<T> extends JPanel
             JOptionPane.showMessageDialog(this, message, "Coordinate Bounds", JOptionPane.INFORMATION_MESSAGE);
         });
         leftAlign.apply(boundsButton);
-        functionPanel.add(Box.createVerticalStrut(5));
 
         // FLYTTA TILL EN EGEN METOD MED COMBOBOX ISTÄLLET
         JButton quadTreeButton = new JButton("Find server halls close by");
+        add(Box.createVerticalStrut(10));
         quadTreeButton.addActionListener(e -> {
             Quadtree.Rectangle boundary = mapGraphPanel.qt.getBoundary();
             double centerX = boundary.x;
@@ -288,25 +288,30 @@ public class FunctionsPanel<T> extends JPanel
 
     private void addRadiusSearchButton(JPanel functionPanel, Function<JComponent, JComponent> leftAlign) {
         JComboBox<Vertex<T>> centerComboBox = new JComboBox<>();
+        add(Box.createVerticalStrut(10));
+        centerComboBox.setMaximumSize(new Dimension(Integer.MAX_VALUE, centerComboBox.getPreferredSize().height));
+
         for (Vertex<T> v : graph.getAllVertices()) {
             centerComboBox.addItem(v);  // toString() bör visa info, t.ex. v.getInfo()
         }
         leftAlign.apply(centerComboBox);
         functionPanel.add(centerComboBox);
 
+        add(Box.createVerticalStrut(5));
         JLabel radiusLabel = new JLabel("Radie (meter):");
         leftAlign.apply(radiusLabel);
         functionPanel.add(radiusLabel);
 
-        JSlider radiusSlider = new JSlider(1000, 100000, 20000);
+        JSlider radiusSlider = new JSlider(0, 100000, 20000);
         radiusSlider.setMajorTickSpacing(20000);
         radiusSlider.setMinorTickSpacing(5000);
         radiusSlider.setPaintTicks(true);
         radiusSlider.setPaintLabels(true);
         leftAlign.apply(radiusSlider);
         functionPanel.add(radiusSlider);
+        add(Box.createVerticalStrut(10));
 
-        JButton searchButton = new JButton("Hitta närliggande noder");
+        JButton searchButton = new JButton("Find nearby nodes");
         searchButton.addActionListener(e -> {
             Vertex<T> selected = (Vertex<T>) centerComboBox.getSelectedItem();
             double radius = radiusSlider.getValue();
@@ -334,7 +339,6 @@ public class FunctionsPanel<T> extends JPanel
         });
 
         leftAlign.apply(searchButton);
-        functionPanel.add(Box.createVerticalStrut(5));
         functionPanel.add(searchButton);
     }
 
@@ -364,6 +368,7 @@ public class FunctionsPanel<T> extends JPanel
 
     // <------------- VISUALISERA QUADTREE STRUKTUR ------------->
     private void addVisualizationControls(JPanel functionPanel, Function<JComponent, JComponent> leftAlign) {
+        add(Box.createVerticalStrut(10));
         JCheckBox showQuadTree = new JCheckBox("Show QuadTree bounds");
 
         showQuadTree.addActionListener(e -> {
