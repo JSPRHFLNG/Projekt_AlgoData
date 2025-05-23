@@ -22,7 +22,10 @@ public class FunctionsPanel<T> extends JPanel
     private Function<JComponent, JComponent> leftAlign;
     private JComboBox<String> cbbDijkstraFrom;
     private JComboBox<String> cbbDijkstraTo;
-    private boolean showQuadTreeBounds = false;
+    private boolean isShowQuadTreeBounds = false;
+    private boolean isShowVertices = false;
+    private boolean isShowDelaunay = false;
+    private boolean isShowMST = false;
     private String[] vertexNames;
     private JButton pathButton;
     private ActionListener highlightListener;
@@ -88,7 +91,7 @@ public class FunctionsPanel<T> extends JPanel
     private void setupDijkstraControls()
     {
         leftAlign.apply(new JLabel("                                     Functions"));
-        add(Box.createVerticalStrut(20));
+        add(Box.createVerticalStrut(10));
 
 
         leftAlign.apply(new JLabel("Data input"));
@@ -385,15 +388,46 @@ public class FunctionsPanel<T> extends JPanel
 
     // <------------- VISUALISERA QUADTREE STRUKTUR ------------->
     private void addVisualizationControls(JPanel functionsPanel, Function<JComponent, JComponent> leftAlign) {
-        JCheckBox showQuadTree = new JCheckBox("Show QuadTree bounds");
 
+        JCheckBox showVertices = new JCheckBox("Show vertices");
+        showVertices.addActionListener(e -> {
+            isShowVertices = showVertices.isSelected();
+            mapGraphPanel.setShowVertices(isShowVertices);
+            repaint();
+        });
+        leftAlign.apply(showVertices);
+        add(Box.createVerticalStrut(5));
+
+
+        JCheckBox showQuadTree = new JCheckBox("Show QuadTree bounds");
         showQuadTree.addActionListener(e -> {
-            showQuadTreeBounds = showQuadTree.isSelected();
-            mapGraphPanel.setShowQuadTreeBound(showQuadTreeBounds);
+            isShowQuadTreeBounds = showQuadTree.isSelected();
+            mapGraphPanel.setShowQuadTreeBound(isShowQuadTreeBounds);
             repaint();
         });
         leftAlign.apply(showQuadTree);
-        add(Box.createVerticalStrut(10));
+        add(Box.createVerticalStrut(5));
+
+
+        JCheckBox showDelaunay = new JCheckBox("Show delaunay");
+        showDelaunay.addActionListener(e -> {
+            isShowDelaunay = showDelaunay.isSelected();
+            mapGraphPanel.setShowDelaunay(isShowDelaunay);
+            repaint();
+        });
+        leftAlign.apply(showDelaunay);
+        add(Box.createVerticalStrut(5));
+
+
+        JCheckBox showMST = new JCheckBox("Show MST");
+        showDelaunay.addActionListener(e -> {
+            isShowMST = showMST.isSelected();
+            mapGraphPanel.setShowMST(isShowMST);
+            repaint();
+        });
+        leftAlign.apply(showMST);
+        add(Box.createVerticalStrut(5));
+
 
         /*
         JButton rebuildButton = new JButton("Rebuild QuadTree");

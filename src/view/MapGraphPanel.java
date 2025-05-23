@@ -19,32 +19,20 @@ import java.util.List;
 public class MapGraphPanel<T> extends JPanel
 {
 
-    /*
-    private Graph<T> graph;
-    private Graph<T> vertexGraph;
-    private Graph<T> delaunayGraph;
-    private Graph<T> dijkstraGraph;
-    private Graph<T> quadtreeGraph;
-
-    //Koppla till checkboxar...
-    private boolean isGraph = true;
-    private boolean isVertexGraph = true;
-    private boolean isDelaunayGraph = false;
-    private boolean isDijkstraGraph = false;
-    private boolean isQuadtreeGraph = false;
-
-     */
     private Graph<T> graph;
     private Graph<T> pathGraph;
     private Graph<T> quadResultGraph;
 
-
+    private Quadtree.Rectangle searchArea = null;
+    private boolean isShowQuadTreeBound = false;
+    private boolean isShowVertices = false;
+    private boolean isShowDelaunay = false;
+    private boolean isShowMST = false;
     private final List<Vertex<T>> vertices;
     private final Image backgroundMap;
 
     Quadtree<T> qt;
-    private Quadtree.Rectangle searchArea = null;
-    private boolean showQuadTreeBound = false;
+
 
     // SWEREF99TM coordinates, reference points.
     private final double MAP_MIN_X = 258000;   // Lower-left corner X
@@ -180,8 +168,23 @@ public class MapGraphPanel<T> extends JPanel
         repaint();
     }
 
+    public void setShowVertices(boolean show) {
+        this.isShowVertices = show;
+        repaint();
+    }
+
     public void setShowQuadTreeBound(boolean show) {
-        this.showQuadTreeBound = show;
+        this.isShowQuadTreeBound = show;
+        repaint();
+    }
+
+    public void setShowDelaunay(boolean show) {
+        this.isShowDelaunay = show;
+        repaint();
+    }
+
+    public void setShowMST(boolean show) {
+        this.isShowMST = show;
         repaint();
     }
 
@@ -211,7 +214,7 @@ public class MapGraphPanel<T> extends JPanel
 
 
         // RITA UPP QUADTREE STRUKTUR
-        if (showQuadTreeBound && qt != null) {
+        if (isShowQuadTreeBound && qt != null) {
             g2.setColor(Color.MAGENTA);
             for (Quadtree.Rectangle r : qt.getAllBoundaries()) {
                 double x1 = (r.x - r.width / 2 - MAP_MIN_X) * scaleX;
