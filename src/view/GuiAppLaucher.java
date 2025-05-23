@@ -10,7 +10,7 @@ import model.mst.MST;
 import javax.swing.*;
 import java.util.List;
 
-public class GuiApp
+public class GuiAppLaucher
 {
 
     public void launch()
@@ -50,7 +50,7 @@ public class GuiApp
             // Ett MST läggs ut på kartan.
             //GraphViewer<String> viewer = new GraphViewer<>(mst.createMST(dtGraph, dtGraph.getAllVertices().getFirst()));
 
-            GraphViewer<String> viewer = new GraphViewer<>(dtGraph);
+            GraphNetworkViewer<String> viewer = new GraphNetworkViewer<>(dtGraph);
             viewer.setVisible(true);
         });
     }

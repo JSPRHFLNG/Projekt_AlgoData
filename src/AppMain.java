@@ -1,9 +1,9 @@
-import view.GuiApp;
+import view.GuiAppLaucher;
 
 public class AppMain
 {
     public static void main(String[] args)
     {
-        new GuiApp().launch();
+        new GuiAppLaucher().launch();
     }
 }
