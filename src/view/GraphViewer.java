@@ -42,7 +42,7 @@ public class GraphViewer<T> extends JFrame {
         this.graph = graph;
 
         JScrollPane tableScroll = createTableScroll(vertices);
-        JScrollPane rroll = createFunctionPanel(vertices);
+        JScrollPane functionScroll = createFunctionPanel(vertices);
 
         JSplitPane rightVerticalPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tableScroll, functionScroll);
         rightVerticalPane.setResizeWeight(0.7);
@@ -77,18 +77,61 @@ public class GraphViewer<T> extends JFrame {
         leftAlign.apply(new JButton("Add data"));
         functionPanel.add(Box.createVerticalStrut(10));
 
-        String[] vertexNames = vertices.stream().map(Vertex::toString).toArray(String[]::new);
+        // Hämta alla vertex och lägg till en placeholder först
+        List<Vertex<T>> allVertices = new ArrayList<>(mainPanel.graph.getAllVertices());
+        String[] vertexNames = new String[allVertices.size() + 1];
+        vertexNames[0] = "Choose a location...";
+        for (int i = 0; i < allVertices.size(); i++) {
+            vertexNames[i + 1] = allVertices.get(i).getInfo().toString();
+        }
 
-        // From
+        // From combobox
         leftAlign.apply(new JLabel("From:"));
-        from = createComboBox(vertexNames);
+        from = new JComboBox<>(vertexNames);
+        from.setSelectedIndex(0);
+        from.setForeground(Color.DARK_GRAY);
+        from.setMaximumSize(new Dimension(Integer.MAX_VALUE, from.getPreferredSize().height));
         leftAlign.apply(from);
-        functionPanel.add(Box.createVerticalStrut(10));
-        // To
+        functionPanel.add(Box.createVerticalStrut(5));
+
+        // To combobox
         leftAlign.apply(new JLabel("To:"));
-        to = createComboBox(vertexNames);
+        to = new JComboBox<>(vertexNames);
+        to.setSelectedIndex(0);
+        to.setForeground(Color.DARK_GRAY);
+        to.setMaximumSize(new Dimension(Integer.MAX_VALUE, to.getPreferredSize().height));
         leftAlign.apply(to);
-        functionPanel.add(Box.createVerticalStrut(10));
+        functionPanel.add(Box.createVerticalStrut(5));
+
+        // Namn till vertex-map för highlighting
+        Map<String, Vertex<T>> nameToVertex = allVertices.stream()
+                .collect(Collectors.toMap(v -> v.getInfo().toString(), v -> v));
+
+        // Highlight-lyssnare
+        ActionListener highlightListener = e -> {
+            String fromName = (String) from.getSelectedItem();
+            String toName = (String) to.getSelectedItem();
+
+            // Återställ alla till röd
+            for (Vertex<T> v : allVertices) {
+                v.setColor(Color.RED);
+            }
+
+            if (fromName != null && !fromName.equals("Choose a location...")) {
+                Vertex<T> v = nameToVertex.get(fromName);
+                if (v != null) v.setColor(Color.YELLOW);
+            }
+
+            if (toName != null && !toName.equals("Choose a location...")) {
+                Vertex<T> v = nameToVertex.get(toName);
+                if (v != null) v.setColor(Color.GREEN);
+            }
+
+            mainPanel.repaint();
+        };
+
+        from.addActionListener(highlightListener);
+        to.addActionListener(highlightListener);
 
 
         // <--------------------------------------------->
