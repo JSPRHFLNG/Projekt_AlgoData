@@ -22,7 +22,7 @@ public class GraphNetworkViewer<T> extends JFrame
         tablePanel = new VertexTablePanel<>(graph.getAllVertices());
         functionsPanel = new FunctionsPanel<>(graph, mapGraphPanel);
 
-        verticalRight = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JScrollPane(tablePanel), new JScrollPane(functionsPanel));
+        verticalRight = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tablePanel, functionsPanel);
         verticalRight.setResizeWeight(0.7);
         verticalRight.setDividerLocation(300);
 

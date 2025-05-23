@@ -10,7 +10,7 @@ import model.mst.MST;
 import javax.swing.*;
 import java.util.List;
 
-public class GuiAppLaucher
+public class GuiAppLauncher
 {
 
     public void launch()
