@@ -9,8 +9,20 @@ public class GuiController implements GuiControllerInterface
      * Updates the information text box
      */
     @Override
-    public void SetInformationText()
+    public void setInformationText()
     {
+
+    }
+
+    public void setDijkstraStartVertexDDL()
+    {
+
+
+    }
+
+    public void setDijkstraDestinationVertexDDL()
+    {
+
 
     }
 }

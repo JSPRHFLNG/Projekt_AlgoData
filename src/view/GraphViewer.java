@@ -9,13 +9,16 @@ import model.quadtree.Quadtree;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class GraphViewer<T> extends JFrame {
 
@@ -39,7 +42,7 @@ public class GraphViewer<T> extends JFrame {
         this.graph = graph;
 
         JScrollPane tableScroll = createTableScroll(vertices);
-        JScrollPane functionScroll = createFunctionPanel(vertices);
+        JScrollPane rroll = createFunctionPanel(vertices);
 
         JSplitPane rightVerticalPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tableScroll, functionScroll);
         rightVerticalPane.setResizeWeight(0.7);
@@ -632,7 +635,7 @@ public class GraphViewer<T> extends JFrame {
                 int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY); // invert Y axis because pixel y=0 is top
 
                 // Draw point
-                g2.setColor(Color.RED);
+                g2.setColor(v.getColor());
                 g2.fillOval(x - 4, y - 4, 8, 8);
 
                 // Draw label
