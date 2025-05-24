@@ -1,7 +1,6 @@
 package view;
 
 
-import model.delaunay.Delaunay;
 import model.graph.Edge;
 import model.graph.Graph;
 import model.graph.Vertex;
@@ -142,7 +141,7 @@ public class MapGraphPanel<T> extends JPanel
             repaint();
         });
 
-        // Pan with mouse drag
+        // Mouse drag pan.
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 lastDragPoint = e.getPoint();
@@ -210,26 +209,22 @@ public class MapGraphPanel<T> extends JPanel
     }
 
 
-
-
-
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        // Anti-aliasing
+        // Anti-aliasing.
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Apply pan and zoom transforms
+        // Pan and zoom transforms.
         g2.translate(panX, panY);
         g2.scale(zoom, zoom);
 
-        // Draw the background map scaled to the panel size
+        // Background image scaled to panel size.
         g2.drawImage(backgroundMap, 0, 0, getWidth(), getHeight(), this);
 
-        // Calculate scaling factors based on BOUNDARY size and map coordinate extents
+        // Scaling factors based on BOUNDARY size and map coordinate extents.
         double scaleX = (double) getWidth() / (MAP_MAX_X - MAP_MIN_X);
         double scaleY = (double) getHeight() / (MAP_MAX_Y - MAP_MIN_Y);
 
@@ -244,7 +239,8 @@ public class MapGraphPanel<T> extends JPanel
 
                 // SWEREF99TM coords to pixel positions
                 int x = (int) ((coordX - MAP_MIN_X) * scaleX);
-                int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY); // invert Y axis because pixel y=0 is top
+                // invert Y-axis because pixel y = 0 is top.
+                int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY);
 
                 // Draw point
                 g2.setColor(v.getColor());
@@ -281,9 +277,10 @@ public class MapGraphPanel<T> extends JPanel
                 double coordX = v.getX();
                 double coordY = v.getY();
 
-                // SWEREF99TM coords to pixel positions
+                // SWEREF99TM coords to pixel positions.
                 int x = (int) ((coordX - MAP_MIN_X) * scaleX);
-                int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY); // invert Y axis because pixel y=0 is top
+                // invert Y-axis because pixel y = 0 is top.
+                int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY);
 
                 // Draw point
                 g2.setColor(v.getColor());
@@ -336,7 +333,8 @@ public class MapGraphPanel<T> extends JPanel
 
                 // SWEREF99TM coords to pixel positions
                 int x = (int) ((coordX - MAP_MIN_X) * scaleX);
-                int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY); // invert Y axis because pixel y=0 is top
+                // invert Y-axis because pixel y = 0 is top.
+                int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY);
 
                 // Draw point
                 g2.setColor(v.getColor());
@@ -380,7 +378,8 @@ public class MapGraphPanel<T> extends JPanel
 
             // SWEREF99TM coords to pixel positions
             int x = (int) ((coordX - MAP_MIN_X) * scaleX);
-            int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY); // invert Y axis because pixel y=0 is top
+             // invert Y-axis because pixel y = 0 is top.
+            int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY);
 
             // Draw point
             g2.setColor(v.getColor());

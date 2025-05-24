@@ -10,11 +10,11 @@ import java.util.Set;
 
 
 /**
- * Minimum Spanning Tree (MST) utilizing Prim's Algorithm.
+ * Minimum Spanning Tree (MST) utilizing Kruskal's Algorithm.
  * @param <T> the type in the Graph. The generic class type T.
  */
 
-//https://www.geeksforgeeks.org/prims-minimum-spanning-tree-mst-greedy-algo-5/
+//https://www.geeksforgeeks.org/kruskals-minimum-spanning-tree-algorithm-greedy-algo-2/
 
 public class MST<T>
 {
