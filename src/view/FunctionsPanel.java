@@ -67,16 +67,53 @@ public class FunctionsPanel<T> extends JPanel
     private void setupHighlighter()
     {
         // Highlight
-        highlightListener = e ->
-        {
-            resetColors(graph.getAllVertices());
-            highlightSelected(cbbDijkstraFrom, Color.YELLOW, allVertices);
-            highlightSelected(cbbDijkstraTo, Color.GREEN, allVertices);
-            mapGraphPanel.repaint();
-        };
-        cbbDijkstraFrom.addActionListener(highlightListener);
-        cbbDijkstraTo.addActionListener(highlightListener);
+        cbbDijkstraFrom.addActionListener(e -> {
+            String selectedName = (String) cbbDijkstraFrom.getSelectedItem();
+
+            // Om "Choose a location..." eller null så gör inget
+            if (selectedName == null || selectedName.equals("Choose a location...")) {
+                mapGraphPanel.setFromVertex(null);
+                return;
+            }
+
+            // Leta upp vertex med matchande namn
+            Vertex<T> selectedVertex = null;
+            for (Vertex<T> v : allVertices) {
+                if (v.getInfo().toString().equals(selectedName)) {
+                    selectedVertex = v;
+                    break;
+                }
+            }
+
+            if (selectedVertex != null) {
+                mapGraphPanel.setFromVertex(selectedVertex);
+            }
+        });
+
+        cbbDijkstraTo.addActionListener(e -> {
+            String selectedName = (String) cbbDijkstraTo.getSelectedItem();
+
+            // Om "Choose a location..." eller null så gör inget
+            if (selectedName == null || selectedName.equals("Choose a location...")) {
+                mapGraphPanel.setToVertex(null);
+                return;
+            }
+
+            // Leta upp vertex med matchande namn
+            Vertex<T> selectedVertex = null;
+            for (Vertex<T> v : allVertices) {
+                if (v.getInfo().toString().equals(selectedName)) {
+                    selectedVertex = v;
+                    break;
+                }
+            }
+
+            if (selectedVertex != null) {
+                mapGraphPanel.setToVertex(selectedVertex);
+            }
+        });
     }
+
     private String[] getVertexNameListForCbb()
     {
         vertexNames = new String[allVertices.size() + 1];

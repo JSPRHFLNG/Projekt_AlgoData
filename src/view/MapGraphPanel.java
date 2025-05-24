@@ -27,6 +27,9 @@ public class MapGraphPanel<T> extends JPanel
     private Graph<T> quadResultGraph;
 
     private Quadtree.Rectangle searchArea = null;
+    private Vertex<T> fromVertex = null;
+    private Vertex<T> toVertex = null;
+
 
     private boolean isShowVertices = true;
     private boolean isShowDelaunay = true;
@@ -210,7 +213,15 @@ public class MapGraphPanel<T> extends JPanel
     }
 
 
+    public void setFromVertex(Vertex<T> v) {
+        this.fromVertex = v;
+        repaint();
+    }
 
+    public void setToVertex(Vertex<T> v) {
+        this.toVertex = v;
+        repaint();
+    }
 
 
 
@@ -257,6 +268,34 @@ public class MapGraphPanel<T> extends JPanel
 
             }
         }
+
+        // För att färgsätta highlightade verticers ettiketter
+        if (fromVertex != null) {
+            int x = (int) ((fromVertex.getX() - MAP_MIN_X) * scaleX);
+            int y = (int) (getHeight() - (fromVertex.getY() - MAP_MIN_Y) * scaleY);
+
+            // Markera vertex med gul färg
+            g2.setColor(Color.YELLOW);
+            g2.fillOval(x - 6, y - 6, 12, 12);
+
+            // Skriv label med gul färg
+            g2.setColor(Color.YELLOW);
+            g2.drawString(fromVertex.getInfo().toString(), x + 6, y - 6);
+        }
+
+        if (toVertex != null) {
+            int x = (int) ((toVertex.getX() - MAP_MIN_X) * scaleX);
+            int y = (int) (getHeight() - (toVertex.getY() - MAP_MIN_Y) * scaleY);
+
+            // Markera vertex med grön färg
+            g2.setColor(Color.GREEN);
+            g2.fillOval(x - 6, y - 6, 12, 12);
+
+            // Skriv label med grön färg
+            g2.setColor(Color.GREEN);
+            g2.drawString(toVertex.getInfo().toString(), x + 6, y - 6);
+        }
+
 
 
         // RITA UPP DELAUNAY
