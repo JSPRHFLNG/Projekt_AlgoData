@@ -1,6 +1,7 @@
 package view;
 
 
+import model.delaunay.Delaunay;
 import model.graph.Edge;
 import model.graph.Graph;
 import model.graph.Vertex;
@@ -19,14 +20,18 @@ import java.util.List;
 public class MapGraphPanel<T> extends JPanel
 {
 
-    private Graph<T> graph;
-    private Graph<T> pathGraph;
+    private Graph<T> vertexGraph;
+    private Graph<T> delaunayGraph;
+    private Graph<T> dijkstraGraph;
+    private Graph<T> mstGraph;
     private Graph<T> quadResultGraph;
 
     private Quadtree.Rectangle searchArea = null;
+
+    private boolean isShowVertices = true;
+    private boolean isShowDelaunay = true;
     private boolean isShowQuadTreeBound = false;
-    private boolean isShowVertices = false;
-    private boolean isShowDelaunay = false;
+    private boolean isShowDijkstra = true;
     private boolean isShowMST = false;
     private final List<Vertex<T>> vertices;
     private final Image backgroundMap;
@@ -48,11 +53,14 @@ public class MapGraphPanel<T> extends JPanel
     private List<Vertex<T>> highlightedVertices = new ArrayList<>();
 
 
-    public MapGraphPanel(List<Vertex<T>> vertices, Graph<T> graph)
+    public MapGraphPanel(Graph<T> graph, Graph<T> delaunayGraph)
     {
-        this.vertices = vertices;
-        this.graph = graph;
-        pathGraph = new Graph<>();
+        this.vertices = graph.getAllVertices();
+        this.vertexGraph = graph;
+        this.delaunayGraph = delaunayGraph;
+        this.dijkstraGraph = new Graph<>();
+        this.mstGraph = new Graph<>();
+
 
         backgroundMap = new ImageIcon("data/serverkarta-sverige390x920.png").getImage();
         setBackground(Color.WHITE);
@@ -153,37 +161,50 @@ public class MapGraphPanel<T> extends JPanel
     }
 
 
-    public void setHighlightedVertices(List<Vertex<T>> list) {
+    public void setHighlightedVertices(List<Vertex<T>> list)
+    {
         this.highlightedVertices = list;
         repaint();
     }
 
-    public void setPathGraph(Graph<T> pathGraph) {
-        this.pathGraph = pathGraph;
+    public void setDijkstraGraph(Graph<T> pathGraph)
+    {
+        this.dijkstraGraph = pathGraph;
         repaint();
     }
 
-    public void setSearchArea(Quadtree.Rectangle area) {
+    public void setSearchArea(Quadtree.Rectangle area)
+    {
         this.searchArea = area;
         repaint();
     }
 
-    public void setShowVertices(boolean show) {
+    public void setShowVertices(boolean show)
+    {
         this.isShowVertices = show;
         repaint();
     }
 
-    public void setShowQuadTreeBound(boolean show) {
+    public void setShowQuadTreeBound(boolean show)
+    {
         this.isShowQuadTreeBound = show;
         repaint();
     }
 
-    public void setShowDelaunay(boolean show) {
+    public void setShowDelaunay(boolean show)
+    {
         this.isShowDelaunay = show;
         repaint();
     }
 
-    public void setShowMST(boolean show) {
+    public void setShowDijkstra(boolean show)
+    {
+        this.isShowDijkstra = show;
+        repaint();
+    }
+
+    public void setShowMST(boolean show)
+    {
         this.isShowMST = show;
         repaint();
     }
@@ -211,10 +232,78 @@ public class MapGraphPanel<T> extends JPanel
         // Calculate scaling factors based on BOUNDARY size and map coordinate extents
         double scaleX = (double) getWidth() / (MAP_MAX_X - MAP_MIN_X);
         double scaleY = (double) getHeight() / (MAP_MAX_Y - MAP_MIN_Y);
+        g2.setColor(Color.BLUE);
+        g2.drawRect(0, 0, (int)((MAP_MAX_X - MAP_MIN_X)*scaleX), (int)((MAP_MAX_Y - MAP_MIN_Y)*scaleY));
+
+        // RITA UPP VERTICES
+        g2.setColor(Color.RED);
+        if (isShowVertices && vertexGraph != null)
+        {
+            for (Vertex<T> v : vertices)
+            {
+                double coordX = v.getX();
+                double coordY = v.getY();
+
+                // SWEREF99TM coords to pixel positions
+                int x = (int) ((coordX - MAP_MIN_X) * scaleX);
+                int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY); // invert Y axis because pixel y=0 is top
+
+                // Draw point
+                g2.setColor(v.getColor());
+                g2.fillOval(x - 4, y - 4, 8, 8);
+
+                // Draw label
+                g2.setColor(Color.BLACK);
+                g2.drawString(v.getInfo().toString(), x + 6, y - 6);
+
+                g2.setColor(Color.BLUE);
+                g2.drawRect(0, 0, (int)((MAP_MAX_X - MAP_MIN_X)*scaleX), (int)((MAP_MAX_Y - MAP_MIN_Y)*scaleY));
+            }
+        }
+
+
+        // RITA UPP DELAUNAY
+        if (isShowDelaunay && delaunayGraph != null)
+        {
+            g2.setColor(Color.BLUE);
+            for (Edge<T> edge : delaunayGraph.getAllEdges())
+            {
+                Vertex<T> from = edge.getFrom();
+                Vertex<T> to = edge.getTo();
+
+                int x1 = (int) ((from.getX() - MAP_MIN_X) * scaleX);
+                int y1 = (int) (getHeight() - (from.getY() - MAP_MIN_Y) * scaleY);
+                int x2 = (int) ((to.getX() - MAP_MIN_X) * scaleX);
+                int y2 = (int) (getHeight() - (to.getY() - MAP_MIN_Y) * scaleY);
+
+                g2.drawLine(x1, y1, x2, y2);
+            }
+            g2.setColor(Color.RED);
+            for (Vertex<T> v : delaunayGraph.getAllVertices())
+            {
+                double coordX = v.getX();
+                double coordY = v.getY();
+
+                // SWEREF99TM coords to pixel positions
+                int x = (int) ((coordX - MAP_MIN_X) * scaleX);
+                int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY); // invert Y axis because pixel y=0 is top
+
+                // Draw point
+                g2.setColor(v.getColor());
+                g2.fillOval(x - 4, y - 4, 8, 8);
+
+                // Draw label
+                g2.setColor(Color.BLACK);
+                g2.drawString(v.getInfo().toString(), x + 6, y - 6);
+            }
+
+
+        }
 
 
         // RITA UPP QUADTREE STRUKTUR
-        if (isShowQuadTreeBound && qt != null) {
+        if (isShowQuadTreeBound && qt != null)
+        {
             g2.setColor(Color.MAGENTA);
             for (Quadtree.Rectangle r : qt.getAllBoundaries()) {
                 double x1 = (r.x - r.width / 2 - MAP_MIN_X) * scaleX;
@@ -239,7 +328,7 @@ public class MapGraphPanel<T> extends JPanel
 
 
         g2.setColor(Color.BLUE);
-        for (Edge<T> edge : graph.getAllEdges()) {
+        for (Edge<T> edge : vertexGraph.getAllEdges()) {
             Vertex<T> from = edge.getFrom();
             Vertex<T> to = edge.getTo();
 
@@ -250,7 +339,7 @@ public class MapGraphPanel<T> extends JPanel
 
             g2.drawLine(x1, y1, x2, y2);
         }
-
+/*
         for (Vertex<T> v : vertices) {
             double coordX = v.getX();
             double coordY = v.getY();
@@ -271,9 +360,11 @@ public class MapGraphPanel<T> extends JPanel
             g2.drawRect(0, 0, (int)((MAP_MAX_X - MAP_MIN_X)*scaleX), (int)((MAP_MAX_Y - MAP_MIN_Y)*scaleY));
         }
 
-        if(pathGraph != null) {
+ */
+
+        if(isShowDijkstra && dijkstraGraph != null) {
             g2.setColor(Color.PINK);
-            for (Edge<T> edge : pathGraph.getAllEdges()) {
+            for (Edge<T> edge : dijkstraGraph.getAllEdges()) {
                 Vertex<T> from = edge.getFrom();
                 Vertex<T> to = edge.getTo();
 

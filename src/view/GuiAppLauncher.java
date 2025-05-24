@@ -25,32 +25,15 @@ public class GuiAppLauncher
                 throw new RuntimeException(e);
             }
 
-            //2. En ny graph skapas med endast punkter(vertiser).
             Graph<String> graph = new Graph<>();
             for (Vertex<String> v : vtxList) {
                 graph.addVertex(v);
             }
 
-            //3. Graph trianguleras med Delaunay.
             Delaunay<String> dt = new Delaunay<>();
             Graph<String> dtGraph = dt.triangulate(graph);
 
-            //4. Här följer olika alternativ och klasser som skapar separata Graph-objekt för sin tillämpning
-
-            // Ex. MST tar emot "kartans" grundläggande Graph som är triangulariserad och skapar ett ny MST-graph som kan visas på kartan.
-            MST<String> mst = new MST<>();
-
-            Graph<String> mstGraph = mst.createMST(dtGraph, dtGraph.getAllVertices().getFirst());
-
-            // Ex. Dijkstras tar emot "kartans" grundläggande Graph som är triangulariserad och skapar en ny Dijksta-graph som innehåller noder och edges för den kortaste vägen
-            Dijkstra<String> dickstra = new Dijkstra<>();
-            Graph<String> dickGraph = dickstra.getLowWeightPathGraph(dtGraph, graph.getAllVertices().getFirst(), graph.getAllVertices().getLast());
-
-
-            // Ett MST läggs ut på kartan.
-            //GraphViewer<String> viewer = new GraphViewer<>(mst.createMST(dtGraph, dtGraph.getAllVertices().getFirst()));
-
-            GraphNetworkViewer<String> viewer = new GraphNetworkViewer<>(dtGraph);
+            GraphNetworkViewer<String> viewer = new GraphNetworkViewer<>(graph, dtGraph);
             viewer.setVisible(true);
         });
     }
