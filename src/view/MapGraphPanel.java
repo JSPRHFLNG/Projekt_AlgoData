@@ -26,6 +26,9 @@ public class MapGraphPanel<T> extends JPanel
     private Graph<T> quadResultGraph;
 
     private Quadtree.Rectangle searchArea = null;
+    private Vertex<T> fromVertex = null;
+    private Vertex<T> toVertex = null;
+
 
     private boolean isShowVertices = true;
     private boolean isShowDelaunay = true;
@@ -208,6 +211,16 @@ public class MapGraphPanel<T> extends JPanel
         repaint();
     }
 
+    public void setFromVertex(Vertex<T> v) {
+        this.fromVertex = v;
+        repaint();
+    }
+
+    public void setToVertex(Vertex<T> v) {
+        this.toVertex = v;
+        repaint();
+    }
+
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -228,33 +241,6 @@ public class MapGraphPanel<T> extends JPanel
         double scaleX = (double) getWidth() / (MAP_MAX_X - MAP_MIN_X);
         double scaleY = (double) getHeight() / (MAP_MAX_Y - MAP_MIN_Y);
 
-        // RITA UPP VERTICES
-        g2.setColor(Color.RED);
-        if (isShowVertices && vertexGraph != null)
-        {
-            for (Vertex<T> v : vertices)
-            {
-                double coordX = v.getX();
-                double coordY = v.getY();
-
-                // SWEREF99TM coords to pixel positions
-                int x = (int) ((coordX - MAP_MIN_X) * scaleX);
-                // invert Y-axis because pixel y = 0 is top.
-                int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY);
-
-                // Draw point
-                g2.setColor(v.getColor());
-                g2.fillOval(x - 4, y - 4, 8, 8);
-
-                // Draw label
-                g2.setColor(Color.BLACK);
-                g2.drawString(v.getInfo().toString(), x + 6, y - 6);
-
-
-            }
-        }
-
-
         // RITA UPP DELAUNAY
         if (isShowDelaunay && delaunayGraph != null)
         {
@@ -271,8 +257,38 @@ public class MapGraphPanel<T> extends JPanel
 
                 g2.drawLine(x1, y1, x2, y2);
             }
+
+            /* Behövs verticerna ritas upp i delaunay?!?
+            
             g2.setColor(Color.RED);
             for (Vertex<T> v : delaunayGraph.getAllVertices())
+            {
+                double coordX = v.getX();
+                double coordY = v.getY();
+
+                // SWEREF99TM coords to pixel positions
+                int x = (int) ((coordX - MAP_MIN_X) * scaleX);
+                // invert Y-axis because pixel y = 0 is top.
+                int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY);
+
+                // Draw point
+                g2.setColor(v.getColor());
+                g2.fillOval(x - 4, y - 4, 8, 8);
+
+                // Draw label
+                g2.setColor(Color.BLACK);
+                g2.drawString(v.getInfo().toString(), x + 6, y - 6);
+            }
+
+             */
+
+        }
+
+        // RITA UPP VERTICES
+        g2.setColor(Color.RED);
+        if (isShowVertices && vertexGraph != null)
+        {
+            for (Vertex<T> v : vertices)
             {
                 double coordX = v.getX();
                 double coordY = v.getY();
@@ -289,10 +305,37 @@ public class MapGraphPanel<T> extends JPanel
                 // Draw label
                 g2.setColor(Color.BLACK);
                 g2.drawString(v.getInfo().toString(), x + 6, y - 6);
-            }
 
+
+            }
         }
 
+        // För att färgsätta highlightade verticer och dess ettiketter
+        if (fromVertex != null) {
+            int x = (int) ((fromVertex.getX() - MAP_MIN_X) * scaleX);
+            int y = (int) (getHeight() - (fromVertex.getY() - MAP_MIN_Y) * scaleY);
+
+            // Markera vertex med gul färg
+            g2.setColor(Color.YELLOW);
+            g2.fillOval(x - 6, y - 6, 12, 12);
+
+            // Skriv label med gul färg
+            g2.setColor(Color.YELLOW);
+            g2.drawString(fromVertex.getInfo().toString(), x + 6, y - 6);
+        }
+
+        if (toVertex != null) {
+            int x = (int) ((toVertex.getX() - MAP_MIN_X) * scaleX);
+            int y = (int) (getHeight() - (toVertex.getY() - MAP_MIN_Y) * scaleY);
+
+            // Markera vertex med grön färg
+            g2.setColor(Color.GREEN);
+            g2.fillOval(x - 6, y - 6, 12, 12);
+
+            // Skriv label med grön färg
+            g2.setColor(Color.GREEN);
+            g2.drawString(toVertex.getInfo().toString(), x + 6, y - 6);
+        }
 
         // RITA UPP QUADTREE STRUKTUR
         if (isShowQuadTreeBound && qt != null)
@@ -357,20 +400,6 @@ public class MapGraphPanel<T> extends JPanel
             g2.fillOval(x - 6, y - 6, 12, 12); // större cirkel
         }
 
-
-
-        g2.setColor(Color.BLUE);
-        for (Edge<T> edge : vertexGraph.getAllEdges()) {
-            Vertex<T> from = edge.getFrom();
-            Vertex<T> to = edge.getTo();
-
-            int x1 = (int) ((from.getX() - MAP_MIN_X) * scaleX);
-            int y1 = (int) (getHeight() - (from.getY() - MAP_MIN_Y) * scaleY);
-            int x2 = (int) ((to.getX() - MAP_MIN_X) * scaleX);
-            int y2 = (int) (getHeight() - (to.getY() - MAP_MIN_Y) * scaleY);
-
-            g2.drawLine(x1, y1, x2, y2);
-        }
 /*
         for (Vertex<T> v : vertices) {
             double coordX = v.getX();

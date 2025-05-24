@@ -67,16 +67,53 @@ public class FunctionsPanel<T> extends JPanel
     private void setupHighlighter()
     {
         // Highlight
-        highlightListener = e ->
-        {
-            resetColors(graph.getAllVertices());
-            highlightSelected(cbbDijkstraFrom, Color.YELLOW, allVertices);
-            highlightSelected(cbbDijkstraTo, Color.GREEN, allVertices);
-            mapGraphPanel.repaint();
-        };
-        cbbDijkstraFrom.addActionListener(highlightListener);
-        cbbDijkstraTo.addActionListener(highlightListener);
+        cbbDijkstraFrom.addActionListener(e -> {
+            String selectedName = (String) cbbDijkstraFrom.getSelectedItem();
+
+            // Om "Choose a location..." eller null så gör inget
+            if (selectedName == null || selectedName.equals("Choose a location...")) {
+                mapGraphPanel.setFromVertex(null);
+                return;
+            }
+
+            // Leta upp vertex med matchande namn
+            Vertex<T> selectedVertex = null;
+            for (Vertex<T> v : allVertices) {
+                if (v.getInfo().toString().equals(selectedName)) {
+                    selectedVertex = v;
+                    break;
+                }
+            }
+
+            if (selectedVertex != null) {
+                mapGraphPanel.setFromVertex(selectedVertex);
+            }
+        });
+
+        cbbDijkstraTo.addActionListener(e -> {
+            String selectedName = (String) cbbDijkstraTo.getSelectedItem();
+
+            // Om "Choose a location..." eller null så gör inget
+            if (selectedName == null || selectedName.equals("Choose a location...")) {
+                mapGraphPanel.setToVertex(null);
+                return;
+            }
+
+            // Leta upp vertex med matchande namn
+            Vertex<T> selectedVertex = null;
+            for (Vertex<T> v : allVertices) {
+                if (v.getInfo().toString().equals(selectedName)) {
+                    selectedVertex = v;
+                    break;
+                }
+            }
+
+            if (selectedVertex != null) {
+                mapGraphPanel.setToVertex(selectedVertex);
+            }
+        });
     }
+
     private String[] getVertexNameListForCbb()
     {
         vertexNames = new String[allVertices.size() + 1];
@@ -130,12 +167,11 @@ public class FunctionsPanel<T> extends JPanel
 
     }
 
-
+/*  Dessa används inte längre!
     private void resetColors(List<Vertex<T>> vertices)
     {
         for (Vertex<T> v : vertices) v.setColor(Color.RED);
     }
-
 
     private JComboBox<String> createComboBox(String[] items)
     {
@@ -143,7 +179,7 @@ public class FunctionsPanel<T> extends JPanel
         box.setMaximumSize(new Dimension(Integer.MAX_VALUE, box.getPreferredSize().height));
         return box;
     }
-
+*/
 
     private void calculateShortestPath(Graph<T> graph)
     {
@@ -190,20 +226,6 @@ public class FunctionsPanel<T> extends JPanel
                         "Error calculating shortest path: " + ex.getMessage());
                 ex.printStackTrace();
             }
-    }
-
-
-    private void highlightSelected(JComboBox<String> comboBox, Color color, List<Vertex<T>> vertices)
-    {
-        String name = (String) comboBox.getSelectedItem();
-        for (Vertex<T> v : vertices)
-        {
-            if (v.getInfo().toString().equals(name))
-            {
-                v.setColor(color);
-                break;
-            }
-        }
     }
 
 
