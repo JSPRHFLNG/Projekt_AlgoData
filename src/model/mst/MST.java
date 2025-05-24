@@ -5,44 +5,43 @@ import model.graph.Edge;
 import model.graph.Graph;
 import model.graph.Vertex;
 import model.prioQ.PriorityQueue;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
- * Minimum Spanning Tree (MST) utilizing Prim's Algorithm.
+ * Minimum Spanning Tree (MST) utilizing Kruskal's Algorithm.
  * @param <T> the type in the Graph. The generic class type T.
  */
 
-//https://www.geeksforgeeks.org/prims-minimum-spanning-tree-mst-greedy-algo-5/
+//https://www.geeksforgeeks.org/kruskals-minimum-spanning-tree-algorithm-greedy-algo-2/
 
 public class MST<T>
 {
-
     public Graph<T> createMST(Graph<T> delaunayGraph, Vertex<T> rootVertex)
     {
         Graph<T> mstGraph = new Graph<>();
 
-        Map<Vertex<T>, Boolean> visited = new HashMap<>();
-        PriorityQueue<Edge<T>, Double> edgeQueue = new PriorityQueue<>(delaunayGraph.getAllEdges().size());
+        Set<Vertex<T>> visited = new HashSet<>();
+        PriorityQueue<Edge<T>, Double> prioQ = new PriorityQueue<>(delaunayGraph.getAllEdges().size());
 
-        visited.put(rootVertex, true);
+        visited.add(rootVertex);
         mstGraph.addVertex(rootVertex);
 
-        // Enqueue all edges connected to root
+        // Enqueue all edges connected to root (start vertex).
         for (Edge<T> edge : delaunayGraph.getEdges(rootVertex.getInfo()))
         {
-            edgeQueue.enqueue(edge, edge.getWeight());
+            prioQ.enqueue(edge, edge.getWeight());
         }
 
-        while (!edgeQueue.isEmpty())
+        while (!prioQ.isEmpty())
         {
-            Edge<T> edge = edgeQueue.dequeue();
+            Edge<T> edge = prioQ.dequeue();
             Vertex<T> fromVertex = edge.getFrom();
             Vertex<T> toVertex = edge.getTo();
-            boolean isFromVisited = visited.getOrDefault(fromVertex, false);
-            boolean isToVisited = visited.getOrDefault(toVertex, false);
+
+            boolean isFromVisited = visited.contains(fromVertex);
+            boolean isToVisited = visited.contains(toVertex);
 
             if (isFromVisited && isToVisited)
             {
@@ -58,29 +57,26 @@ public class MST<T>
             {
                 newVertex = fromVertex;
             }
-            visited.put(newVertex, true);
+
+            visited.add(newVertex);
             mstGraph.addVertex(newVertex);
             mstGraph.addEdge(fromVertex, toVertex, edge.getWeight());
 
-
-            // Enqueue all edges from the new vertex
-            for (Edge<T> nextEdge : delaunayGraph.getEdges(newVertex.getInfo()))
+            // Enqueue all edges from the new vertex that connect to unvisited vertices.
+            for (Edge<T> edg : delaunayGraph.getEdges(newVertex.getInfo()))
             {
-                Vertex<T> u = nextEdge.getFrom();
-                Vertex<T> v = nextEdge.getTo();
+                Vertex<T> fromVtx = edg.getFrom();
+                Vertex<T> toVtx = edg.getTo();
 
-                boolean uVisited = visited.getOrDefault(u, false);
-                boolean vVisited = visited.getOrDefault(v, false);
+                boolean isFromVtxVisited = visited.contains(fromVtx);
+                boolean isToVtxVisited = visited.contains(toVtx);
 
-                // Only enqueue if it connects to an unvisited vertex
-                if (!uVisited || !vVisited)
+                if (!isFromVtxVisited || !isToVtxVisited)
                 {
-                    edgeQueue.enqueue(nextEdge, nextEdge.getWeight());
+                    prioQ.enqueue(edg, edg.getWeight());
                 }
             }
         }
         return mstGraph;
     }
 }
-
-

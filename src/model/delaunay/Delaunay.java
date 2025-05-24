@@ -38,7 +38,8 @@ public class Delaunay<T>
         triangulator.setSites(coords);
         GeometryCollection edgeLines = (GeometryCollection) triangulator.getEdges(geomFactory);
 
-        for (int i = 0; i < edgeLines.getNumGeometries(); i++) {
+        for (int i = 0; i < edgeLines.getNumGeometries(); i++)
+        {
             LineString line = (LineString) edgeLines.getGeometryN(i);
             Coordinate[] points = line.getCoordinates();
 
@@ -48,7 +49,8 @@ public class Delaunay<T>
             Vertex<T> from = coordToVertex.get(key1);
             Vertex<T> to = coordToVertex.get(key2);
 
-            if (from != null && to != null) {
+            if (from != null && to != null)
+            {
                 triangulatedGraph.addVertex(from);
                 triangulatedGraph.addVertex(to);
                 triangulatedGraph.addEdge(from.getInfo(), to.getInfo());

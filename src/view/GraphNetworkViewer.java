@@ -14,11 +14,11 @@ public class GraphNetworkViewer<T> extends JFrame
     private JSplitPane verticalRight;
     private JSplitPane horizontal;
 
-    public GraphNetworkViewer(Graph<T> graph, Graph<T> delaunayGraph)
+    public GraphNetworkViewer(Graph<T> graph, Graph<T> delaunayGraph, Graph<T> mstGraph)
     {
         setup();
 
-        mapGraphPanel = new MapGraphPanel<>(graph, delaunayGraph);
+        mapGraphPanel = new MapGraphPanel<>(graph, delaunayGraph, mstGraph);
         tablePanel = new VertexTablePanel<>(graph.getAllVertices());
         functionsPanel = new FunctionsPanel<>(delaunayGraph, mapGraphPanel);
 
