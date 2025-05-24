@@ -9,52 +9,75 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+/**
+ * A Dijkstra implementation for path finding within a graph structure.
+ * Calculates the most efficient path between two vertices.
+ * Utilizes a custom priority queue which is configured with a minimum-heap.
+ * @param <T> the vertices unique identifier. The generic class of type T.
+ */
 public class Dijkstra<T>
 {
-
+    PriorityQueue<Vertex<T>, Double> prioQ;
+    private Map<T, Double> lowestWeightsMap;
+    private Map<T, Vertex<T>> previousNodesMap;
+    /**
+     * Calculates the path with the lowest weight given a start and end vertex in an existing graph object.
+     * @param graph the graph object for the algorithm to traverse.
+     * @param startVertex the vertex where the algorithm starts.
+     * @param endVertex the vertex which the algorithm should reach.
+     * @return a graph object which consists of the vertices and edges of the calculated path.
+     */
     public Graph<T> getLowWeightPathGraph(Graph<T> graph, Vertex<T> startVertex, Vertex<T> endVertex)
     {
         // Try catch? graph != null && startVertex != null && endVertex != null
+        lowestWeightsMap = new HashMap<>();
+        previousNodesMap= new HashMap<>();
+        prioQ = new PriorityQueue<>(graph.getAllVertices().size());
 
-
-        Map<T, Double> accumulatedWeights = new HashMap<>();
-        Map<T, Vertex<T>> accumulatedSteps = new HashMap<>();
-        PriorityQueue<Vertex<T>, Double> prioQ = new PriorityQueue<>(graph.getAllVertices().size());
-
-        for (Vertex<T> v : graph.getAllVertices())
-        {
-            accumulatedWeights.put(v.getInfo(), Double.POSITIVE_INFINITY);
-        }
-
-        accumulatedWeights.put(startVertex.getInfo(), 0.0);
+        // Enqueue start vertex.
         prioQ.enqueue(startVertex, 0.0);
 
+
+        // Set all vertex weights to infinity.
+        for (Vertex<T> vtx : graph.getAllVertices())
+        {
+            lowestWeightsMap.put(vtx.getInfo(), Double.POSITIVE_INFINITY);
+        }
+        // Set start vertex weight to 0.
+        lowestWeightsMap.put(startVertex.getInfo(), 0.0);
+
+
+        // Iterate while there is vertices in the queue.
         while (!prioQ.isEmpty())
         {
+            // Take out lowest weight vertex from prioQ (min-heap), as currentVertex.
             Vertex<T> currentVertex = prioQ.dequeue();
 
-            if (currentVertex.getInfo().equals(endVertex.getInfo()))
-            {
-                System.out.println("Break !");
-                break;
-            }
-            System.out.println("Dequeued: " + currentVertex.getInfo());
-            System.out.println("Processing edges:");
+            // Base-case. If the currentVertex is the endVertex the algorithm is done.
+            if (currentVertex.getInfo().equals(endVertex.getInfo())){break;}
+
+            // Given currentVertex extract and iterate its outgoing edges.
             for (Edge<T> edge : graph.getEdges(currentVertex.getInfo()))
             {
-                System.out.println("  " + edge.getFrom().getInfo() + " -> " + edge.getTo().getInfo() + " (w: " + edge.getWeight() + ")");
+                System.out.println(edge.getFrom().getInfo() + " -> " + edge.getTo().getInfo() + " (weight: " + edge.getWeight() + ")");
+
+                // Track the edge forward to the next vertex.
                 Vertex<T> nextVertex = edge.getTo();
-                double compareNext = accumulatedWeights.get(currentVertex.getInfo()) + edge.getWeight();
 
-                if (compareNext < accumulatedWeights.get(nextVertex.getInfo()))
+                // Extract the accumulated weight to get from start to the currentVertex and add this edge weight.
+                double currentWeight = lowestWeightsMap.get(currentVertex.getInfo()) + edge.getWeight();
+
+                // If the path from currentVertex to this nextVertex is cheaper.
+                if (currentWeight < lowestWeightsMap.get(nextVertex.getInfo()))
                 {
-                    accumulatedWeights.put(nextVertex.getInfo(), compareNext);
+                    // Then add (key currentVertex : value currentWeight), because it is the cheapest path so far from start to the nextVertex.
+                    lowestWeightsMap.put(nextVertex.getInfo(), currentWeight);
 
-                    accumulatedSteps.put(nextVertex.getInfo(), currentVertex);
+                    // And add the step (key nextVertex : value currentVertex) to be able to back track.
+                    previousNodesMap.put(nextVertex.getInfo(), currentVertex);
 
-                    // Köa igen med uppdaterad weight.
-                    prioQ.enqueue(nextVertex, compareNext);
-                    System.out.println("Re queue..");
+                    // Enqueue nextVertex with the updated currentWeight
+                    prioQ.enqueue(nextVertex, currentWeight);
                 }
             }
         }
@@ -66,17 +89,17 @@ public class Dijkstra<T>
         Graph<T> pathGraph = new Graph<>();
         Vertex<T> current = endVertex;
 
-        if (!accumulatedSteps.containsKey(current.getInfo()))
+        if (!previousNodesMap.containsKey(current.getInfo()))
         {
             System.out.println("Does not contain!!");
             return pathGraph;
         }
 
-        while (accumulatedSteps.containsKey(current.getInfo()))
+        while (previousNodesMap.containsKey(current.getInfo()))
         {
-            Vertex<T> previous = accumulatedSteps.get(current.getInfo());
+            Vertex<T> previous = previousNodesMap.get(current.getInfo());
             System.out.println("Backtracking from: " + endVertex.getInfo());
-            System.out.println("accumulatedSteps keys: " + accumulatedSteps.keySet());
+            System.out.println("accumulatedSteps keys: " + previousNodesMap.keySet());
 
             if (previous == null)
             {
