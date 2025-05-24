@@ -232,8 +232,6 @@ public class MapGraphPanel<T> extends JPanel
         // Calculate scaling factors based on BOUNDARY size and map coordinate extents
         double scaleX = (double) getWidth() / (MAP_MAX_X - MAP_MIN_X);
         double scaleY = (double) getHeight() / (MAP_MAX_Y - MAP_MIN_Y);
-        g2.setColor(Color.BLUE);
-        g2.drawRect(0, 0, (int)((MAP_MAX_X - MAP_MIN_X)*scaleX), (int)((MAP_MAX_Y - MAP_MIN_Y)*scaleY));
 
         // RITA UPP VERTICES
         g2.setColor(Color.RED);
@@ -256,8 +254,7 @@ public class MapGraphPanel<T> extends JPanel
                 g2.setColor(Color.BLACK);
                 g2.drawString(v.getInfo().toString(), x + 6, y - 6);
 
-                g2.setColor(Color.BLUE);
-                g2.drawRect(0, 0, (int)((MAP_MAX_X - MAP_MIN_X)*scaleX), (int)((MAP_MAX_Y - MAP_MIN_Y)*scaleY));
+
             }
         }
 
@@ -265,7 +262,7 @@ public class MapGraphPanel<T> extends JPanel
         // RITA UPP DELAUNAY
         if (isShowDelaunay && delaunayGraph != null)
         {
-            g2.setColor(Color.BLUE);
+            g2.setColor(new Color(0, 64, 255));
             for (Edge<T> edge : delaunayGraph.getAllEdges())
             {
                 Vertex<T> from = edge.getFrom();
@@ -296,7 +293,6 @@ public class MapGraphPanel<T> extends JPanel
                 g2.setColor(Color.BLACK);
                 g2.drawString(v.getInfo().toString(), x + 6, y - 6);
             }
-
 
         }
 
@@ -364,6 +360,7 @@ public class MapGraphPanel<T> extends JPanel
 
         if(isShowDijkstra && dijkstraGraph != null) {
             g2.setColor(Color.PINK);
+            g2.setStroke(new BasicStroke(2));
             for (Edge<T> edge : dijkstraGraph.getAllEdges()) {
                 Vertex<T> from = edge.getFrom();
                 Vertex<T> to = edge.getTo();

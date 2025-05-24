@@ -55,7 +55,6 @@ public class FunctionsPanel<T> extends JPanel
     private void setupPanel()
     {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBorder(BorderFactory.createLineBorder(Color.BLUE));
 
         leftAlign = comp ->
         {
@@ -101,7 +100,7 @@ public class FunctionsPanel<T> extends JPanel
         add(Box.createVerticalStrut(10));
 
 
-        leftAlign.apply(new JLabel("Dijkstra algorithm"));
+        leftAlign.apply(new JLabel("<html><span style='font-weight:bold; font-size:13pt;'>Dijkstra algorithm</span></html>"));
         add(Box.createVerticalStrut(5));
 
 
@@ -211,7 +210,7 @@ public class FunctionsPanel<T> extends JPanel
     // <------------  QuadTree ------------>
     private void addRegionQueryButton(JPanel functionPanel, Function<JComponent, JComponent> leftAlign)
     {
-        leftAlign.apply(new JLabel("Quadtree"));
+        leftAlign.apply(new JLabel("<html><span style='font-weight:bold; font-size:13pt;'>Quadtree</span></html>"));
         add(Box.createVerticalStrut(5));
         JButton boundsButton = new JButton("Show coordinate bounds");
         boundsButton.addActionListener(e -> {
@@ -319,7 +318,7 @@ public class FunctionsPanel<T> extends JPanel
         add(centerComboBox);
         add(Box.createVerticalStrut(5));
 
-        JLabel radiusLabel = new JLabel("Radius (10km):");
+        JLabel radiusLabel = new JLabel("Radius (km):");
         leftAlign.apply(radiusLabel);
         add(radiusLabel);
 
@@ -390,6 +389,7 @@ public class FunctionsPanel<T> extends JPanel
     // <------------- VISUALISERA QUADTREE STRUKTUR ------------->
     private void addVisualizationControls(JPanel functionsPanel, Function<JComponent, JComponent> leftAlign) {
 
+        add(Box.createVerticalStrut(8));
         JCheckBox showVertices = new JCheckBox("Show/hide vertices", true);
         showVertices.addActionListener(e -> {
             isShowVertices = showVertices.isSelected();
