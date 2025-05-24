@@ -43,7 +43,10 @@ public class GuiAppLauncher
             Delaunay<String> dt = new Delaunay<>();
             Graph<String> dtGraph = dt.triangulate(graph);
 
-            GraphNetworkViewer<String> viewer = new GraphNetworkViewer<>(graph, dtGraph);
+            MST<String> mst = new MST<>();
+            Graph<String> mstGraph = mst.createMST(dtGraph, dtGraph.getAllVertices().getLast());
+
+            GraphNetworkViewer<String> viewer = new GraphNetworkViewer<>(graph, dtGraph, mstGraph);
             viewer.setVisible(true);
         });
     }

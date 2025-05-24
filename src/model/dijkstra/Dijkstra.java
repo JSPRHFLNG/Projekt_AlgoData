@@ -53,7 +53,7 @@ public class Dijkstra<T>
             // Take out lowest weight vertex from prioQ (min-heap), as currentVertex.
             Vertex<T> currentVertex = prioQ.dequeue();
 
-            // Base-case. If the currentVertex is the endVertex the algorithm is done.
+            // Break condition. If the currentVertex is the endVertex the algorithm is done.
             if (currentVertex.getInfo().equals(endVertex.getInfo())){break;}
 
             // Given currentVertex extract and iterate its outgoing edges.
@@ -82,55 +82,63 @@ public class Dijkstra<T>
             }
         }
 
-
-        System.out.println("Back tracking");
-
-        // Skapa ett nytt graph-objekt för Dijkstras-väg, back-track.
-        Graph<T> pathGraph = new Graph<>();
-        Vertex<T> current = endVertex;
-
-        if (!previousNodesMap.containsKey(current.getInfo()))
+        // Debug print outs. -------------------------
+        System.out.println("  Back tracking");
+        System.out.println("accumulatedSteps keys: " + previousNodesMap.keySet());
+        System.out.println("Backtracking from: " + endVertex.getInfo());
+        for (Map.Entry<T, Vertex<T>> entry : previousNodesMap.entrySet())
         {
-            System.out.println("Does not contain!!");
-            return pathGraph;
+            T key = entry.getKey();
+            Vertex<T> value = entry.getValue();
+            System.out.println(key + " : " + value);
+        }
+        // --------------------------------------------
+
+        Graph<T> pathGraph = new Graph<>();
+        Vertex<T> currentVertex = endVertex;
+
+        if (!previousNodesMap.containsKey(currentVertex.getInfo()))
+        {
+            System.out.println("End vertex is unreachable or does not exist.");
+            return graph;
         }
 
-        while (previousNodesMap.containsKey(current.getInfo()))
+        while (previousNodesMap.containsKey(currentVertex.getInfo()))
         {
-            Vertex<T> previous = previousNodesMap.get(current.getInfo());
-            System.out.println("Backtracking from: " + endVertex.getInfo());
-            System.out.println("accumulatedSteps keys: " + previousNodesMap.keySet());
+            // Get the endVertex previous vertex, (its key (current): value (previous).
+            Vertex<T> previous = previousNodesMap.get(currentVertex.getInfo());
 
-            if (previous == null)
-            {
-                System.out.println("Previous null == Break !");
-                break;
-            }
+            // Break condition. Loop completed when start vertex is reached because it has no previous vertex.
+            if (previous == null){break;}
 
+            // If pathGraph does not yet contain previous vertex, add it.
             if (pathGraph.getVertex(previous.getInfo()) == null)
             {
                 pathGraph.addVertex(previous);
             }
-
-            if (pathGraph.getVertex(current.getInfo()) == null)
+            // If pathGraph does not yet contain currentVertex, add it.
+            if (pathGraph.getVertex(currentVertex.getInfo()) == null)
             {
-                pathGraph.addVertex(current);
+                pathGraph.addVertex(currentVertex);
             }
 
+            // Extract edge paths from original Graph object.
             double weight = 0.0;
             for (Edge<T> edge : graph.getEdges(previous.getInfo()))
             {
-                if (edge.getTo().getInfo().equals(current.getInfo()))
+                // Identify the edge that goes to the currentVertex to extract the weight value.
+                if (edge.getTo().getInfo().equals(currentVertex.getInfo()))
                 {
                     weight = edge.getWeight();
                     break;
                 }
             }
+            // Add the edge to the pathGraph.
+            pathGraph.addEdge(previous, currentVertex, weight);
 
-            pathGraph.addEdge(previous, current, weight);
-            current = previous;
+            // Swap and keep tracking the path next step.
+            currentVertex = previous;
         }
-        System.out.println(" returning pathGraph..?");
         return pathGraph;
     }
 }

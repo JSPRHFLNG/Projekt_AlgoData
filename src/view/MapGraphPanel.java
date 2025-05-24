@@ -53,13 +53,13 @@ public class MapGraphPanel<T> extends JPanel
     private List<Vertex<T>> highlightedVertices = new ArrayList<>();
 
 
-    public MapGraphPanel(Graph<T> graph, Graph<T> delaunayGraph)
+    public MapGraphPanel(Graph<T> graph, Graph<T> delaunayGraph, Graph<T> mstGraph)
     {
         this.vertices = graph.getAllVertices();
         this.vertexGraph = graph;
         this.delaunayGraph = delaunayGraph;
+        this.mstGraph = mstGraph;
         this.dijkstraGraph = new Graph<>();
-        this.mstGraph = new Graph<>();
 
 
         backgroundMap = new ImageIcon("data/serverkarta-sverige390x920.png").getImage();
@@ -309,6 +309,44 @@ public class MapGraphPanel<T> extends JPanel
 
                 g2.draw(new Rectangle2D.Double(x1, y1, w, h));
             }
+        }
+
+
+        // RITA UPP MST
+        if (isShowMST && mstGraph != null)
+        {
+            g2.setColor(Color.GREEN);
+            for (Edge<T> edge : mstGraph.getAllEdges())
+            {
+                Vertex<T> from = edge.getFrom();
+                Vertex<T> to = edge.getTo();
+
+                int x1 = (int) ((from.getX() - MAP_MIN_X) * scaleX);
+                int y1 = (int) (getHeight() - (from.getY() - MAP_MIN_Y) * scaleY);
+                int x2 = (int) ((to.getX() - MAP_MIN_X) * scaleX);
+                int y2 = (int) (getHeight() - (to.getY() - MAP_MIN_Y) * scaleY);
+
+                g2.drawLine(x1, y1, x2, y2);
+            }
+            g2.setColor(Color.RED);
+            for (Vertex<T> v : mstGraph.getAllVertices())
+            {
+                double coordX = v.getX();
+                double coordY = v.getY();
+
+                // SWEREF99TM coords to pixel positions
+                int x = (int) ((coordX - MAP_MIN_X) * scaleX);
+                int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY); // invert Y axis because pixel y=0 is top
+
+                // Draw point
+                g2.setColor(v.getColor());
+                g2.fillOval(x - 4, y - 4, 8, 8);
+
+                // Draw label
+                g2.setColor(Color.BLACK);
+                g2.drawString(v.getInfo().toString(), x + 6, y - 6);
+            }
+
         }
 
 
