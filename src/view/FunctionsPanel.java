@@ -167,12 +167,11 @@ public class FunctionsPanel<T> extends JPanel
 
     }
 
-
+/*  Dessa används inte längre!
     private void resetColors(List<Vertex<T>> vertices)
     {
         for (Vertex<T> v : vertices) v.setColor(Color.RED);
     }
-
 
     private JComboBox<String> createComboBox(String[] items)
     {
@@ -180,7 +179,7 @@ public class FunctionsPanel<T> extends JPanel
         box.setMaximumSize(new Dimension(Integer.MAX_VALUE, box.getPreferredSize().height));
         return box;
     }
-
+*/
 
     private void calculateShortestPath(Graph<T> graph)
     {
@@ -227,20 +226,6 @@ public class FunctionsPanel<T> extends JPanel
                         "Error calculating shortest path: " + ex.getMessage());
                 ex.printStackTrace();
             }
-    }
-
-
-    private void highlightSelected(JComboBox<String> comboBox, Color color, List<Vertex<T>> vertices)
-    {
-        String name = (String) comboBox.getSelectedItem();
-        for (Vertex<T> v : vertices)
-        {
-            if (v.getInfo().toString().equals(name))
-            {
-                v.setColor(color);
-                break;
-            }
-        }
     }
 
 
