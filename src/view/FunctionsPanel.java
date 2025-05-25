@@ -387,10 +387,12 @@ public class FunctionsPanel<T> extends JPanel
     }
 
 
-    // <------------- VISUALISERA QUADTREE STRUKTUR ------------->
+    // <------------- VISUALISERA KARTANS LAGER ------------->
     private void addVisualizationControls(JPanel functionsPanel, Function<JComponent, JComponent> leftAlign) {
 
-        add(Box.createVerticalStrut(15));
+        add(Box.createVerticalStrut(10));
+        leftAlign.apply(new JLabel("<html><span style='font-weight:bold; font-size:13pt;'>Layers</span></html>"));
+        add(Box.createVerticalStrut(5));
         JCheckBox showVertices = new JCheckBox("Show/hide vertices", true);
         showVertices.addActionListener(e -> {
             isShowVertices = showVertices.isSelected();
