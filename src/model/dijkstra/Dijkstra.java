@@ -59,7 +59,7 @@ public class Dijkstra<T>
             // Given currentVertex extract and iterate its outgoing edges.
             for (Edge<T> edge : graph.getEdges(currentVertex.getInfo()))
             {
-                System.out.println(edge.getFrom().getInfo() + " -> " + edge.getTo().getInfo() + " (weight: " + edge.getWeight() + ")");
+                //System.out.println(edge.getFrom().getInfo() + " -> " + edge.getTo().getInfo() + " (weight: " + edge.getWeight() + ")");
 
                 // Track the edge forward to the next vertex.
                 Vertex<T> nextVertex = edge.getTo();
@@ -81,7 +81,7 @@ public class Dijkstra<T>
                 }
             }
         }
-
+/*
         // Debug print outs. -------------------------
         System.out.println("  Back tracking");
         System.out.println("accumulatedSteps keys: " + previousNodesMap.keySet());
@@ -94,12 +94,14 @@ public class Dijkstra<T>
         }
         // --------------------------------------------
 
+
+ */
         Graph<T> pathGraph = new Graph<>();
         Vertex<T> currentVertex = endVertex;
 
         if (!previousNodesMap.containsKey(currentVertex.getInfo()))
         {
-            System.out.println("End vertex is unreachable or does not exist.");
+            //System.out.println("End vertex is unreachable or does not exist.");
             return graph;
         }
 

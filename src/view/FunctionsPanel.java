@@ -130,13 +130,6 @@ public class FunctionsPanel<T> extends JPanel
         leftAlign.apply(new JLabel("                                     Functions"));
         add(Box.createVerticalStrut(10));
 
-
-        leftAlign.apply(new JLabel("Data input"));
-        add(Box.createVerticalStrut(5));
-        leftAlign.apply(new JButton("Add data"));
-        add(Box.createVerticalStrut(10));
-
-
         leftAlign.apply(new JLabel("<html><span style='font-weight:bold; font-size:13pt;'>Dijkstra algorithm</span></html>"));
         add(Box.createVerticalStrut(5));
 
@@ -406,10 +399,12 @@ public class FunctionsPanel<T> extends JPanel
     }
 
 
-    // <------------- VISUALISERA QUADTREE STRUKTUR ------------->
+    // <------------- VISUALISERA KARTANS LAGER ------------->
     private void addVisualizationControls(JPanel functionsPanel, Function<JComponent, JComponent> leftAlign) {
 
-        add(Box.createVerticalStrut(8));
+        add(Box.createVerticalStrut(10));
+        leftAlign.apply(new JLabel("<html><span style='font-weight:bold; font-size:13pt;'>Layers</span></html>"));
+        add(Box.createVerticalStrut(5));
         JCheckBox showVertices = new JCheckBox("Show/hide vertices", true);
         showVertices.addActionListener(e -> {
             isShowVertices = showVertices.isSelected();
@@ -423,8 +418,10 @@ public class FunctionsPanel<T> extends JPanel
         showDelaunay.addActionListener(e -> {
             isShowDelaunay = showDelaunay.isSelected();
             mapGraphPanel.setShowDelaunay(isShowDelaunay);
+
             repaint();
         });
+        add(Box.createVerticalStrut(3));
         leftAlign.apply(showDelaunay);
 
 
@@ -432,8 +429,10 @@ public class FunctionsPanel<T> extends JPanel
         showQuadTree.addActionListener(e -> {
             isShowQuadTreeBounds = showQuadTree.isSelected();
             mapGraphPanel.setShowQuadTreeBound(isShowQuadTreeBounds);
+
             repaint();
         });
+        add(Box.createVerticalStrut(3));
         leftAlign.apply(showQuadTree);
 
 
@@ -441,8 +440,10 @@ public class FunctionsPanel<T> extends JPanel
         showDijkstra.addActionListener(e -> {
             isShowDijkstra = showDijkstra.isSelected();
             mapGraphPanel.setShowDijkstra(isShowDijkstra);
+
             repaint();
         });
+        add(Box.createVerticalStrut(3));
         leftAlign.apply(showDijkstra);
 
 
@@ -452,6 +453,7 @@ public class FunctionsPanel<T> extends JPanel
             mapGraphPanel.setShowMST(isShowMST);
             repaint();
         });
+        add(Box.createVerticalStrut(3));
         leftAlign.apply(showMST);
 
 

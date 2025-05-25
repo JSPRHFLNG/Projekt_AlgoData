@@ -2,6 +2,7 @@ package view;
 
 
 import model.graph.Graph;
+import model.quadtree.Quadtree;
 
 import javax.swing.*;
 
@@ -14,11 +15,11 @@ public class GraphNetworkViewer<T> extends JFrame
     private JSplitPane verticalRight;
     private JSplitPane horizontal;
 
-    public GraphNetworkViewer(Graph<T> graph, Graph<T> delaunayGraph, Graph<T> mstGraph)
+    public GraphNetworkViewer(Graph<T> graph, Graph<T> delaunayGraph, Graph<T> mstGraph, Quadtree<T> qt)
     {
         setup();
 
-        mapGraphPanel = new MapGraphPanel<>(graph, delaunayGraph, mstGraph);
+        mapGraphPanel = new MapGraphPanel<>(graph, delaunayGraph, mstGraph, qt);
         tablePanel = new VertexTablePanel<>(graph.getAllVertices());
         functionsPanel = new FunctionsPanel<>(delaunayGraph, mapGraphPanel);
 

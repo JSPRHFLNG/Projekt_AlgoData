@@ -16,6 +16,7 @@ public class VertexTablePanel<T> extends JPanel {
         setLayout(new BorderLayout());
         JTable table = createVertexTable();
         table.setFocusable(false);
+        table.setEnabled(false);
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
     }

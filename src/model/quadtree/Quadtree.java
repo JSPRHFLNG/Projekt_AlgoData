@@ -126,7 +126,8 @@ public class Quadtree<T> {
                 || southeast.insert(vertex) || southwest.insert(vertex));
     }
 
-    private void subdivide() {
+    private void subdivide()
+    {
         double x = boundary.x;
         double y = boundary.y;
         double w = boundary.width / 2;
@@ -144,7 +145,8 @@ public class Quadtree<T> {
         lastVisisted.add(boundary);
         System.out.printf("Querying boundary %s with range %s%n", boundary, range);
 
-        if (!boundary.intersects(range)) {
+        if (!boundary.intersects(range))
+        {
             System.out.println("  No intersection, skipping");
             return;
         }
@@ -153,12 +155,14 @@ public class Quadtree<T> {
         for (Vertex<T> v : vertices) {
             if (range.contains(v)) {
                 lastVisisted.add(boundary);
+
                 found.add(v);
                 System.out.printf("  Found vertex: (%.2f, %.2f)%n", v.getX(), v.getY());
             }
         }
 
-        if (divided) {
+        if (divided)
+        {
             System.out.println("  Checking children...");
             northeast.query(range, found);
             northwest.query(range, found);
@@ -172,23 +176,29 @@ public class Quadtree<T> {
         return findNearestRecursive(x, y, null, Double.MAX_VALUE).vertex;
     }
 
-    private static class NearestResult<T> {
+
+    private static class NearestResult<T>
+    {
         Vertex<T> vertex;
         double distance;
 
-        NearestResult(Vertex<T> vertex, double distance) {
+        NearestResult(Vertex<T> vertex, double distance)
+        {
             this.vertex = vertex;
             this.distance = distance;
         }
     }
 
-    private double distanceToRectangle(double px, double py, Rectangle rectangle) {
+
+    private double distanceToRectangle(double px, double py, Rectangle rectangle)
+    {
         double left = rectangle.x - rectangle.width / 2;
         double right = rectangle.x + rectangle.width / 2;
         double top = rectangle.y - rectangle.height / 2;
         double bottom = rectangle.y + rectangle.height / 2;
 
-        if (px >= left && px <= right && py >= top && py <= bottom) {
+        if (px >= left && px <= right && py >= top && py <= bottom)
+        {
             return 0.0;
         }
         double dx = Math.max(0, Math.max(left - px, px - right));
@@ -196,7 +206,8 @@ public class Quadtree<T> {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-    private NearestResult<T> findNearestRecursive(double x, double y, Vertex<T> currentBest, double bestDistance) {
+    private NearestResult<T> findNearestRecursive(double x, double y, Vertex<T> currentBest, double bestDistance)
+    {
 
         double distanceToRegion = distanceToRectangle(x, y, boundary);
         if(distanceToRegion >= bestDistance) {
@@ -205,7 +216,8 @@ public class Quadtree<T> {
         Vertex<T> localBest = currentBest;
         double localBestDistance = bestDistance;
 
-        for (Vertex<T> vertex : vertices) {
+        for (Vertex<T> vertex : vertices)
+        {
             double dist = distance(x, y, vertex.getX(), vertex.getY());
             if (dist < localBestDistance) {
                 localBest = vertex;
@@ -213,7 +225,8 @@ public class Quadtree<T> {
             }
         }
 
-        if (divided) {
+        if (divided)
+        {
             NearestResult<T> result = northeast.findNearestRecursive(x, y, localBest, localBestDistance);
             localBest = result.vertex;
             localBestDistance = result.distance;
@@ -242,13 +255,17 @@ public class Quadtree<T> {
         return boundary;
     }
 
-    public List<Rectangle> getAllBoundaries() {
+
+    public List<Rectangle> getAllBoundaries()
+    {
         List<Rectangle> boundaries = new ArrayList<>();
         collectBoundaries(this, boundaries);
         return boundaries;
     }
 
-    private void collectBoundaries(Quadtree<T> node, List<Rectangle> list) {
+
+    private void collectBoundaries(Quadtree<T> node, List<Rectangle> list)
+    {
         list.add(node.getBoundary());
         if (node.divided) {
             collectBoundaries(node.northeast, list);
@@ -258,7 +275,9 @@ public class Quadtree<T> {
         }
     }
 
-    public List<Vertex<T>> getAllVertices() {
+
+    public List<Vertex<T>> getAllVertices()
+    {
         List<Vertex<T>> allVertices = new ArrayList<>(vertices);
 
         if (divided) {
@@ -296,16 +315,19 @@ public class Quadtree<T> {
 
     // INRE KLASS
     public static class Rectangle {
+
         public double x, y, width, height;
 
-        public Rectangle(double x, double y, double width, double height) {
+        public Rectangle(double x, double y, double width, double height)
+        {
             this.x = x;
             this.y = y;
             this.width = width;
             this.height = height;
         }
 
-        public <T> boolean contains(Vertex<T> vertex) {
+        public <T> boolean contains(Vertex<T> vertex)
+        {
             double left = x - width / 2;
             double right = x + width / 2;
             double top = y - height / 2;
@@ -318,7 +340,8 @@ public class Quadtree<T> {
 
         }
 
-        public boolean intersects(Rectangle range) {
+        public boolean intersects(Rectangle range)
+        {
 
             return !(range.x - range.width / 2 > x + width / 2 ||
                     range.x + range.width / 2 < x - width / 2 ||
@@ -327,7 +350,8 @@ public class Quadtree<T> {
         }
 
         @Override
-        public String toString() {
+        public String toString()
+        {
             return String.format("Rectangle(center=(%.2f, %.2f), width=%.2f, height=%.2f, bounds=[%.2f-%.2f, %.2f-%.2f])",
                     x, y, width, height,
                     x - width/2, x + width/2,

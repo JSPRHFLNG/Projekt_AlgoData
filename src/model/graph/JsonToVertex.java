@@ -11,11 +11,20 @@ import java.util.List;
 public class JsonToVertex
 {
     private static final String jsonFilePath = "data/svenska-servrar.json";
+    private static final String jsonFilePathTestData = "data/generated-mock-data-10000.json";
 
-    public static List<Vertex<String>> readJson() throws Exception
+    public static List<Vertex<String>> readJson(boolean test) throws Exception
     {
         ObjectMapper mapper = new ObjectMapper();
-        File file = new File(jsonFilePath);
+        File file;
+        if(test)
+        {
+            file = new File(jsonFilePathTestData);
+        }
+        else
+        {
+            file = new File(jsonFilePath);
+        }
 
         if (!file.exists())
         {
@@ -26,6 +35,7 @@ public class JsonToVertex
 
         List<Vertex<String>> result = new ArrayList<>();
         for (JsonNode node : root) {
+
             double rawX = node.get("x-sweref99tm").asDouble();
             double rawY = node.get("y-sweref99tm").asDouble();
 
