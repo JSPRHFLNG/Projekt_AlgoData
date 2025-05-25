@@ -242,30 +242,6 @@ public class MapGraphPanel<T> extends JPanel
                 g2.drawLine(x1, y1, x2, y2);
             }
 
-            /* Behövs verticerna ritas upp i delaunay?!?
-            
-            g2.setColor(Color.RED);
-            for (Vertex<T> v : delaunayGraph.getAllVertices())
-            {
-                double coordX = v.getX();
-                double coordY = v.getY();
-
-                // SWEREF99TM coords to pixel positions
-                int x = (int) ((coordX - MAP_MIN_X) * scaleX);
-                // invert Y-axis because pixel y = 0 is top.
-                int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY);
-
-                // Draw point
-                g2.setColor(v.getColor());
-                g2.fillOval(x - 4, y - 4, 8, 8);
-
-                // Draw label
-                g2.setColor(Color.BLACK);
-                g2.drawString(v.getInfo().toString(), x + 6, y - 6);
-            }
-
-             */
-
         }
 
         // RITA UPP VERTICES
