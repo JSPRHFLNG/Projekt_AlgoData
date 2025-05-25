@@ -167,23 +167,8 @@ public class FunctionsPanel<T> extends JPanel
 
     }
 
-/*  Dessa används inte längre!
-    private void resetColors(List<Vertex<T>> vertices)
-    {
-        for (Vertex<T> v : vertices) v.setColor(Color.RED);
-    }
-
-    private JComboBox<String> createComboBox(String[] items)
-    {
-        JComboBox<String> box = new JComboBox<>(items);
-        box.setMaximumSize(new Dimension(Integer.MAX_VALUE, box.getPreferredSize().height));
-        return box;
-    }
-*/
-
     private void calculateShortestPath(Graph<T> graph)
     {
-        // FLYTTA TILL EN EGEN METOD
 
             String fromID = (String) cbbDijkstraFrom.getSelectedItem();
             String toID = (String) cbbDijkstraTo.getSelectedItem();
@@ -327,8 +312,7 @@ public class FunctionsPanel<T> extends JPanel
     }
 
 
-    private void addRadiusSearchButton(JPanel functionPanel, Function<JComponent, JComponent> leftAlign)
-    {
+    private void addRadiusSearchButton(JPanel functionPanel, Function<JComponent, JComponent> leftAlign) {
         add(Box.createVerticalStrut(10));
         JComboBox<Vertex<T>> centerComboBox = new JComboBox<>();
         for (Vertex<T> v : graph.getAllVertices()) {
@@ -340,42 +324,56 @@ public class FunctionsPanel<T> extends JPanel
         add(centerComboBox);
         add(Box.createVerticalStrut(5));
 
-        JLabel radiusLabel = new JLabel("Radius (km):");
+        JLabel radiusLabel = new JLabel("Width/height (10 km):");
         leftAlign.apply(radiusLabel);
         add(radiusLabel);
 
-        JSlider radiusSlider = new JSlider(0, 100, 10);
-        radiusSlider.setMajorTickSpacing(10);
-        radiusSlider.setMinorTickSpacing(5);
-        radiusSlider.setPaintTicks(true);
-        radiusSlider.setPaintLabels(true);
-        leftAlign.apply(radiusSlider);
-        add(radiusSlider);
+        JSlider widthHeightSlider = new JSlider(0, 100, 10);
+        widthHeightSlider.setMajorTickSpacing(10);
+        widthHeightSlider.setMinorTickSpacing(5);
+        widthHeightSlider.setPaintTicks(true);
+        widthHeightSlider.setPaintLabels(true);
+        leftAlign.apply(widthHeightSlider);
+        add(widthHeightSlider);
 
         JButton searchButton = new JButton("Find nearby nodes");
         searchButton.addActionListener(e -> {
             Vertex<T> selected = (Vertex<T>) centerComboBox.getSelectedItem();
-            double radius = radiusSlider.getValue()*10000;
+            double widthHeight = widthHeightSlider.getValue() * 10000;
 
             if (selected != null) {
                 double centerX = selected.getX();
                 double centerY = selected.getY();
-                Quadtree.Rectangle searchArea = new Quadtree.Rectangle(centerX, centerY, radius * 2, radius * 2);
+                Quadtree.Rectangle searchArea = new Quadtree.Rectangle(centerX, centerY, widthHeight * 2, widthHeight * 2);
+
+                mapGraphPanel.qt.clearLastVisited();
 
                 List<Vertex<T>> candidates = new ArrayList<>();
                 mapGraphPanel.qt.query(searchArea, candidates);
 
+                // DEBUG: Antal besökta rutor
+                System.out.println("Number of visited rectangles: " + mapGraphPanel.qt.getLastVisited().size());
+
+                // Lista på noder med noder i sig
                 List<Vertex<T>> withinRadius = new ArrayList<>();
+                List<Quadtree.Rectangle> containingRectangles = new ArrayList<>();
+
                 for (Vertex<T> v : candidates) {
                     double dx = v.getX() - centerX;
                     double dy = v.getY() - centerY;
-                    if (Math.sqrt(dx * dx + dy * dy) <= radius) {
+                    if (Math.sqrt(dx * dx + dy * dy) <= widthHeight) {
                         withinRadius.add(v);
+
+                        Quadtree.Rectangle rec = mapGraphPanel.qt.markRectangleContaining(v);
+                        if (rec != null) containingRectangles.add(rec);
                     }
                 }
 
                 mapGraphPanel.setSearchArea(searchArea);
                 mapGraphPanel.setHighlightedVertices(withinRadius);
+                mapGraphPanel.setContainingRectangles(containingRectangles);
+                mapGraphPanel.repaint();
+
             }
         });
 

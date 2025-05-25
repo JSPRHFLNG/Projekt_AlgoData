@@ -49,9 +49,12 @@ public class MapGraphPanel<T> extends JPanel
     private double zoom = 1.0;
     private double panX = 0;
     private double panY = 0;
+    private double scaleY;
+    private double scaleX;
     private Point lastDragPoint;
 
     private List<Vertex<T>> highlightedVertices = new ArrayList<>();
+    private List<Quadtree.Rectangle> containingRectangles = new ArrayList<>();
 
 
     public MapGraphPanel(Graph<T> graph, Graph<T> delaunayGraph, Graph<T> mstGraph)
@@ -87,8 +90,8 @@ public class MapGraphPanel<T> extends JPanel
                 double screenX = (e.getX() - panX) / zoom;
                 double screenY = (e.getY() - panY) / zoom;
 
-                double scaleX = (double) getWidth() / (MAP_MAX_X - MAP_MIN_X);
-                double scaleY = (double) getHeight() / (MAP_MAX_Y - MAP_MIN_Y);
+                scaleX = (double) getWidth() / (MAP_MAX_X - MAP_MIN_X);
+                scaleY = (double) getHeight() / (MAP_MAX_Y - MAP_MIN_Y);
 
                 double mapX = MAP_MIN_X + screenX / scaleX;
                 double mapY = MAP_MAX_Y - screenY / scaleY;
@@ -146,11 +149,43 @@ public class MapGraphPanel<T> extends JPanel
         });
     }
 
-
-    public void setHighlightedVertices(List<Vertex<T>> list)
+    /*
+    public void setHighlightedVertices2(List<Vertex<T>> list)
     {
+        repaint();
+        StringBuilder sb = new StringBuilder("Selected server halls:\n");
+        for(Vertex<T> v :list) {
+            quadResultGraph.addVertex(v);
+            sb.append(v.getInfo()).append("\n");
+        }
+        JOptionPane.showMessageDialog(this,
+                sb.toString());
+    }
+
+     */
+
+    public void setHighlightedVertices(List<Vertex<T>> list) {
         this.highlightedVertices = list;
         repaint();
+
+        if(list == null || list.isEmpty()) {
+            SwingUtilities.invokeLater(() -> {
+                JOptionPane.showMessageDialog(MapGraphPanel.this, "No server halls found...");
+            });
+            return;
+        }
+        StringBuilder sb = new StringBuilder("Selected server halls:\n");
+        for (Vertex<T> v : list) {
+            sb.append("- ").append(String.valueOf(v.getInfo())).append("\n");
+        }
+        //repaint();
+        SwingUtilities.invokeLater(() -> {
+            JOptionPane.showMessageDialog(MapGraphPanel.this, sb.toString());
+        });
+    }
+
+    public void setContainingRectangles(List<Quadtree.Rectangle> rectangles) {
+        this.containingRectangles = rectangles;
     }
 
     public void setDijkstraGraph(Graph<T> pathGraph)
@@ -335,6 +370,17 @@ public class MapGraphPanel<T> extends JPanel
             }
         }
 
+        // MARKERA REKTANGLAR SOM BESÖKTS EFTER QUERY
+        g2.setColor(Color.RED);
+        g2.setStroke(new BasicStroke(3));
+        for (Quadtree.Rectangle r : containingRectangles) {
+            double x1 = (r.x - r.width / 2 - MAP_MIN_X) * scaleX;
+            double y1 = getHeight() - ((r.y + r.height / 2 - MAP_MIN_Y) * scaleY);
+            double w = r.width * scaleX;
+            double h = r.height * scaleY;
+
+            g2.draw(new Rectangle2D.Double(x1, y1, w, h));
+        }
 
         // RITA UPP MST
         if (isShowMST && mstGraph != null)
@@ -375,13 +421,12 @@ public class MapGraphPanel<T> extends JPanel
         }
 
 
-
         // MARKERA NÄRMASTE GRANNAR
         g2.setColor(Color.YELLOW);
         for (Vertex<T> v : highlightedVertices) {
             int x = (int) ((v.getX() - MAP_MIN_X) * scaleX);
             int y = (int) (getHeight() - (v.getY() - MAP_MIN_Y) * scaleY);
-            g2.fillOval(x - 6, y - 6, 12, 12); // större cirkel
+            g2.fillOval(x - 6, y - 6, 12, 12);
         }
 
 /*

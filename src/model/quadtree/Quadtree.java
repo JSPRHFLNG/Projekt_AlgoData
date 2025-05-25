@@ -11,9 +11,9 @@ public class Quadtree<T> {
     private final Rectangle boundary;
     private final List<Vertex<T>> vertices;
     boolean divided;
+    private List<Rectangle> lastVisisted = new ArrayList<>();
 
     Quadtree<T> northeast, northwest, southeast, southwest;
-
 
     public Quadtree(Rectangle boundary) {
         this.boundary = boundary;
@@ -21,6 +21,8 @@ public class Quadtree<T> {
         this.divided = false;
     }
 
+    // TA BORT DESSA KONSTRUKTORER
+    /*
     public Quadtree(Graph<T> graph) {
         this.boundary = calculateBoundary(graph);
         this.vertices = new ArrayList<>();
@@ -31,6 +33,9 @@ public class Quadtree<T> {
         }
     }
 
+     */
+
+    /*
     public Quadtree(Graph<T> graph, Rectangle boundary) {
         this.boundary = boundary;
         this.vertices = new ArrayList<>();
@@ -41,6 +46,9 @@ public class Quadtree<T> {
         }
     }
 
+     */
+
+    /*
     public Quadtree(double minX, double minY, double maxX, double maxY) {
         this(new Rectangle(
                 (minX + maxX) / 2,
@@ -50,6 +58,18 @@ public class Quadtree<T> {
         ));
     }
 
+     */
+
+    // BEHÖVS DESSA? TA BORT OM DE INTE BEHÖVS
+    public List<Rectangle> getLastVisited() {
+        return lastVisisted;
+    }
+
+    public void clearLastVisited() {
+        lastVisisted.clear();
+    }
+
+    // TA BORT??
     private Rectangle calculateBoundary(Graph<T> graph) {
         List<Vertex<T>> verticesWithin = graph.getAllVertices();
         if (verticesWithin.isEmpty()) {
@@ -77,27 +97,33 @@ public class Quadtree<T> {
         return new Rectangle(centerX, centerY, width, height);
     }
 
+
+    // VIKTIGA
     public boolean insert(Vertex<T> vertex) {
         if (!boundary.contains(vertex)) return false;
 
-        if (!divided && vertices.size() < CAPACITY) {
-            vertices.add(vertex);
-            return true;
-        } else {
-            if (!divided) {
+        if (!divided) {
+            if (vertices.size() < CAPACITY) {
+                vertices.add(vertex);
+                return true;
+            } else {
                 subdivide();
-                for (Vertex<T> v : vertices) {
 
-                    if(!(northeast.insert(v) || northwest.insert(v) || southeast.insert(v) || southwest.insert(v))) {
-                        insert(v);
+                // Flytta existerande punkter till barnen
+                List<Vertex<T>> oldVertices = new ArrayList<>(vertices);
+                vertices.clear();
+                for (Vertex<T> v : oldVertices) {
+                    boolean inserted = northeast.insert(v) || northwest.insert(v)
+                            || southeast.insert(v) || southwest.insert(v);
+                    if (!inserted) {
+                        System.err.println("Could not insert the vertex: " + v.getX() + ", " + v.getY());
                     }
                 }
-                vertices.clear();
             }
-
-            return (northeast.insert(vertex) || northwest.insert(vertex) ||
-                    southeast.insert(vertex) || southwest.insert(vertex));
         }
+
+        return (northeast.insert(vertex) || northwest.insert(vertex)
+                || southeast.insert(vertex) || southwest.insert(vertex));
     }
 
     private void subdivide() {
@@ -115,6 +141,7 @@ public class Quadtree<T> {
     }
 
     public void query(Rectangle range, List<Vertex<T>> found) {
+        lastVisisted.add(boundary);
         System.out.printf("Querying boundary %s with range %s%n", boundary, range);
 
         if (!boundary.intersects(range)) {
@@ -125,6 +152,7 @@ public class Quadtree<T> {
         System.out.printf("  Checking %d vertices in this node%n", vertices.size());
         for (Vertex<T> v : vertices) {
             if (range.contains(v)) {
+                lastVisisted.add(boundary);
                 found.add(v);
                 System.out.printf("  Found vertex: (%.2f, %.2f)%n", v.getX(), v.getY());
             }
@@ -138,7 +166,6 @@ public class Quadtree<T> {
             southwest.query(range, found);
         }
     }
-
 
     public Vertex<T> findNearest(double x, double y) {
         if(getAllVertices().isEmpty()) return null;
@@ -207,11 +234,9 @@ public class Quadtree<T> {
         return new NearestResult<>(localBest, localBestDistance);
     }
 
-
     private double distance(double x1, double y1, double x2, double y2) {
         return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
-
 
     public Rectangle getBoundary() {
         return boundary;
@@ -246,6 +271,30 @@ public class Quadtree<T> {
         return allVertices;
     }
 
+    public Rectangle markRectangleContaining(Vertex<T> foundVertices) {
+        if(!boundary.contains(foundVertices)) return null;
+
+        // OM DET ÄR EN LÖVNOD
+        if(!divided && boundary.contains(foundVertices)) {
+            return boundary;
+        }
+
+        if(divided) {
+            Rectangle r;
+
+            r = northeast.markRectangleContaining(foundVertices);
+            if(r != null) return r;
+            r = northwest.markRectangleContaining(foundVertices);
+            if (r != null) return r;
+            r = southeast.markRectangleContaining(foundVertices);
+            if (r != null) return r;
+            r = southwest.markRectangleContaining(foundVertices);
+            if (r != null) return r;
+        }
+        return null;
+    }
+
+    // INRE KLASS
     public static class Rectangle {
         public double x, y, width, height;
 
