@@ -8,6 +8,7 @@ import model.graph.Graph;
 import model.graph.JsonToVertex;
 import model.graph.Vertex;
 import model.mst.MST;
+import model.quadtree.Quadtree;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,7 +31,7 @@ public class GuiAppLauncher
             // 1. Läser in en lista med Vertiser.
             List<Vertex<String>> vtxList;
             try {
-                vtxList = JsonToVertex.readJson();
+                vtxList = JsonToVertex.readJson(false);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -43,10 +44,12 @@ public class GuiAppLauncher
             Delaunay<String> dt = new Delaunay<>();
             Graph<String> dtGraph = dt.triangulate(graph);
 
+            Quadtree<String> qt = new Quadtree<>(MapCoordinateConfig.getDefaultBoundary());
+
             MST<String> mst = new MST<>();
             Graph<String> mstGraph = mst.createMST(dtGraph, dtGraph.getAllVertices().getLast());
 
-            GraphNetworkViewer<String> viewer = new GraphNetworkViewer<>(graph, dtGraph, mstGraph);
+            GraphNetworkViewer<String> viewer = new GraphNetworkViewer<>(graph, dtGraph, mstGraph, qt);
             viewer.setVisible(true);
         });
     }

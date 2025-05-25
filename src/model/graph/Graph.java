@@ -20,6 +20,19 @@ public class Graph<T> implements GraphInterface<T>
         nEdges = 0;
     }
 
+    public Graph(List<Vertex<T>> list)
+    {
+        this();
+
+        for(Vertex<T> vertex: list)
+        {
+            T info = vertex.getInfo();
+            vertices.put(info, vertex);
+            edges.put(info, new ArrayList<>());
+            nVertices++;
+        }
+    }
+
 
     /**
      * Extracts and returns a list of all vertices stored in the graph
@@ -194,7 +207,5 @@ public class Graph<T> implements GraphInterface<T>
         }
 
     }
-
-
 
 }

@@ -19,6 +19,7 @@ import java.util.List;
 public class MapGraphPanel<T> extends JPanel
 {
 
+
     private Graph<T> vertexGraph;
     private Graph<T> delaunayGraph;
     private Graph<T> dijkstraGraph;
@@ -37,8 +38,8 @@ public class MapGraphPanel<T> extends JPanel
     private boolean isShowMST = false;
     private final List<Vertex<T>> vertices;
     private final Image backgroundMap;
-    Quadtree<T> qt;
-
+    private final Quadtree.Rectangle boundary;
+    public Quadtree<T> qt;
 
     // SWEREF99TM coordinates, reference points.
     private final double MAP_MIN_X = 258000;   // Lower-left corner X
@@ -54,25 +55,18 @@ public class MapGraphPanel<T> extends JPanel
     private List<Vertex<T>> highlightedVertices = new ArrayList<>();
 
 
-    public MapGraphPanel(Graph<T> graph, Graph<T> delaunayGraph, Graph<T> mstGraph)
+    public MapGraphPanel(Graph<T> graph, Graph<T> delaunayGraph, Graph<T> mstGraph, Quadtree<T> qt)
     {
         this.vertices = graph.getAllVertices();
         this.vertexGraph = graph;
         this.delaunayGraph = delaunayGraph;
         this.mstGraph = mstGraph;
+        this.qt = qt;
         this.dijkstraGraph = new Graph<>();
+        this.boundary = MapCoordinateConfig.getDefaultBoundary();
 
-
-        backgroundMap = new ImageIcon("data/serverkarta-sverige390x920.png").getImage();
+        this.backgroundMap = new ImageIcon("data/serverkarta-sverige390x920.png").getImage();
         setBackground(Color.WHITE);
-
-        Quadtree.Rectangle boundary = new Quadtree.Rectangle(
-                (MAP_MIN_X + MAP_MAX_X) / 2,
-                (MAP_MIN_Y + MAP_MAX_Y) / 2,
-                MAP_MAX_X - MAP_MIN_X,
-                MAP_MAX_Y - MAP_MIN_Y
-        );
-        qt = new Quadtree<>(boundary);
 
         for(Vertex<T> v : vertices)
         {
@@ -107,7 +101,7 @@ public class MapGraphPanel<T> extends JPanel
         });
 
 
-        // Zoom with mouse wheel
+        // Mouse wheel zooming.
         addMouseWheelListener(e -> {
             double delta = 0.1;
             double oldZoom = zoom;
