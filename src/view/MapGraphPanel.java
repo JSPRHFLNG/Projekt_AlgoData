@@ -1,7 +1,6 @@
 package view;
 
 
-import model.delaunay.Delaunay;
 import model.graph.Edge;
 import model.graph.Graph;
 import model.graph.Vertex;
@@ -27,6 +26,9 @@ public class MapGraphPanel<T> extends JPanel
     private Graph<T> quadResultGraph;
 
     private Quadtree.Rectangle searchArea = null;
+    private Vertex<T> fromVertex = null;
+    private Vertex<T> toVertex = null;
+
 
     private boolean isShowVertices = true;
     private boolean isShowDelaunay = true;
@@ -52,13 +54,13 @@ public class MapGraphPanel<T> extends JPanel
     private List<Vertex<T>> highlightedVertices = new ArrayList<>();
 
 
-    public MapGraphPanel(Graph<T> graph, Graph<T> delaunayGraph)
+    public MapGraphPanel(Graph<T> graph, Graph<T> delaunayGraph, Graph<T> mstGraph)
     {
         this.vertices = graph.getAllVertices();
         this.vertexGraph = graph;
         this.delaunayGraph = delaunayGraph;
+        this.mstGraph = mstGraph;
         this.dijkstraGraph = new Graph<>();
-        this.mstGraph = new Graph<>();
 
 
         backgroundMap = new ImageIcon("data/serverkarta-sverige390x920.png").getImage();
@@ -126,7 +128,7 @@ public class MapGraphPanel<T> extends JPanel
             repaint();
         });
 
-        // Pan with mouse drag
+        // Mouse drag pan.
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 lastDragPoint = e.getPoint();
@@ -193,9 +195,15 @@ public class MapGraphPanel<T> extends JPanel
         repaint();
     }
 
+    public void setFromVertex(Vertex<T> v) {
+        this.fromVertex = v;
+        repaint();
+    }
 
-
-
+    public void setToVertex(Vertex<T> v) {
+        this.toVertex = v;
+        repaint();
+    }
 
 
     @Override
@@ -203,53 +211,24 @@ public class MapGraphPanel<T> extends JPanel
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        // Anti-aliasing
+        // Anti-aliasing.
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Apply pan and zoom transforms
+        // Pan and zoom transforms.
         g2.translate(panX, panY);
         g2.scale(zoom, zoom);
 
-        // Draw the background map scaled to the panel size
+        // Background image scaled to panel size.
         g2.drawImage(backgroundMap, 0, 0, getWidth(), getHeight(), this);
 
-        // Calculate scaling factors based on BOUNDARY size and map coordinate extents
+        // Scaling factors based on BOUNDARY size and map coordinate extents.
         double scaleX = (double) getWidth() / (MAP_MAX_X - MAP_MIN_X);
         double scaleY = (double) getHeight() / (MAP_MAX_Y - MAP_MIN_Y);
-        g2.setColor(Color.BLUE);
-        g2.drawRect(0, 0, (int)((MAP_MAX_X - MAP_MIN_X)*scaleX), (int)((MAP_MAX_Y - MAP_MIN_Y)*scaleY));
-
-        // RITA UPP VERTICES
-        g2.setColor(Color.RED);
-        if (isShowVertices && vertexGraph != null)
-        {
-            for (Vertex<T> v : vertices)
-            {
-                double coordX = v.getX();
-                double coordY = v.getY();
-
-                // SWEREF99TM coords to pixel positions
-                int x = (int) ((coordX - MAP_MIN_X) * scaleX);
-                int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY); // invert Y axis because pixel y=0 is top
-
-                // Draw point
-                g2.setColor(v.getColor());
-                g2.fillOval(x - 4, y - 4, 8, 8);
-
-                // Draw label
-                g2.setColor(Color.BLACK);
-                g2.drawString(v.getInfo().toString(), x + 6, y - 6);
-
-                g2.setColor(Color.BLUE);
-                g2.drawRect(0, 0, (int)((MAP_MAX_X - MAP_MIN_X)*scaleX), (int)((MAP_MAX_Y - MAP_MIN_Y)*scaleY));
-            }
-        }
-
 
         // RITA UPP DELAUNAY
         if (isShowDelaunay && delaunayGraph != null)
         {
-            g2.setColor(Color.BLUE);
+            g2.setColor(new Color(0, 64, 255));
             for (Edge<T> edge : delaunayGraph.getAllEdges())
             {
                 Vertex<T> from = edge.getFrom();
@@ -262,6 +241,9 @@ public class MapGraphPanel<T> extends JPanel
 
                 g2.drawLine(x1, y1, x2, y2);
             }
+
+            /* Behövs verticerna ritas upp i delaunay?!?
+            
             g2.setColor(Color.RED);
             for (Vertex<T> v : delaunayGraph.getAllVertices())
             {
@@ -270,7 +252,8 @@ public class MapGraphPanel<T> extends JPanel
 
                 // SWEREF99TM coords to pixel positions
                 int x = (int) ((coordX - MAP_MIN_X) * scaleX);
-                int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY); // invert Y axis because pixel y=0 is top
+                // invert Y-axis because pixel y = 0 is top.
+                int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY);
 
                 // Draw point
                 g2.setColor(v.getColor());
@@ -281,9 +264,62 @@ public class MapGraphPanel<T> extends JPanel
                 g2.drawString(v.getInfo().toString(), x + 6, y - 6);
             }
 
+             */
 
         }
 
+        // RITA UPP VERTICES
+        g2.setColor(Color.RED);
+        if (isShowVertices && vertexGraph != null)
+        {
+            for (Vertex<T> v : vertices)
+            {
+                double coordX = v.getX();
+                double coordY = v.getY();
+
+                // SWEREF99TM coords to pixel positions.
+                int x = (int) ((coordX - MAP_MIN_X) * scaleX);
+                // invert Y-axis because pixel y = 0 is top.
+                int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY);
+
+                // Draw point
+                g2.setColor(v.getColor());
+                g2.fillOval(x - 4, y - 4, 8, 8);
+
+                // Draw label
+                g2.setColor(Color.BLACK);
+                g2.drawString(v.getInfo().toString(), x + 6, y - 6);
+
+
+            }
+        }
+
+        // För att färgsätta highlightade verticer och dess ettiketter
+        if (fromVertex != null) {
+            int x = (int) ((fromVertex.getX() - MAP_MIN_X) * scaleX);
+            int y = (int) (getHeight() - (fromVertex.getY() - MAP_MIN_Y) * scaleY);
+
+            // Markera vertex med gul färg
+            g2.setColor(Color.YELLOW);
+            g2.fillOval(x - 6, y - 6, 12, 12);
+
+            // Skriv label med gul färg
+            g2.setColor(Color.YELLOW);
+            g2.drawString(fromVertex.getInfo().toString(), x + 6, y - 6);
+        }
+
+        if (toVertex != null) {
+            int x = (int) ((toVertex.getX() - MAP_MIN_X) * scaleX);
+            int y = (int) (getHeight() - (toVertex.getY() - MAP_MIN_Y) * scaleY);
+
+            // Markera vertex med grön färg
+            g2.setColor(Color.GREEN);
+            g2.fillOval(x - 6, y - 6, 12, 12);
+
+            // Skriv label med grön färg
+            g2.setColor(Color.GREEN);
+            g2.drawString(toVertex.getInfo().toString(), x + 6, y - 6);
+        }
 
         // RITA UPP QUADTREE STRUKTUR
         if (isShowQuadTreeBound && qt != null)
@@ -300,6 +336,45 @@ public class MapGraphPanel<T> extends JPanel
         }
 
 
+        // RITA UPP MST
+        if (isShowMST && mstGraph != null)
+        {
+            g2.setColor(Color.GREEN);
+            for (Edge<T> edge : mstGraph.getAllEdges())
+            {
+                Vertex<T> from = edge.getFrom();
+                Vertex<T> to = edge.getTo();
+
+                int x1 = (int) ((from.getX() - MAP_MIN_X) * scaleX);
+                int y1 = (int) (getHeight() - (from.getY() - MAP_MIN_Y) * scaleY);
+                int x2 = (int) ((to.getX() - MAP_MIN_X) * scaleX);
+                int y2 = (int) (getHeight() - (to.getY() - MAP_MIN_Y) * scaleY);
+
+                g2.drawLine(x1, y1, x2, y2);
+            }
+            g2.setColor(Color.RED);
+            for (Vertex<T> v : mstGraph.getAllVertices())
+            {
+                double coordX = v.getX();
+                double coordY = v.getY();
+
+                // SWEREF99TM coords to pixel positions
+                int x = (int) ((coordX - MAP_MIN_X) * scaleX);
+                // invert Y-axis because pixel y = 0 is top.
+                int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY);
+
+                // Draw point
+                g2.setColor(v.getColor());
+                g2.fillOval(x - 4, y - 4, 8, 8);
+
+                // Draw label
+                g2.setColor(Color.BLACK);
+                g2.drawString(v.getInfo().toString(), x + 6, y - 6);
+            }
+
+        }
+
+
 
         // MARKERA NÄRMASTE GRANNAR
         g2.setColor(Color.YELLOW);
@@ -309,20 +384,6 @@ public class MapGraphPanel<T> extends JPanel
             g2.fillOval(x - 6, y - 6, 12, 12); // större cirkel
         }
 
-
-
-        g2.setColor(Color.BLUE);
-        for (Edge<T> edge : vertexGraph.getAllEdges()) {
-            Vertex<T> from = edge.getFrom();
-            Vertex<T> to = edge.getTo();
-
-            int x1 = (int) ((from.getX() - MAP_MIN_X) * scaleX);
-            int y1 = (int) (getHeight() - (from.getY() - MAP_MIN_Y) * scaleY);
-            int x2 = (int) ((to.getX() - MAP_MIN_X) * scaleX);
-            int y2 = (int) (getHeight() - (to.getY() - MAP_MIN_Y) * scaleY);
-
-            g2.drawLine(x1, y1, x2, y2);
-        }
 /*
         for (Vertex<T> v : vertices) {
             double coordX = v.getX();
@@ -330,7 +391,8 @@ public class MapGraphPanel<T> extends JPanel
 
             // SWEREF99TM coords to pixel positions
             int x = (int) ((coordX - MAP_MIN_X) * scaleX);
-            int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY); // invert Y axis because pixel y=0 is top
+             // invert Y-axis because pixel y = 0 is top.
+            int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY);
 
             // Draw point
             g2.setColor(v.getColor());
@@ -348,6 +410,7 @@ public class MapGraphPanel<T> extends JPanel
 
         if(isShowDijkstra && dijkstraGraph != null) {
             g2.setColor(Color.PINK);
+            g2.setStroke(new BasicStroke(2));
             for (Edge<T> edge : dijkstraGraph.getAllEdges()) {
                 Vertex<T> from = edge.getFrom();
                 Vertex<T> to = edge.getTo();

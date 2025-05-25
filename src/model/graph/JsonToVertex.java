@@ -12,11 +12,13 @@ public class JsonToVertex
 {
     private static final String jsonFilePath = "data/svenska-servrar.json";
 
-    public static List<Vertex<String>> readJson() throws Exception {
+    public static List<Vertex<String>> readJson() throws Exception
+    {
         ObjectMapper mapper = new ObjectMapper();
         File file = new File(jsonFilePath);
 
-        if (!file.exists()) {
+        if (!file.exists())
+        {
             throw new FileNotFoundException("File not found: " + file.getAbsolutePath());
         }
 
@@ -30,10 +32,9 @@ public class JsonToVertex
             double bandwidth = node.get("bandwidth").asDouble();
             String info = node.get("locality").asText();
 
-            // Store raw SWEREF99TM coordinates directly (no normalization)
+            // Raw unformatted SWEREF99TM coordinates.
             result.add(new Vertex<>(rawX, rawY, bandwidth, info));
         }
-
         return result;
     }
 }

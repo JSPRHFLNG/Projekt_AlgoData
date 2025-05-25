@@ -55,7 +55,6 @@ public class FunctionsPanel<T> extends JPanel
     private void setupPanel()
     {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBorder(BorderFactory.createLineBorder(Color.BLUE));
 
         leftAlign = comp ->
         {
@@ -68,16 +67,53 @@ public class FunctionsPanel<T> extends JPanel
     private void setupHighlighter()
     {
         // Highlight
-        highlightListener = e ->
-        {
-            resetColors(graph.getAllVertices());
-            highlightSelected(cbbDijkstraFrom, Color.YELLOW, allVertices);
-            highlightSelected(cbbDijkstraTo, Color.GREEN, allVertices);
-            mapGraphPanel.repaint();
-        };
-        cbbDijkstraFrom.addActionListener(highlightListener);
-        cbbDijkstraTo.addActionListener(highlightListener);
+        cbbDijkstraFrom.addActionListener(e -> {
+            String selectedName = (String) cbbDijkstraFrom.getSelectedItem();
+
+            // Om "Choose a location..." eller null så gör inget
+            if (selectedName == null || selectedName.equals("Choose a location...")) {
+                mapGraphPanel.setFromVertex(null);
+                return;
+            }
+
+            // Leta upp vertex med matchande namn
+            Vertex<T> selectedVertex = null;
+            for (Vertex<T> v : allVertices) {
+                if (v.getInfo().toString().equals(selectedName)) {
+                    selectedVertex = v;
+                    break;
+                }
+            }
+
+            if (selectedVertex != null) {
+                mapGraphPanel.setFromVertex(selectedVertex);
+            }
+        });
+
+        cbbDijkstraTo.addActionListener(e -> {
+            String selectedName = (String) cbbDijkstraTo.getSelectedItem();
+
+            // Om "Choose a location..." eller null så gör inget
+            if (selectedName == null || selectedName.equals("Choose a location...")) {
+                mapGraphPanel.setToVertex(null);
+                return;
+            }
+
+            // Leta upp vertex med matchande namn
+            Vertex<T> selectedVertex = null;
+            for (Vertex<T> v : allVertices) {
+                if (v.getInfo().toString().equals(selectedName)) {
+                    selectedVertex = v;
+                    break;
+                }
+            }
+
+            if (selectedVertex != null) {
+                mapGraphPanel.setToVertex(selectedVertex);
+            }
+        });
     }
+
     private String[] getVertexNameListForCbb()
     {
         vertexNames = new String[allVertices.size() + 1];
@@ -101,7 +137,7 @@ public class FunctionsPanel<T> extends JPanel
         add(Box.createVerticalStrut(10));
 
 
-        leftAlign.apply(new JLabel("Dijkstra algorithm"));
+        leftAlign.apply(new JLabel("<html><span style='font-weight:bold; font-size:13pt;'>Dijkstra algorithm</span></html>"));
         add(Box.createVerticalStrut(5));
 
 
@@ -131,12 +167,11 @@ public class FunctionsPanel<T> extends JPanel
 
     }
 
-
+/*  Dessa används inte längre!
     private void resetColors(List<Vertex<T>> vertices)
     {
         for (Vertex<T> v : vertices) v.setColor(Color.RED);
     }
-
 
     private JComboBox<String> createComboBox(String[] items)
     {
@@ -144,7 +179,7 @@ public class FunctionsPanel<T> extends JPanel
         box.setMaximumSize(new Dimension(Integer.MAX_VALUE, box.getPreferredSize().height));
         return box;
     }
-
+*/
 
     private void calculateShortestPath(Graph<T> graph)
     {
@@ -194,24 +229,10 @@ public class FunctionsPanel<T> extends JPanel
     }
 
 
-    private void highlightSelected(JComboBox<String> comboBox, Color color, List<Vertex<T>> vertices)
-    {
-        String name = (String) comboBox.getSelectedItem();
-        for (Vertex<T> v : vertices)
-        {
-            if (v.getInfo().toString().equals(name))
-            {
-                v.setColor(color);
-                break;
-            }
-        }
-    }
-
-
     // <------------  QuadTree ------------>
     private void addRegionQueryButton(JPanel functionPanel, Function<JComponent, JComponent> leftAlign)
     {
-        leftAlign.apply(new JLabel("Quadtree"));
+        leftAlign.apply(new JLabel("<html><span style='font-weight:bold; font-size:13pt;'>Quadtree</span></html>"));
         add(Box.createVerticalStrut(5));
         JButton boundsButton = new JButton("Show coordinate bounds");
         boundsButton.addActionListener(e -> {
@@ -319,7 +340,7 @@ public class FunctionsPanel<T> extends JPanel
         add(centerComboBox);
         add(Box.createVerticalStrut(5));
 
-        JLabel radiusLabel = new JLabel("Radius (10km):");
+        JLabel radiusLabel = new JLabel("Radius (km):");
         leftAlign.apply(radiusLabel);
         add(radiusLabel);
 
@@ -390,6 +411,7 @@ public class FunctionsPanel<T> extends JPanel
     // <------------- VISUALISERA QUADTREE STRUKTUR ------------->
     private void addVisualizationControls(JPanel functionsPanel, Function<JComponent, JComponent> leftAlign) {
 
+        add(Box.createVerticalStrut(8));
         JCheckBox showVertices = new JCheckBox("Show/hide vertices", true);
         showVertices.addActionListener(e -> {
             isShowVertices = showVertices.isSelected();
