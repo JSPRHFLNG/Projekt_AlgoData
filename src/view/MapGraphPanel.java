@@ -35,7 +35,6 @@ public class MapGraphPanel<T> extends JPanel
     private boolean isShowMST = false;
     private final List<Vertex<T>> vertices;
     private final Image backgroundMap;
-
     Quadtree<T> qt;
 
 
@@ -78,6 +77,7 @@ public class MapGraphPanel<T> extends JPanel
             qt.insert(v);
         }
 
+        // RETURNS ALL THE SERVER HALLS INSIDE THE CURRENT NODE/RECTANGLE
         addMouseListener(new MouseAdapter()
         {
             public void mouseClicked(MouseEvent e)
@@ -92,33 +92,17 @@ public class MapGraphPanel<T> extends JPanel
                 double mapY = MAP_MAX_Y - screenY / scaleY;
 
                 Vertex<T> nearest = qt.findNearest(mapX, mapY);
-                if (nearest != null)
-                {
+                if (nearest != null) {
                     double dx = nearest.getX() - mapX;
                     double dy = nearest.getY() - mapY;
                     double distance = Math.sqrt(dx * dx + dy * dy);
 
-                    if (distance < 5000)
-                    {
-                        JOptionPane.showMessageDialog(MapGraphPanel.this,
-                                String.format("Nearest vertex: %s\nDistance: %.2f units\n%s",
-                                        nearest, distance, nearest.getInfo()));
-                        return;
-                    }
-                }
-
-                List<Vertex<T>> results = new ArrayList<>();
-                qt.query(new Quadtree.Rectangle(mapX, mapY, 20, 20), results);
-
-                if (!results.isEmpty()) {
-                    Vertex<T> v = results.get(0);
-                    JOptionPane.showMessageDialog(MapGraphPanel.this, v.getInfo());
-                } else {
-                    JOptionPane.showMessageDialog(MapGraphPanel.this, "No vertices nearby.");
+                    JOptionPane.showMessageDialog(MapGraphPanel.this,
+                            String.format("Closest server hall: %s\nDistance: %.2f units\n%s",
+                                    nearest.getInfo(), distance, nearest.toString()));
                 }
             }
         });
-
 
 
         // Zoom with mouse wheel
@@ -304,7 +288,7 @@ public class MapGraphPanel<T> extends JPanel
         // RITA UPP QUADTREE STRUKTUR
         if (isShowQuadTreeBound && qt != null)
         {
-            g2.setColor(Color.MAGENTA);
+            g2.setColor(Color.BLACK);
             for (Quadtree.Rectangle r : qt.getAllBoundaries()) {
                 double x1 = (r.x - r.width / 2 - MAP_MIN_X) * scaleX;
                 double y1 = getHeight() - ((r.y + r.height / 2 - MAP_MIN_Y) * scaleY);

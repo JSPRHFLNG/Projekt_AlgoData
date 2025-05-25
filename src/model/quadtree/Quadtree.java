@@ -8,8 +8,8 @@ import java.util.List;
 
 public class Quadtree<T> {
     private static final int CAPACITY = 4;
-    Rectangle boundary;
-    List<Vertex<T>> vertices;
+    private final Rectangle boundary;
+    private final List<Vertex<T>> vertices;
     boolean divided;
 
     Quadtree<T> northeast, northwest, southeast, southwest;
@@ -87,8 +87,9 @@ public class Quadtree<T> {
             if (!divided) {
                 subdivide();
                 for (Vertex<T> v : vertices) {
-                    if(!(northeast.insert(v) || northwest.insert(v) || southeast.insert(v) || southwest.insert(v))) {
 
+                    if(!(northeast.insert(v) || northwest.insert(v) || southeast.insert(v) || southwest.insert(v))) {
+                        insert(v);
                     }
                 }
                 vertices.clear();
@@ -138,46 +139,84 @@ public class Quadtree<T> {
         }
     }
 
-    public void rebuild(Graph<T> graph) {
-        vertices.clear();
-        divided = false;
-        northeast = northwest = southeast = southwest = null;
-        this.boundary = calculateBoundary(graph);
 
-        for (Vertex<T> v : graph.getAllVertices()) {
-            insert(v);
+    public Vertex<T> findNearest(double x, double y) {
+        if(getAllVertices().isEmpty()) return null;
+        return findNearestRecursive(x, y, null, Double.MAX_VALUE).vertex;
+    }
+
+    private static class NearestResult<T> {
+        Vertex<T> vertex;
+        double distance;
+
+        NearestResult(Vertex<T> vertex, double distance) {
+            this.vertex = vertex;
+            this.distance = distance;
         }
     }
 
-    public Vertex<T> findNearest(double x, double y) {
-        List<Vertex<T>> allVertices = getAllVertices();
-        if (allVertices.isEmpty()) return null;
+    private double distanceToRectangle(double px, double py, Rectangle rectangle) {
+        double left = rectangle.x - rectangle.width / 2;
+        double right = rectangle.x + rectangle.width / 2;
+        double top = rectangle.y - rectangle.height / 2;
+        double bottom = rectangle.y + rectangle.height / 2;
 
-        Vertex<T> nearest = allVertices.getFirst();
-        double nearestDist = distance(x, y, nearest.getX(), nearest.getY());
+        if (px >= left && px <= right && py >= top && py <= bottom) {
+            return 0.0;
+        }
+        double dx = Math.max(0, Math.max(left - px, px - right));
+        double dy = Math.max(0, Math.max(top - py, py - bottom));
+        return Math.sqrt(dx * dx + dy * dy);
+    }
 
-        for (Vertex<T> v : allVertices) {
-            double dist = distance(x, y, v.getX(), v.getY());
-            if (dist < nearestDist) {
-                nearest = v;
-                nearestDist = dist;
+    private NearestResult<T> findNearestRecursive(double x, double y, Vertex<T> currentBest, double bestDistance) {
+
+        double distanceToRegion = distanceToRectangle(x, y, boundary);
+        if(distanceToRegion >= bestDistance) {
+            return new NearestResult<>(currentBest, bestDistance);
+        }
+        Vertex<T> localBest = currentBest;
+        double localBestDistance = bestDistance;
+
+        for (Vertex<T> vertex : vertices) {
+            double dist = distance(x, y, vertex.getX(), vertex.getY());
+            if (dist < localBestDistance) {
+                localBest = vertex;
+                localBestDistance = dist;
             }
         }
 
-        return nearest;
+        if (divided) {
+            NearestResult<T> result = northeast.findNearestRecursive(x, y, localBest, localBestDistance);
+            localBest = result.vertex;
+            localBestDistance = result.distance;
+
+            result = northwest.findNearestRecursive(x, y, localBest, localBestDistance);
+            localBest = result.vertex;
+            localBestDistance = result.distance;
+
+            result = southeast.findNearestRecursive(x, y, localBest, localBestDistance);
+            localBest = result.vertex;
+            localBestDistance = result.distance;
+
+            result = southwest.findNearestRecursive(x, y, localBest, localBestDistance);
+            localBest = result.vertex;
+            localBestDistance = result.distance;
+        }
+
+        return new NearestResult<>(localBest, localBestDistance);
     }
+
 
     private double distance(double x1, double y1, double x2, double y2) {
         return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
 
-    public boolean isDivided() {
-        return divided;
-    }
 
     public Rectangle getBoundary() {
         return boundary;
     }
+
     public List<Rectangle> getAllBoundaries() {
         List<Rectangle> boundaries = new ArrayList<>();
         collectBoundaries(this, boundaries);
@@ -194,7 +233,6 @@ public class Quadtree<T> {
         }
     }
 
-
     public List<Vertex<T>> getAllVertices() {
         List<Vertex<T>> allVertices = new ArrayList<>(vertices);
 
@@ -208,24 +246,6 @@ public class Quadtree<T> {
         return allVertices;
     }
 
-    public void printStructure(int depth) {
-        String indent = "  ".repeat(depth);
-        System.out.printf("%sNode at depth %d: %s, vertices: %d, divided: %b%n",
-                indent, depth, boundary, vertices.size(), divided);
-
-        if (divided) {
-            System.out.printf("%s├─ NE:%n", indent);
-            northeast.printStructure(depth + 1);
-            System.out.printf("%s├─ NW:%n", indent);
-            northwest.printStructure(depth + 1);
-            System.out.printf("%s├─ SE:%n", indent);
-            southeast.printStructure(depth + 1);
-            System.out.printf("%s└─ SW:%n", indent);
-            southwest.printStructure(depth + 1);
-        }
-    }
-
-    // Inre Rectangle-klass
     public static class Rectangle {
         public double x, y, width, height;
 
@@ -242,19 +262,19 @@ public class Quadtree<T> {
             double top = y - height / 2;
             double bottom = y + height / 2;
 
-            boolean inside = (vertex.getX() >= left &&
+            return (vertex.getX() >= left &&
                     vertex.getX() <= right &&
                     vertex.getY() >= top &&
                     vertex.getY() <= bottom);
-            return inside;
+
         }
 
         public boolean intersects(Rectangle range) {
-            boolean intersects = !(range.x - range.width / 2 > x + width / 2 ||
+
+            return !(range.x - range.width / 2 > x + width / 2 ||
                     range.x + range.width / 2 < x - width / 2 ||
                     range.y - range.height / 2 > y + height / 2 ||
                     range.y + range.height / 2 < y - height / 2);
-            return intersects;
         }
 
         @Override
