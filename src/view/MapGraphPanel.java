@@ -19,7 +19,6 @@ import java.util.List;
 public class MapGraphPanel<T> extends JPanel
 {
 
-
     private Graph<T> vertexGraph;
     private Graph<T> delaunayGraph;
     private Graph<T> dijkstraGraph;
@@ -142,21 +141,6 @@ public class MapGraphPanel<T> extends JPanel
             }
         });
     }
-
-    /*
-    public void setHighlightedVertices2(List<Vertex<T>> list)
-    {
-        repaint();
-        StringBuilder sb = new StringBuilder("Selected server halls:\n");
-        for(Vertex<T> v :list) {
-            quadResultGraph.addVertex(v);
-            sb.append(v.getInfo()).append("\n");
-        }
-        JOptionPane.showMessageDialog(this,
-                sb.toString());
-    }
-
-     */
 
     public void setHighlightedVertices(List<Vertex<T>> list) {
         this.highlightedVertices = list;
@@ -340,7 +324,7 @@ public class MapGraphPanel<T> extends JPanel
             }
         }
 
-        // MARKERA REKTANGLAR SOM BESÖKTS EFTER QUERY
+        // MARKERA REKTANGLAR EFTER QUERY
         g2.setColor(Color.RED);
         g2.setStroke(new BasicStroke(3));
         for (Quadtree.Rectangle r : containingRectangles) {
@@ -399,29 +383,6 @@ public class MapGraphPanel<T> extends JPanel
             g2.fillOval(x - 6, y - 6, 12, 12);
         }
 
-/*
-        for (Vertex<T> v : vertices) {
-            double coordX = v.getX();
-            double coordY = v.getY();
-
-            // SWEREF99TM coords to pixel positions
-            int x = (int) ((coordX - MAP_MIN_X) * scaleX);
-             // invert Y-axis because pixel y = 0 is top.
-            int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY);
-
-            // Draw point
-            g2.setColor(v.getColor());
-            g2.fillOval(x - 4, y - 4, 8, 8);
-
-            // Draw label
-            g2.setColor(Color.BLACK);
-            g2.drawString(v.getInfo().toString(), x + 6, y - 6);
-
-            g2.setColor(Color.BLUE);
-            g2.drawRect(0, 0, (int)((MAP_MAX_X - MAP_MIN_X)*scaleX), (int)((MAP_MAX_Y - MAP_MIN_Y)*scaleY));
-        }
-
- */
 
         if(isShowDijkstra && dijkstraGraph != null) {
             g2.setColor(Color.PINK);
@@ -439,6 +400,4 @@ public class MapGraphPanel<T> extends JPanel
             }
         }
     }
-
-
 }

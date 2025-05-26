@@ -1,10 +1,14 @@
 package model.quadtree;
 
-import model.graph.Graph;
 import model.graph.Vertex;
-
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * Represents a Quadtree spatial data structure for organizing 2D points (vertices).
+ * This class offers spatial queries like range searches and nearest neighbor.
+ *
+ */
 
 public class Quadtree<T> {
     private static final int CAPACITY = 4;
@@ -21,46 +25,6 @@ public class Quadtree<T> {
         this.divided = false;
     }
 
-    // TA BORT DESSA KONSTRUKTORER
-    /*
-    public Quadtree(Graph<T> graph) {
-        this.boundary = calculateBoundary(graph);
-        this.vertices = new ArrayList<>();
-        this.divided = false;
-
-        for (Vertex<T> v : graph.getAllVertices()) {
-            insert(v);
-        }
-    }
-
-     */
-
-    /*
-    public Quadtree(Graph<T> graph, Rectangle boundary) {
-        this.boundary = boundary;
-        this.vertices = new ArrayList<>();
-        this.divided = false;
-
-        for (Vertex<T> v : graph.getAllVertices()) {
-            insert(v);
-        }
-    }
-
-     */
-
-    /*
-    public Quadtree(double minX, double minY, double maxX, double maxY) {
-        this(new Rectangle(
-                (minX + maxX) / 2,
-                (minY + maxY) / 2,
-                maxX - minX,
-                maxY - minY
-        ));
-    }
-
-     */
-
-    // BEHÖVS DESSA? TA BORT OM DE INTE BEHÖVS
     public List<Rectangle> getLastVisited() {
         return lastVisisted;
     }
@@ -69,36 +33,12 @@ public class Quadtree<T> {
         lastVisisted.clear();
     }
 
-    // TA BORT??
-    private Rectangle calculateBoundary(Graph<T> graph) {
-        List<Vertex<T>> verticesWithin = graph.getAllVertices();
-        if (verticesWithin.isEmpty()) {
-            return new Rectangle(0, 0, 100, 100);
-        }
-
-        double minX = Double.MAX_VALUE;
-        double minY = Double.MAX_VALUE;
-        double maxX = Double.MIN_VALUE;
-        double maxY = Double.MIN_VALUE;
-
-        for (Vertex<T> v : verticesWithin) {
-            minX = Math.min(minX, v.getX());
-            maxX = Math.max(maxX, v.getX());
-            minY = Math.min(minY, v.getY());
-            maxY = Math.max(maxY, v.getY());
-        }
-
-        double padding = 20;
-        double width = (maxX - minX) + 2 * padding;
-        double height = (maxY - minY) + 2 * padding;
-        double centerX = (minX + maxX) / 2;
-        double centerY = (minY + maxY) / 2;
-
-        return new Rectangle(centerX, centerY, width, height);
-    }
-
-
-    // VIKTIGA
+    /**
+     * Attempts to insert a vertex into the quadtree.
+     *
+     * @param vertex the vertex to insert
+     * @return true if insertion was successful
+     */
     public boolean insert(Vertex<T> vertex) {
         if (!boundary.contains(vertex)) return false;
 
@@ -109,7 +49,6 @@ public class Quadtree<T> {
             } else {
                 subdivide();
 
-                // Flytta existerande punkter till barnen
                 List<Vertex<T>> oldVertices = new ArrayList<>(vertices);
                 vertices.clear();
                 for (Vertex<T> v : oldVertices) {
@@ -126,6 +65,9 @@ public class Quadtree<T> {
                 || southeast.insert(vertex) || southwest.insert(vertex));
     }
 
+    /**
+     * Subdivides this node into four child nodes.
+     */
     private void subdivide()
     {
         double x = boundary.x;
@@ -141,6 +83,12 @@ public class Quadtree<T> {
         divided = true;
     }
 
+    /**
+     * Performs a range query and finds all vertices inside a given rectangle.
+     *
+     * @param range the search rectangle
+     * @param found list to populate with found vertices
+     */
     public void query(Rectangle range, List<Vertex<T>> found) {
         lastVisisted.add(boundary);
         //System.out.printf("Querying boundary %s with range %s%n", boundary, range);
@@ -171,6 +119,13 @@ public class Quadtree<T> {
         }
     }
 
+    /**
+     * Finds the vertex closest to a given (x, y) point.
+     *
+     * @param x the x-coordinate
+     * @param y the y-coordinate
+     * @return the nearest vertex, or null if the tree is empty
+     */
     public Vertex<T> findNearest(double x, double y) {
         if(getAllVertices().isEmpty()) return null;
         return findNearestRecursive(x, y, null, Double.MAX_VALUE).vertex;
@@ -188,7 +143,6 @@ public class Quadtree<T> {
             this.distance = distance;
         }
     }
-
 
     private double distanceToRectangle(double px, double py, Rectangle rectangle)
     {
@@ -293,7 +247,6 @@ public class Quadtree<T> {
     public Rectangle markRectangleContaining(Vertex<T> foundVertices) {
         if(!boundary.contains(foundVertices)) return null;
 
-        // OM DET ÄR EN LÖVNOD
         if(!divided && boundary.contains(foundVertices)) {
             return boundary;
         }
@@ -313,7 +266,7 @@ public class Quadtree<T> {
         return null;
     }
 
-    // INRE KLASS
+
     public static class Rectangle {
 
         public double x, y, width, height;
@@ -326,6 +279,12 @@ public class Quadtree<T> {
             this.height = height;
         }
 
+        /**
+         * Checks if this rectangle contains the given vertex.
+         *
+         * @param vertex the vertex to check
+         * @return true if the vertex is inside this rectangle
+         */
         public <T> boolean contains(Vertex<T> vertex)
         {
             double left = x - width / 2;
@@ -340,6 +299,12 @@ public class Quadtree<T> {
 
         }
 
+        /**
+         * Checks if this rectangle intersects another rectangle.
+         *
+         * @param range the other rectangle
+         * @return true if the rectangles intersect
+        */
         public boolean intersects(Rectangle range)
         {
 
