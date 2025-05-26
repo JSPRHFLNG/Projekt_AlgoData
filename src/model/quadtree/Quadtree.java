@@ -14,7 +14,7 @@ public class Quadtree<T> {
     private static final int CAPACITY = 4;
     private final Rectangle boundary;
     private final List<Vertex<T>> vertices;
-    boolean divided;
+    public boolean divided;
     private List<Rectangle> lastVisisted = new ArrayList<>();
 
     Quadtree<T> northeast, northwest, southeast, southwest;
