@@ -143,27 +143,27 @@ public class Quadtree<T> {
 
     public void query(Rectangle range, List<Vertex<T>> found) {
         lastVisisted.add(boundary);
-        System.out.printf("Querying boundary %s with range %s%n", boundary, range);
+        //System.out.printf("Querying boundary %s with range %s%n", boundary, range);
 
         if (!boundary.intersects(range))
         {
-            System.out.println("  No intersection, skipping");
+            //System.out.println("  No intersection, skipping");
             return;
         }
 
-        System.out.printf("  Checking %d vertices in this node%n", vertices.size());
+        //System.out.printf("  Checking %d vertices in this node%n", vertices.size());
         for (Vertex<T> v : vertices) {
             if (range.contains(v)) {
                 lastVisisted.add(boundary);
 
                 found.add(v);
-                System.out.printf("  Found vertex: (%.2f, %.2f)%n", v.getX(), v.getY());
+                //System.out.printf("  Found vertex: (%.2f, %.2f)%n", v.getX(), v.getY());
             }
         }
 
         if (divided)
         {
-            System.out.println("  Checking children...");
+            //System.out.println("  Checking children...");
             northeast.query(range, found);
             northwest.query(range, found);
             southeast.query(range, found);

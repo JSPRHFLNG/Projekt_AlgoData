@@ -11,16 +11,23 @@ import view.MapCoordinateConfig;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestTimeComplexity
 {
-
+    private static final Vertex<String> origoVertex = new Vertex<>(594000, 6910000, "origo");
+    private static final ArrayList<Vertex<String>> theOrigo = new ArrayList<>();
     private static final int testRepeater = 10000;
-    private final static String csvFile = "data/time_complexity_results.csv";
+    private static final String csvFile = "data/time_complexity_results.csv";
+
+    private static long quadtreeBuildTime;
+    private static long quadtreeSearchTime;
 
     public static void main(String[] args) throws Exception
     {
+        Quadtree.Rectangle boundary = new Quadtree.Rectangle(594000, 6910000, 672000, 1580000);
+        theOrigo.add(origoVertex);
         List<Vertex<String>> allVertices = JsonToVertex.readJson(true);
         TestGraphSizeN<String> testGraph = new TestGraphSizeN<>(allVertices);
         int[] sizes = {50, 100, 200, 400, 800, 1600, 3200, 6400};
@@ -29,13 +36,13 @@ public class TestTimeComplexity
 
         try (FileWriter csvWriter = new FileWriter(csvFile))
         {
-            // CSV.
-            csvWriter.append("Size,Delaunay,Dijkstra,QuadtreeBuild,MST\n");
+            // CSV Head.
+            csvWriter.append("Size,Delaunay,Dijkstra,QuadtreeBuild,QuadtreeSearch,MST\n");
 
-            // Print.
-            System.out.printf("%-6s | %-10s | %-10s | %-17s | %-10s%n",
-                    "Size", "Delaunay", "Dijkstra", "Quadtree (build)", "MST");
-            System.out.println("  --------------------    Nanoseconds    --------------------");
+            // Print out.
+            System.out.printf("%-9s | %-10s | %-10s | %-17s | %-15s | %-10s%n",
+                    "Size", "Delaunay", "Dijkstra", "Quadtree (build)", "Quadtree (search)", "MST");
+            System.out.println("  --------------------    Nanoseconds    ------------------------------");
 
             for (int size : sizes)
             {
@@ -44,7 +51,6 @@ public class TestTimeComplexity
 
                 Vertex<String> start = originalGraph.getAllVertices().getFirst();
                 Vertex<String> end = originalGraph.getAllVertices().getLast();
-
 
                 long delaunayTime = 0;
                 Graph<String> triangulatedGraph = null;
@@ -63,18 +69,18 @@ public class TestTimeComplexity
                 }
                 delaunayTime /= testRepeater;
 
-
                 long dijkstraTime = measureDijkstra(triangulatedGraph, start, end);
-                long quadtreeBuildTime = measureQuadtreeBuild(triangulatedGraph);
+                Quadtree<String> quadtree = measureQuadtreeBuild(triangulatedGraph);
+                quadtreeSearchTime = measureQuadtreeSearch(quadtree, MapCoordinateConfig.getDefaultBoundary(), theOrigo);
                 long mstTime = measureMST(triangulatedGraph, start);
 
-                // Print.
-                System.out.printf("%-9d | %-9d | %-9d | %-17d | %-10d%n",
-                        size, delaunayTime, dijkstraTime, quadtreeBuildTime, mstTime);
+                // Print time results.
+                System.out.printf("%-9d | %-9d | %-9d | %-17d | %-15d | %-10d%n",
+                        size, delaunayTime, dijkstraTime, quadtreeBuildTime, quadtreeSearchTime, mstTime);
 
-                // CSV.
-                csvWriter.append(String.format("%d,%d,%d,%d,%d\n",
-                        size, delaunayTime, dijkstraTime, quadtreeBuildTime, mstTime));
+                // CSV write.
+                csvWriter.append(String.format("%d,%d,%d,%d,%d,%d\n",
+                        size, delaunayTime, dijkstraTime, quadtreeBuildTime, quadtreeSearchTime, mstTime));
             }
 
         } catch (IOException e) {
@@ -98,9 +104,11 @@ public class TestTimeComplexity
     }
 
 
-    private static long measureQuadtreeBuild(Graph<String> graph)
+    private static Quadtree<String> measureQuadtreeBuild(Graph<String> graph)
     {
         long total = 0;
+        Quadtree<String> firstQuadtree = null;
+
         for (int i = 0; i < testRepeater; i++)
         {
             Quadtree<String> qt = new Quadtree<>(MapCoordinateConfig.getDefaultBoundary());
@@ -109,6 +117,24 @@ public class TestTimeComplexity
             {
                 qt.insert(v);
             }
+            long endTime = System.nanoTime();
+            total += (endTime - startTime);
+            if (firstQuadtree == null) firstQuadtree = qt;
+        }
+
+        quadtreeBuildTime = total / testRepeater;
+        return firstQuadtree;
+    }
+
+
+    private static long measureQuadtreeSearch(Quadtree<String> qt, Quadtree.Rectangle boundary, ArrayList<Vertex<String>> origo)
+    {
+        long total = 0;
+
+        for (int i = 0; i < testRepeater; i++)
+        {
+            long startTime = System.nanoTime();
+            qt.query(boundary, origo);
             long endTime = System.nanoTime();
             total += (endTime - startTime);
         }
@@ -129,5 +155,4 @@ public class TestTimeComplexity
         }
         return total / testRepeater;
     }
-
 }
