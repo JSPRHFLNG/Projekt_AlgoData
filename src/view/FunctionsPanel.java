@@ -13,9 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * This panel is responsible for some of the core functions. It's accountable for
+ * shortest path calculation, highlighting nodes and visualization of datastructures.
+ *
+ */
 public class FunctionsPanel<T> extends JPanel
 {
-
     private MapGraphPanel<T> mapGraphPanel;
     private Graph<T> graph;
     private List<Vertex<T>> allVertices;
@@ -64,6 +68,9 @@ public class FunctionsPanel<T> extends JPanel
         };
     }
 
+    /**
+     * Highlights the start- and finish vertex.
+     */
     private void setupHighlighter()
     {
         // Highlight
@@ -114,6 +121,9 @@ public class FunctionsPanel<T> extends JPanel
         });
     }
 
+    /**
+     * Array of the vertices.
+     */
     private String[] getVertexNameListForCbb()
     {
         vertexNames = new String[allVertices.size() + 1];
@@ -125,6 +135,11 @@ public class FunctionsPanel<T> extends JPanel
         return vertexNames;
     }
 
+    /**
+     * Contains logic behind dijkstra which calculates the shortest path between two
+     * vertices.
+     *
+     */
     private void setupDijkstraControls()
     {
         leftAlign.apply(new JLabel("                                     Functions"));
@@ -160,9 +175,11 @@ public class FunctionsPanel<T> extends JPanel
 
     }
 
+    /**
+     * Uses dijkstra to calculate the shortest path between two vertices.
+     */
     private void calculateShortestPath(Graph<T> graph)
     {
-
             String fromID = (String) cbbDijkstraFrom.getSelectedItem();
             String toID = (String) cbbDijkstraTo.getSelectedItem();
 
@@ -170,7 +187,6 @@ public class FunctionsPanel<T> extends JPanel
                 JOptionPane.showMessageDialog(null, "Choose two nodes to calculate shortest path.");
                 return;
             }
-
 
             Vertex<T> start = null;
             Vertex<T> finish = null;
@@ -207,7 +223,11 @@ public class FunctionsPanel<T> extends JPanel
     }
 
 
-    // <------------  QuadTree ------------>
+    /**
+     * Method that adds a pop-up. Allows input that searches for vertices in
+     * a specified area.
+     *
+     */
     private void addRegionQueryButton(JPanel functionPanel, Function<JComponent, JComponent> leftAlign)
     {
         leftAlign.apply(new JLabel("<html><span style='font-weight:bold; font-size:13pt;'>Quadtree</span></html>"));
@@ -235,7 +255,6 @@ public class FunctionsPanel<T> extends JPanel
         leftAlign.apply(boundsButton);
         add(Box.createVerticalStrut(5));
 
-        // FLYTTA TILL EN EGEN METOD MED COMBOBOX ISTÄLLET
         JButton quadTreeButton = new JButton("Open search dialogue");
         add(Box.createVerticalStrut(5));
 
@@ -305,11 +324,16 @@ public class FunctionsPanel<T> extends JPanel
     }
 
 
+    /**
+     * Allows a slider that can change the range from the given vertex.
+     * Visualizes the quadtree structure when searching for nearby nodes.
+     *
+     */
     private void addRadiusSearchButton(JPanel functionPanel, Function<JComponent, JComponent> leftAlign) {
         add(Box.createVerticalStrut(10));
         JComboBox<Vertex<T>> centerComboBox = new JComboBox<>();
         for (Vertex<T> v : graph.getAllVertices()) {
-            centerComboBox.addItem(v);  // toString() bör visa info, t.ex. v.getInfo()
+            centerComboBox.addItem(v);
         }
         leftAlign.apply(centerComboBox);
         centerComboBox.setMaximumSize(new Dimension(Integer.MAX_VALUE, centerComboBox.getPreferredSize().height));
@@ -344,10 +368,8 @@ public class FunctionsPanel<T> extends JPanel
                 List<Vertex<T>> candidates = new ArrayList<>();
                 mapGraphPanel.qt.query(searchArea, candidates);
 
-                // DEBUG: Antal besökta rutor
                 System.out.println("Number of visited rectangles: " + mapGraphPanel.qt.getLastVisited().size());
 
-                // Lista på noder med noder i sig
                 List<Vertex<T>> withinRadius = new ArrayList<>();
                 List<Quadtree.Rectangle> containingRectangles = new ArrayList<>();
 
@@ -375,7 +397,9 @@ public class FunctionsPanel<T> extends JPanel
         add(searchButton);
     }
 
-
+    /**
+     * Lists information about vertices after input dialog.
+     */
     private void quadTreeQuery(List<Vertex<T>> results, double centerX, double centerY, double radius) {
         if (results.isEmpty()) {
             JOptionPane.showMessageDialog(mapGraphPanel, "No serverhalls found in the specified area.");
@@ -398,8 +422,9 @@ public class FunctionsPanel<T> extends JPanel
         JOptionPane.showMessageDialog(this, message.toString(), "Search Results", JOptionPane.INFORMATION_MESSAGE);
     }
 
-
-    // <------------- VISUALISERA KARTANS LAGER ------------->
+    /**
+     * Checkboxes for the different datastructures.
+     */
     private void addVisualizationControls(JPanel functionsPanel, Function<JComponent, JComponent> leftAlign) {
 
         add(Box.createVerticalStrut(10));
@@ -456,22 +481,5 @@ public class FunctionsPanel<T> extends JPanel
         add(Box.createVerticalStrut(3));
         leftAlign.apply(showMST);
 
-
-        /*
-        JButton rebuildButton = new JButton("Rebuild QuadTree");
-        rebuildButton.addActionListener(e -> {
-            //mainPanel.rebuildQuadTree();
-            JOptionPane.showMessageDialog(this, "QuadTree rebuilt successfully!");
-        });
-        leftAlign.apply(rebuildButton);
-        add(Box.createVerticalStrut(5));
-
-        JButton clearSearchButton = new JButton("Clear search area");
-        clearSearchButton.addActionListener(e -> {
-            //mainPanel.clearSearchArea();
-        });
-        leftAlign.apply(clearSearchButton);
-         */
     }
-
 }

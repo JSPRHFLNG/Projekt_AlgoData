@@ -1,6 +1,5 @@
 package view;
 
-
 import model.graph.Edge;
 import model.graph.Graph;
 import model.graph.Vertex;
@@ -15,6 +14,10 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This is the panel for the GUI, which visualize different datastructures on top of the map.
+ *
+ */
 
 public class MapGraphPanel<T> extends JPanel
 {
@@ -142,6 +145,11 @@ public class MapGraphPanel<T> extends JPanel
         });
     }
 
+    /**
+     * Highlights the vertices on map.
+     *
+     * @param list A List with the found vertices.
+     */
     public void setHighlightedVertices(List<Vertex<T>> list) {
         this.highlightedVertices = list;
         repaint();
@@ -208,11 +216,17 @@ public class MapGraphPanel<T> extends JPanel
         repaint();
     }
 
+    /**
+     * Highlights the starting vertex.
+     */
     public void setFromVertex(Vertex<T> v) {
         this.fromVertex = v;
         repaint();
     }
 
+    /**
+     * Highlights the end vertex.
+     */
     public void setToVertex(Vertex<T> v) {
         this.toVertex = v;
         repaint();
