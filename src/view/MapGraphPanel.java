@@ -170,9 +170,9 @@ public class MapGraphPanel<T> extends JPanel
         }
         StringBuilder sb = new StringBuilder("Selected server halls:\n");
         for (Vertex<T> v : list) {
-            sb.append("- ").append(String.valueOf(v.getInfo())).append("\n");
+            sb.append("- ").append(String.valueOf(v.getInfo() + ", Bandwidth: " + Math.round(v.getBW()) + "\n"));
         }
-        //repaint();
+
         SwingUtilities.invokeLater(() -> {
             JOptionPane.showMessageDialog(MapGraphPanel.this, sb.toString());
         });
