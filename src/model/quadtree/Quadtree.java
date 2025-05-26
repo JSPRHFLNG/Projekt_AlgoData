@@ -1,52 +1,104 @@
 package model.quadtree;
 
+import model.graph.Graph;
 import model.graph.Vertex;
+
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * This class is responsible for a spatial data structure. With the inner class Rectangle, this class
- * allows recursive subdivision in 2D into quadrants for efficient spatial queries and finding nearest neighbors.This
- * class allows 4 nodes in every quadrant. When every quadrant (node) exceeds this capacity, it subdivides the quadrant into
- * 4 child-nodes (northwest, northeast, southeast, southwest).
- *
- */
 
 public class Quadtree<T> {
     private static final int CAPACITY = 4;
     private final Rectangle boundary;
     private final List<Vertex<T>> vertices;
-    public boolean divided;
-    private List<Rectangle> lastVisited = new ArrayList<>();
-    public Quadtree<T> northeast, northwest, southeast, southwest;
+    boolean divided;
+    private List<Rectangle> lastVisisted = new ArrayList<>();
 
-    /**
-     * Initiates the boundary.
-     *
-     * @param boundary The rectangle
-     */
+    Quadtree<T> northeast, northwest, southeast, southwest;
+
     public Quadtree(Rectangle boundary) {
         this.boundary = boundary;
         this.vertices = new ArrayList<>();
         this.divided = false;
     }
 
+    // TA BORT DESSA KONSTRUKTORER
+    /*
+    public Quadtree(Graph<T> graph) {
+        this.boundary = calculateBoundary(graph);
+        this.vertices = new ArrayList<>();
+        this.divided = false;
+
+        for (Vertex<T> v : graph.getAllVertices()) {
+            insert(v);
+        }
+    }
+
+     */
+
+    /*
+    public Quadtree(Graph<T> graph, Rectangle boundary) {
+        this.boundary = boundary;
+        this.vertices = new ArrayList<>();
+        this.divided = false;
+
+        for (Vertex<T> v : graph.getAllVertices()) {
+            insert(v);
+        }
+    }
+
+     */
+
+    /*
+    public Quadtree(double minX, double minY, double maxX, double maxY) {
+        this(new Rectangle(
+                (minX + maxX) / 2,
+                (minY + maxY) / 2,
+                maxX - minX,
+                maxY - minY
+        ));
+    }
+
+     */
+
+    // BEHÖVS DESSA? TA BORT OM DE INTE BEHÖVS
     public List<Rectangle> getLastVisited() {
-        return lastVisited;
+        return lastVisisted;
     }
 
     public void clearLastVisited() {
-        lastVisited.clear();
+        lastVisisted.clear();
     }
 
-    /**
-     * Inserting vertices if a rectangle has not been subdivided, and will
-     * continue until the capacity is reached. When the number of nodes
-     * exceeds the capacity, it will subdivide and move the remaining
-     * nodes into child-nodes.
-     *
-     * @param vertex The vertex to be inserted
-     */
+    // TA BORT??
+    private Rectangle calculateBoundary(Graph<T> graph) {
+        List<Vertex<T>> verticesWithin = graph.getAllVertices();
+        if (verticesWithin.isEmpty()) {
+            return new Rectangle(0, 0, 100, 100);
+        }
+
+        double minX = Double.MAX_VALUE;
+        double minY = Double.MAX_VALUE;
+        double maxX = Double.MIN_VALUE;
+        double maxY = Double.MIN_VALUE;
+
+        for (Vertex<T> v : verticesWithin) {
+            minX = Math.min(minX, v.getX());
+            maxX = Math.max(maxX, v.getX());
+            minY = Math.min(minY, v.getY());
+            maxY = Math.max(maxY, v.getY());
+        }
+
+        double padding = 20;
+        double width = (maxX - minX) + 2 * padding;
+        double height = (maxY - minY) + 2 * padding;
+        double centerX = (minX + maxX) / 2;
+        double centerY = (minY + maxY) / 2;
+
+        return new Rectangle(centerX, centerY, width, height);
+    }
+
+
+    // VIKTIGA
     public boolean insert(Vertex<T> vertex) {
         if (!boundary.contains(vertex)) return false;
 
@@ -56,6 +108,8 @@ public class Quadtree<T> {
                 return true;
             } else {
                 subdivide();
+
+                // Flytta existerande punkter till barnen
                 List<Vertex<T>> oldVertices = new ArrayList<>(vertices);
                 vertices.clear();
                 for (Vertex<T> v : oldVertices) {
@@ -72,11 +126,6 @@ public class Quadtree<T> {
                 || southeast.insert(vertex) || southwest.insert(vertex));
     }
 
-    /**
-     * Subdivide the boundary into 4 child-nodes,
-     * northeast, northwest, southeast and southwest.
-     *
-     */
     private void subdivide()
     {
         double x = boundary.x;
@@ -92,38 +141,29 @@ public class Quadtree<T> {
         divided = true;
     }
 
-    /**
-     * Spatial queries. Searches after vertices with a set range.
-     * Checking if a rectangle intersects with another rectangle, if not,
-     * then a list of found vertices will be created. If the rectangle
-     * has been subdivided, then it will check for child-nodes.
-     *
-     * @param found List of found vertices
-     * @param range Rectangle-object
-     */
     public void query(Rectangle range, List<Vertex<T>> found) {
-        lastVisited.add(boundary);
-        System.out.printf("Querying boundary %s with range %s%n", boundary, range);
+        lastVisisted.add(boundary);
+        //System.out.printf("Querying boundary %s with range %s%n", boundary, range);
 
         if (!boundary.intersects(range))
         {
-            System.out.println("  No intersection, skipping");
+            //System.out.println("  No intersection, skipping");
             return;
         }
 
-        System.out.printf("  Checking %d vertices in this node%n", vertices.size());
+        //System.out.printf("  Checking %d vertices in this node%n", vertices.size());
         for (Vertex<T> v : vertices) {
             if (range.contains(v)) {
-                lastVisited.add(boundary);
+                lastVisisted.add(boundary);
 
                 found.add(v);
-                System.out.printf("  Found vertex: (%.2f, %.2f)%n", v.getX(), v.getY());
+                //System.out.printf("  Found vertex: (%.2f, %.2f)%n", v.getX(), v.getY());
             }
         }
 
         if (divided)
         {
-            System.out.println("  Checking children...");
+            //System.out.println("  Checking children...");
             northeast.query(range, found);
             northwest.query(range, found);
             southeast.query(range, found);
@@ -131,32 +171,17 @@ public class Quadtree<T> {
         }
     }
 
-    /**
-     * Finds the nearest neighbors.
-     *
-     */
     public Vertex<T> findNearest(double x, double y) {
         if(getAllVertices().isEmpty()) return null;
         return findNearestRecursive(x, y, null, Double.MAX_VALUE).vertex;
     }
 
 
-    /**
-     * Inner class that helps with finding nearest neighbors and
-     * tracks the distance to a given point.
-     *
-     */
     private static class NearestResult<T>
     {
         Vertex<T> vertex;
         double distance;
 
-        /**
-         * Constructs a result with the given vertex and distance.
-         *
-         * @param vertex Nearest vertex found
-         * @param distance The distance to that vertex
-         */
         NearestResult(Vertex<T> vertex, double distance)
         {
             this.vertex = vertex;
@@ -250,6 +275,7 @@ public class Quadtree<T> {
         }
     }
 
+
     public List<Vertex<T>> getAllVertices()
     {
         List<Vertex<T>> allVertices = new ArrayList<>(vertices);
@@ -267,7 +293,7 @@ public class Quadtree<T> {
     public Rectangle markRectangleContaining(Vertex<T> foundVertices) {
         if(!boundary.contains(foundVertices)) return null;
 
-        // if this is a child-node
+        // OM DET ÄR EN LÖVNOD
         if(!divided && boundary.contains(foundVertices)) {
             return boundary;
         }
@@ -287,15 +313,11 @@ public class Quadtree<T> {
         return null;
     }
 
-
+    // INRE KLASS
     public static class Rectangle {
 
         public double x, y, width, height;
 
-        /**
-         * Creates a rectangle with the specified dimensions.
-         *
-         */
         public Rectangle(double x, double y, double width, double height)
         {
             this.x = x;
@@ -304,10 +326,6 @@ public class Quadtree<T> {
             this.height = height;
         }
 
-        /**
-         * Checks if the vertex contains within the rectangle's boundary.
-         *
-         */
         public <T> boolean contains(Vertex<T> vertex)
         {
             double left = x - width / 2;
@@ -322,10 +340,6 @@ public class Quadtree<T> {
 
         }
 
-        /**
-         * Checks if this rectangle intersect with another rectangle.
-         *
-         */
         public boolean intersects(Rectangle range)
         {
 
