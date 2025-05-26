@@ -11,7 +11,7 @@ import java.util.List;
 public class JsonToVertex
 {
     private static final String jsonFilePath = "data/svenska-servrar.json";
-    private static final String jsonFilePathTestData = "data/generated-mock-data-10000.json";
+    private static final String jsonFilePathTestData = "data/mockup-data-10000-unique.json";
 
     public static List<Vertex<String>> readJson(boolean test) throws Exception
     {

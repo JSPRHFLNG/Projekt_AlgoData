@@ -20,7 +20,8 @@ public class TestGraphSizeN<T>
     {
         for (int size : sizes)
         {
-            if (size <= allVertices.size()) {
+            if (size <= allVertices.size())
+            {
                 List<Vertex<T>> subList = new ArrayList<>(allVertices.subList(0, size));
                 Graph<T> graph = new Graph<>(subList);
                 graphMap.put(size, graph);

@@ -61,7 +61,8 @@ public class Graph<T> implements GraphInterface<T>
     }
 
 
-    public List<Edge<T>> getAllEdges() {
+    public List<Edge<T>> getAllEdges()
+    {
         List<Edge<T>> allEdges = new ArrayList<>();
         for (List<Edge<T>> edgeList : edges.values()) {
             allEdges.addAll(edgeList);
@@ -92,34 +93,16 @@ public class Graph<T> implements GraphInterface<T>
     }
 
     @Override
-    public void addVertex(Vertex<T> vertex) {
-        if(!vertices.containsKey(vertex.getInfo())) {
+    public void addVertex(Vertex<T> vertex)
+    {
+        if(!vertices.containsKey(vertex.getInfo()))
+        {
             vertices.put(vertex.getInfo(), vertex);
             edges.put(vertex.getInfo(), new ArrayList<>());
             nVertices++;
         }
     }
 
-
-    /**
-     * Adds a new {@link Vertex} to the graph at the given position.
-     * Does not allow duplicates.
-     *
-     * @param x the x coordinate.
-     * @param y the y coordinate.
-     * @param z the z coordinate.
-     * @param info the information and identifier of the vertex
-     */
-    @Override
-    public void addVertex(double x, double y, double z,T info)
-    {
-        if(!vertices.containsKey(info))
-        {
-            vertices.put(info, new Vertex<>(x, y, z,info));
-            edges.put(info, new ArrayList<>());
-            nVertices++;
-        }
-    }
 
 
     /**

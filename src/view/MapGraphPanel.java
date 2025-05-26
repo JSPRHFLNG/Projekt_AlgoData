@@ -278,8 +278,6 @@ public class MapGraphPanel<T> extends JPanel
                 // Draw label
                 g2.setColor(Color.BLACK);
                 g2.drawString(v.getInfo().toString(), x + 6, y - 6);
-
-
             }
         }
 

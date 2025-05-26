@@ -26,8 +26,6 @@ public interface GraphInterface<T> {
      * @param y, the y coordinate
      * @param info the information and identifier of the vertex
      */
-    public void addVertex(double x, double y, double z, T info);
-
     public void addVertex(double x, double y, T info);
 
     public void addVertex(Vertex<T> vertex);

@@ -31,7 +31,7 @@ public class GuiAppLauncher
             // 1. Läser in en lista med Vertiser.
             List<Vertex<String>> vtxList;
             try {
-                vtxList = JsonToVertex.readJson(false);
+                vtxList = JsonToVertex.readJson(true);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -40,6 +40,9 @@ public class GuiAppLauncher
             for (Vertex<String> v : vtxList) {
                 graph.addVertex(v);
             }
+
+            System.out.println("Added vertices: " + vtxList.size());
+            System.out.println("Vertices in graph:" + graph.getAllVertices().size());
 
             Delaunay<String> dt = new Delaunay<>();
             Graph<String> dtGraph = dt.triangulate(graph);
