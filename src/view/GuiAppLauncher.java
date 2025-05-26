@@ -31,7 +31,7 @@ public class GuiAppLauncher
             // 1. Läser in en lista med Vertiser.
             List<Vertex<String>> vtxList;
             try {
-                vtxList = JsonToVertex.readJson(true);
+                vtxList = JsonToVertex.readJson(false);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
