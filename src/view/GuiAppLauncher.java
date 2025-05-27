@@ -1,15 +1,12 @@
 package view;
 
-import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import model.delaunay.Delaunay;
-import model.dijkstra.Dijkstra;
 import model.graph.Graph;
 import model.graph.JsonToVertex;
 import model.graph.Vertex;
 import model.mst.MST;
 import model.quadtree.Quadtree;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;

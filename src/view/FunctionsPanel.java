@@ -149,7 +149,7 @@ public class FunctionsPanel<T> extends JPanel
         add(Box.createVerticalStrut(5));
 
 
-        // From combobox
+        // From combobox.
         leftAlign.apply(new JLabel("Select from:"));
         cbbDijkstraFrom = new JComboBox<>(getVertexNameListForCbb());
         cbbDijkstraFrom.setSelectedIndex(0);
@@ -159,7 +159,7 @@ public class FunctionsPanel<T> extends JPanel
         add(Box.createVerticalStrut(5));
 
 
-        // To combobox
+        // To combobox.
         leftAlign.apply(new JLabel("Select to:"));
         cbbDijkstraTo = new JComboBox<>(getVertexNameListForCbb());
         cbbDijkstraTo.setSelectedIndex(0);

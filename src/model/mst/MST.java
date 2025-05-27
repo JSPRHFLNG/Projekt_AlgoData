@@ -62,7 +62,6 @@ public class MST<T>
             mstGraph.addVertex(newVertex);
             mstGraph.addEdge(fromVertex, toVertex, edge.getWeight());
 
-            // Enqueue all edges from the new vertex that connect to unvisited vertices.
             for (Edge<T> edg : delaunayGraph.getEdges(newVertex.getInfo()))
             {
                 Vertex<T> fromVtx = edg.getFrom();

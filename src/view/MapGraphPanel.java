@@ -111,7 +111,8 @@ public class MapGraphPanel<T> extends JPanel
             double delta = 0.1;
             double oldZoom = zoom;
 
-            if (e.getWheelRotation() < 0) {
+            if (e.getWheelRotation() < 0)
+            {
                 zoom += delta;
             } else {
                 zoom = Math.max(zoom - delta, 0.1);
@@ -268,7 +269,6 @@ public class MapGraphPanel<T> extends JPanel
 
                 g2.drawLine(x1, y1, x2, y2);
             }
-
         }
 
         // RITA UPP VERTICES
@@ -285,11 +285,11 @@ public class MapGraphPanel<T> extends JPanel
                 // invert Y-axis because pixel y = 0 is top.
                 int y = (int) (getHeight() - (coordY - MAP_MIN_Y) * scaleY);
 
-                // Draw point
+                // Draw point.
                 g2.setColor(v.getColor());
                 g2.fillOval(x - 4, y - 4, 8, 8);
 
-                // Draw label
+                // Draw label.
                 g2.setColor(Color.BLACK);
                 g2.drawString(v.getInfo().toString(), x + 6, y - 6);
             }
@@ -394,7 +394,6 @@ public class MapGraphPanel<T> extends JPanel
             int y = (int) (getHeight() - (v.getY() - MAP_MIN_Y) * scaleY);
             g2.fillOval(x - 6, y - 6, 12, 12);
         }
-
 
         if(isShowDijkstra && dijkstraGraph != null) {
             g2.setColor(Color.PINK);
