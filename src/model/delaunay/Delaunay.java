@@ -13,6 +13,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * The implementation of a Delaunay triangulation algorithm.
+ * Based on JTS Core 1.19.0 (lib), utilizes Bowyer-Watson algorithm an enclosing super triangle.
+ * The result is a new graph object holding the triangulated mesh.
+ * @param <T> the type of the graph object, the generic class type T.
+ */
 public class Delaunay<T>
 {
 
