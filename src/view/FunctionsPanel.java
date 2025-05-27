@@ -231,48 +231,26 @@ public class FunctionsPanel<T> extends JPanel
     private void addRegionQueryButton(JPanel functionPanel, Function<JComponent, JComponent> leftAlign)
     {
         leftAlign.apply(new JLabel("<html><span style='font-weight:bold; font-size:13pt;'>Quadtree</span></html>"));
-        add(Box.createVerticalStrut(5));
-        JButton boundsButton = new JButton("Show coordinate bounds");
-        boundsButton.addActionListener(e -> {
-            Quadtree.Rectangle boundary = mapGraphPanel.qt.getBoundary();
-            double minX = boundary.x - boundary.width / 2;
-            double maxX = boundary.x + boundary.width / 2;
-            double minY = boundary.y - boundary.height / 2;
-            double maxY = boundary.y + boundary.height / 2;
-
-            String message = String.format(
-                    "QuadTree Coordinate Bounds:\n\n" +
-                            "X Range: %.0f to %.0f\n" +
-                            "Y Range: %.0f to %.0f\n\n" +
-                            "Center: (%.0f, %.0f)\n" +
-                            "Size: %.0f × %.0f\n\n" +
-                            "Use coordinates within these ranges for searches!",
-                    minX, maxX, minY, maxY,
-                    boundary.x, boundary.y, boundary.width, boundary.height
-            );
-            JOptionPane.showMessageDialog(this, message, "Coordinate Bounds", JOptionPane.INFORMATION_MESSAGE);
-        });
-        leftAlign.apply(boundsButton);
-        add(Box.createVerticalStrut(5));
 
         JButton quadTreeButton = new JButton("Open search dialogue");
         add(Box.createVerticalStrut(5));
-
 
         quadTreeButton.addActionListener(e -> {
             Quadtree.Rectangle boundary = mapGraphPanel.qt.getBoundary();
             double centerX = boundary.x;
             double centerY = boundary.y;
+            double minX = boundary.x - boundary.width / 2;
+            double maxX = boundary.x + boundary.width / 2;
+            double minY = boundary.y - boundary.height / 2;
+            double maxY = boundary.y + boundary.height / 2;
 
             String input = JOptionPane.showInputDialog(this,
                     String.format("Enter area (3 numbers separated by commas):\n" +
-                                    "Format: centerX, centerY, radius\n" +
-                                    "Example: %.0f, %.0f, 50000\n\n" +
+                                    "Example: 594000, 6910000, 50000\n\n" +
                                     "Valid X range: %.0f to %.0f\n" +
                                     "Valid Y range: %.0f to %.0f",
-                            centerX, centerY, 50000.0,
-                            boundary.x - boundary.width/2, boundary.x + boundary.width/2,
-                            boundary.y - boundary.height/2, boundary.y + boundary.height/2));
+                            minX, maxX,
+                            minY, maxY));
 
             if (input != null && !input.trim().isEmpty()) {
                 try {
@@ -341,7 +319,7 @@ public class FunctionsPanel<T> extends JPanel
         add(centerComboBox);
         add(Box.createVerticalStrut(5));
 
-        JLabel radiusLabel = new JLabel("Width/height (10 km):");
+        JLabel radiusLabel = new JLabel("Distance (km):");
         leftAlign.apply(radiusLabel);
         add(radiusLabel);
 
@@ -406,7 +384,7 @@ public class FunctionsPanel<T> extends JPanel
             return;
         }
         StringBuilder message = new StringBuilder();
-        message.append(String.format("Found %d vertices within %.0f units of (%.0f, %.0f):\n\n",
+        message.append(String.format("Found %d vertices within %.0f meters of (%.0f, %.0f):\n\n",
                 results.size(), radius, centerX, centerY));
 
         for (int i = 0; i < Math.min(results.size(), 10); i++) { // Show max 10 results
@@ -414,7 +392,7 @@ public class FunctionsPanel<T> extends JPanel
             double dx = v.getX() - centerX;
             double dy = v.getY() - centerY;
             double distance = Math.sqrt(dx * dx + dy * dy);
-            message.append(String.format("• %s (%.0f units away)\n", v, distance));
+            message.append(String.format("• %s (%.0f meters away)\n", v, distance));
         }
         if (results.size() > 10) {
             message.append(String.format("\n... and %d more vertices", results.size() - 10));
