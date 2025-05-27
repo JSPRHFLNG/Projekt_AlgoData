@@ -16,10 +16,8 @@ import java.util.function.Function;
 /**
  * This panel is responsible for some of the core functions. It's accountable for
  * shortest path calculation, highlighting nodes and visualization of datastructures.
- *
  */
-public class FunctionsPanel<T> extends JPanel
-{
+public class FunctionsPanel<T> extends JPanel {
     private MapGraphPanel<T> mapGraphPanel;
     private Graph<T> graph;
     private List<Vertex<T>> allVertices;
@@ -36,12 +34,9 @@ public class FunctionsPanel<T> extends JPanel
     private ActionListener highlightListener;
 
 
-
-
-    public FunctionsPanel(Graph<T> graph, MapGraphPanel<T> mapGraphPanel)
-    {
+    public FunctionsPanel(Graph<T> graph, MapGraphPanel<T> mapGraphPanel) {
         this.graph = graph;
-        this.mapGraphPanel=mapGraphPanel;
+        this.mapGraphPanel = mapGraphPanel;
         this.allVertices = graph.getAllVertices();
 
         // Programmatically add buttons and functionality to gui.
@@ -56,8 +51,7 @@ public class FunctionsPanel<T> extends JPanel
     }
 
 
-    private void setupPanel()
-    {
+    private void setupPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         leftAlign = comp ->
@@ -71,8 +65,7 @@ public class FunctionsPanel<T> extends JPanel
     /**
      * Highlights the start- and finish vertex.
      */
-    private void setupHighlighter()
-    {
+    private void setupHighlighter() {
         // Highlight
         cbbDijkstraFrom.addActionListener(e -> {
             String selectedName = (String) cbbDijkstraFrom.getSelectedItem();
@@ -124,12 +117,10 @@ public class FunctionsPanel<T> extends JPanel
     /**
      * Array of the vertices.
      */
-    private String[] getVertexNameListForCbb()
-    {
+    private String[] getVertexNameListForCbb() {
         vertexNames = new String[allVertices.size() + 1];
         vertexNames[0] = "Choose a location...";
-        for (int i = 0; i < allVertices.size(); i++)
-        {
+        for (int i = 0; i < allVertices.size(); i++) {
             vertexNames[i + 1] = allVertices.get(i).getInfo().toString();
         }
         return vertexNames;
@@ -138,10 +129,8 @@ public class FunctionsPanel<T> extends JPanel
     /**
      * Contains logic behind dijkstra which calculates the shortest path between two
      * vertices.
-     *
      */
-    private void setupDijkstraControls()
-    {
+    private void setupDijkstraControls() {
         leftAlign.apply(new JLabel("                                     Functions"));
         add(Box.createVerticalStrut(10));
 
@@ -178,58 +167,55 @@ public class FunctionsPanel<T> extends JPanel
     /**
      * Uses dijkstra to calculate the shortest path between two vertices.
      */
-    private void calculateShortestPath(Graph<T> graph)
-    {
-            String fromID = (String) cbbDijkstraFrom.getSelectedItem();
-            String toID = (String) cbbDijkstraTo.getSelectedItem();
+    private void calculateShortestPath(Graph<T> graph) {
+        String fromID = (String) cbbDijkstraFrom.getSelectedItem();
+        String toID = (String) cbbDijkstraTo.getSelectedItem();
 
-            if(fromID == null || toID == null || fromID.equals(toID)) {
-                JOptionPane.showMessageDialog(null, "Choose two nodes to calculate shortest path.");
-                return;
+        if (fromID == null || toID == null || fromID.equals(toID)) {
+            JOptionPane.showMessageDialog(null, "Choose two nodes to calculate shortest path.");
+            return;
+        }
+
+        Vertex<T> start = null;
+        Vertex<T> finish = null;
+
+        for (Vertex<T> vertex : graph.getAllVertices()) {
+            if (vertex.toString().equals(fromID)) {
+                start = vertex;
             }
-
-            Vertex<T> start = null;
-            Vertex<T> finish = null;
-
-            for (Vertex<T> vertex : graph.getAllVertices()) {
-                if (vertex.toString().equals(fromID)) {
-                    start = vertex;
-                }
-                if (vertex.toString().equals(toID)) {
-                    finish = vertex;
-                }
+            if (vertex.toString().equals(toID)) {
+                finish = vertex;
             }
-            if(start == null || finish == null) {
+        }
+        if (start == null || finish == null) {
+            JOptionPane.showMessageDialog(null,
+                    "Start or finish node could not be found. Start: " + start + " Finish: " + finish);
+            return;
+        }
+        try {
+            Dijkstra<T> dijkstra = new Dijkstra<>();
+            Graph<T> pathGraph = dijkstra.getLowWeightPathGraph(graph, start, finish);
+
+            if (pathGraph == null || pathGraph.getAllVertices().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "No path was found between the nodes.");
+            } else {
+                mapGraphPanel.setDijkstraGraph(pathGraph);
                 JOptionPane.showMessageDialog(null,
-                        "Start or finish node could not be found. Start: " + start + " Finish: " + finish);
-                return;
+                        "Lowest weight path calculated successfully! Path is highlighted.");
             }
-            try {
-                Dijkstra<T> dijkstra = new Dijkstra<>();
-                Graph<T> pathGraph = dijkstra.getLowWeightPathGraph(graph, start, finish);
-
-                if(pathGraph == null || pathGraph.getAllVertices().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "No path was found between the nodes.");
-                } else {
-                    mapGraphPanel.setDijkstraGraph(pathGraph);
-                    JOptionPane.showMessageDialog(null,
-                            "Lowest weight path calculated successfully! Path is highlighted.");
-                }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null,
-                        "Error calculating shortest path: " + ex.getMessage());
-                ex.printStackTrace();
-            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null,
+                    "Error calculating shortest path: " + ex.getMessage());
+            ex.printStackTrace();
+        }
     }
 
 
     /**
      * Method that adds a pop-up. Allows input that searches for vertices in
      * a specified area.
-     *
      */
-    private void addRegionQueryButton(JPanel functionPanel, Function<JComponent, JComponent> leftAlign)
-    {
+    private void addRegionQueryButton(JPanel functionPanel, Function<JComponent, JComponent> leftAlign) {
         leftAlign.apply(new JLabel("<html><span style='font-weight:bold; font-size:13pt;'>Quadtree</span></html>"));
 
         JButton quadTreeButton = new JButton("Open search dialogue");
@@ -305,7 +291,6 @@ public class FunctionsPanel<T> extends JPanel
     /**
      * Allows a slider that can change the range from the given vertex.
      * Visualizes the quadtree structure when searching for nearby nodes.
-     *
      */
     private void addRadiusSearchButton(JPanel functionPanel, Function<JComponent, JComponent> leftAlign) {
         add(Box.createVerticalStrut(10));

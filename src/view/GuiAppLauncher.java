@@ -7,20 +7,19 @@ import model.graph.JsonToVertex;
 import model.graph.Vertex;
 import model.mst.MST;
 import model.quadtree.Quadtree;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class GuiAppLauncher
-{
+public class GuiAppLauncher {
 
-    public void launch()
-    {
+    public void launch() {
         SwingUtilities.invokeLater(() -> {
 
             try {
                 UIManager.setLookAndFeel(new FlatMacLightLaf());
-                UIManager.put("Panel.background", new Color(235,235,235));
+                UIManager.put("Panel.background", new Color(235, 235, 235));
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -34,8 +33,7 @@ public class GuiAppLauncher
             }
 
             Graph<String> graph = new Graph<>();
-            for (Vertex<String> v : vtxList)
-            {
+            for (Vertex<String> v : vtxList) {
                 graph.addVertex(v);
             }
 

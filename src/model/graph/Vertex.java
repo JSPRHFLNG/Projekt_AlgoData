@@ -2,8 +2,7 @@ package model.graph;
 
 import java.awt.*;
 
-public class Vertex<T>
-{
+public class Vertex<T> {
     private T info;
     private double x;
     private double y;
@@ -13,82 +12,75 @@ public class Vertex<T>
 
     /**
      * Creates a Vertex object with x and y coordinates.
+     *
      * @param xCoordinate
      * @param yCoordinate
-     * @param info the object identifier of generic class type T.
+     * @param info        the object identifier of generic class type T.
      */
-    public Vertex(double xCoordinate, double yCoordinate, T info)
-    {
+    public Vertex(double xCoordinate, double yCoordinate, T info) {
         this(xCoordinate, yCoordinate, 0, info);
     }
 
 
     /**
      * Creates a Vertex object with x, y and z coordinate.
+     *
      * @param xCoordinate
      * @param yCoordinate
      * @param bandwidth
-     * @param info the object identifier of generic class type T.
+     * @param info        the object identifier of generic class type T.
      */
-    public Vertex(double xCoordinate, double yCoordinate, double bandwidth, T info)
-    {
-        this.x=xCoordinate;
-        this.y=yCoordinate;
-        this.bw=bandwidth;
+    public Vertex(double xCoordinate, double yCoordinate, double bandwidth, T info) {
+        this.x = xCoordinate;
+        this.y = yCoordinate;
+        this.bw = bandwidth;
         this.info = info;
         this.color = Color.RED;
     }
 
 
     /**
-     *  Getters and setters
+     * Getters and setters
+     *
      * @return this.*, * = instance field value.
      */
 
-    public T getInfo()
-    {
+    public T getInfo() {
         return info;
     }
 
 
-    public void setInfo(T info)
-    {
+    public void setInfo(T info) {
         this.info = info;
     }
 
 
-    public double getX()
-    {
+    public double getX() {
         return x;
     }
 
 
-    public void setX(double x)
-    {
+    public void setX(double x) {
         this.x = x;
     }
 
 
-    public double getY()
-    {
+    public double getY() {
         return y;
     }
 
 
-    public void setY(double y)
-    {
+    public void setY(double y) {
         this.y = y;
     }
 
 
-    public Color getColor()
-    {
+    public Color getColor() {
         return color;
     }
 
 
-    public void setColor(Color color)
-    {
+    public void setColor(Color color) {
         this.color = color;
     }
 

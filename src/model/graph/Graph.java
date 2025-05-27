@@ -5,27 +5,23 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class Graph<T> implements GraphInterface<T>
-{
+public class Graph<T> implements GraphInterface<T> {
     private int nVertices;
     private int nEdges;
     private HashMap<T, Vertex<T>> vertices;
     private HashMap<T, ArrayList<Edge<T>>> edges;
 
-    public Graph()
-    {
+    public Graph() {
         vertices = new HashMap<>();
         edges = new HashMap<>();
         nVertices = 0;
         nEdges = 0;
     }
 
-    public Graph(List<Vertex<T>> list)
-    {
+    public Graph(List<Vertex<T>> list) {
         this();
 
-        for(Vertex<T> vertex: list)
-        {
+        for (Vertex<T> vertex : list) {
             T info = vertex.getInfo();
             vertices.put(info, vertex);
             edges.put(info, new ArrayList<>());
@@ -40,8 +36,7 @@ public class Graph<T> implements GraphInterface<T>
      * @return a list containing all {@link Vertex} objects
      */
     @Override
-    public List<Vertex<T>> getAllVertices()
-    {
+    public List<Vertex<T>> getAllVertices() {
         return new ArrayList<>(vertices.values());
     }
 
@@ -55,14 +50,12 @@ public class Graph<T> implements GraphInterface<T>
      * the vertex
      */
     @Override
-    public List<Edge<T>> getEdges(T info)
-    {
+    public List<Edge<T>> getEdges(T info) {
         return edges.getOrDefault(info, new ArrayList<>());
     }
 
 
-    public List<Edge<T>> getAllEdges()
-    {
+    public List<Edge<T>> getAllEdges() {
         List<Edge<T>> allEdges = new ArrayList<>();
         for (List<Edge<T>> edgeList : edges.values()) {
             allEdges.addAll(edgeList);
@@ -70,22 +63,21 @@ public class Graph<T> implements GraphInterface<T>
         return allEdges;
     }
 
-    public Vertex<T> getVertex(T info)
-    {
+    public Vertex<T> getVertex(T info) {
         return vertices.get(info);
     }
 
     /**
      * Adds a new {@link Vertex} to the graph at the given position
      * Does not allow duplicates.
-     * @param x the x coordinate.
-     * @param y the y coordinate.
+     *
+     * @param x    the x coordinate.
+     * @param y    the y coordinate.
      * @param info the identifier of the vertex
      */
     @Override
-    public void addVertex(double x, double y,T info)
-    {
-        if(!vertices.containsKey(info)){
+    public void addVertex(double x, double y, T info) {
+        if (!vertices.containsKey(info)) {
             vertices.put(info, new Vertex<>(x, y, info));
             edges.put(info, new ArrayList<>());
             nVertices++;
@@ -93,16 +85,13 @@ public class Graph<T> implements GraphInterface<T>
     }
 
     @Override
-    public void addVertex(Vertex<T> vertex)
-    {
-        if(!vertices.containsKey(vertex.getInfo()))
-        {
+    public void addVertex(Vertex<T> vertex) {
+        if (!vertices.containsKey(vertex.getInfo())) {
             vertices.put(vertex.getInfo(), vertex);
             edges.put(vertex.getInfo(), new ArrayList<>());
             nVertices++;
         }
     }
-
 
 
     /**
@@ -113,12 +102,12 @@ public class Graph<T> implements GraphInterface<T>
      * @param infoB the identifier of vertex B
      */
     @Override
-    public void addEdge(T infoA, T infoB)
-    {
-        if(infoA == null || infoB == null){return;}
+    public void addEdge(T infoA, T infoB) {
+        if (infoA == null || infoB == null) {
+            return;
+        }
 
-        if(vertices.containsKey(infoA) && vertices.containsKey(infoB))
-        {
+        if (vertices.containsKey(infoA) && vertices.containsKey(infoB)) {
             Vertex<T> vertexA = vertices.get(infoA);
             Vertex<T> vertexB = vertices.get(infoB);
             Edge<T> edgeAB = new Edge<>(vertexA, vertexB);
@@ -138,18 +127,15 @@ public class Graph<T> implements GraphInterface<T>
      * @param info the identifier of the vertex to remove
      */
     @Override
-    public void remove(T info)
-    {
-        if(!vertices.containsKey(info) || info == null)
-        {
+    public void remove(T info) {
+        if (!vertices.containsKey(info) || info == null) {
             return;
         }
 
         nEdges -= edges.get(info).size() / 2;
-        for(T key : edges.keySet())
-        {
+        for (T key : edges.keySet()) {
             edges.get(key).
-                    removeIf(edge->
+                    removeIf(edge ->
                             edge.getTo().getInfo().equals(info));
         }
         vertices.remove(info);
@@ -165,8 +151,7 @@ public class Graph<T> implements GraphInterface<T>
      * @return number of edges
      */
     @Override
-    public int numberOfEdges()
-    {
+    public int numberOfEdges() {
         return nEdges;
     }
 
@@ -177,14 +162,12 @@ public class Graph<T> implements GraphInterface<T>
      * @return number of vertices
      */
     @Override
-    public int numberOfVertices()
-    {
+    public int numberOfVertices() {
         return nVertices;
     }
 
     @Override
-    public void addEdge(Vertex<T> fromVertex, Vertex<T> toVertex, double weight)
-    {
+    public void addEdge(Vertex<T> fromVertex, Vertex<T> toVertex, double weight) {
         if (fromVertex != null && toVertex != null) {
             addEdge(fromVertex.getInfo(), toVertex.getInfo());
         }

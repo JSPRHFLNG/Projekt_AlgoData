@@ -16,11 +16,9 @@ import java.util.List;
 
 /**
  * This is the panel for the GUI, which visualize different datastructures on top of the map.
- *
  */
 
-public class MapGraphPanel<T> extends JPanel
-{
+public class MapGraphPanel<T> extends JPanel {
 
     private Graph<T> vertexGraph;
     private Graph<T> delaunayGraph;
@@ -60,8 +58,7 @@ public class MapGraphPanel<T> extends JPanel
     private List<Quadtree.Rectangle> containingRectangles = new ArrayList<>();
 
 
-    public MapGraphPanel(Graph<T> graph, Graph<T> delaunayGraph, Graph<T> mstGraph, Quadtree<T> qt)
-    {
+    public MapGraphPanel(Graph<T> graph, Graph<T> delaunayGraph, Graph<T> mstGraph, Quadtree<T> qt) {
         this.vertices = graph.getAllVertices();
         this.vertexGraph = graph;
         this.delaunayGraph = delaunayGraph;
@@ -73,16 +70,13 @@ public class MapGraphPanel<T> extends JPanel
         this.backgroundMap = new ImageIcon("data/serverkarta-sverige390x920.png").getImage();
         setBackground(Color.WHITE);
 
-        for(Vertex<T> v : vertices)
-        {
+        for (Vertex<T> v : vertices) {
             qt.insert(v);
         }
 
         // RETURNS ALL THE SERVER HALLS INSIDE THE CURRENT NODE/RECTANGLE
-        addMouseListener(new MouseAdapter()
-        {
-            public void mouseClicked(MouseEvent e)
-            {
+        addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
                 double screenX = (e.getX() - panX) / zoom;
                 double screenY = (e.getY() - panY) / zoom;
 
@@ -111,8 +105,7 @@ public class MapGraphPanel<T> extends JPanel
             double delta = 0.1;
             double oldZoom = zoom;
 
-            if (e.getWheelRotation() < 0)
-            {
+            if (e.getWheelRotation() < 0) {
                 zoom += delta;
             } else {
                 zoom = Math.max(zoom - delta, 0.1);
@@ -155,7 +148,7 @@ public class MapGraphPanel<T> extends JPanel
         this.highlightedVertices = list;
         repaint();
 
-        if(list == null || list.isEmpty()) {
+        if (list == null || list.isEmpty()) {
             SwingUtilities.invokeLater(() -> {
                 JOptionPane.showMessageDialog(MapGraphPanel.this, "No server halls found...");
             });
@@ -175,44 +168,37 @@ public class MapGraphPanel<T> extends JPanel
         this.containingRectangles = rectangles;
     }
 
-    public void setDijkstraGraph(Graph<T> pathGraph)
-    {
+    public void setDijkstraGraph(Graph<T> pathGraph) {
         this.dijkstraGraph = pathGraph;
         repaint();
     }
 
-    public void setSearchArea(Quadtree.Rectangle area)
-    {
+    public void setSearchArea(Quadtree.Rectangle area) {
         this.searchArea = area;
         repaint();
     }
 
-    public void setShowVertices(boolean show)
-    {
+    public void setShowVertices(boolean show) {
         this.isShowVertices = show;
         repaint();
     }
 
-    public void setShowQuadTreeBound(boolean show)
-    {
+    public void setShowQuadTreeBound(boolean show) {
         this.isShowQuadTreeBound = show;
         repaint();
     }
 
-    public void setShowDelaunay(boolean show)
-    {
+    public void setShowDelaunay(boolean show) {
         this.isShowDelaunay = show;
         repaint();
     }
 
-    public void setShowDijkstra(boolean show)
-    {
+    public void setShowDijkstra(boolean show) {
         this.isShowDijkstra = show;
         repaint();
     }
 
-    public void setShowMST(boolean show)
-    {
+    public void setShowMST(boolean show) {
         this.isShowMST = show;
         repaint();
     }
@@ -254,11 +240,9 @@ public class MapGraphPanel<T> extends JPanel
         double scaleY = (double) getHeight() / (MAP_MAX_Y - MAP_MIN_Y);
 
         // RITA UPP DELAUNAY
-        if (isShowDelaunay && delaunayGraph != null)
-        {
+        if (isShowDelaunay && delaunayGraph != null) {
             g2.setColor(new Color(0, 64, 255));
-            for (Edge<T> edge : delaunayGraph.getAllEdges())
-            {
+            for (Edge<T> edge : delaunayGraph.getAllEdges()) {
                 Vertex<T> from = edge.getFrom();
                 Vertex<T> to = edge.getTo();
 
@@ -273,10 +257,8 @@ public class MapGraphPanel<T> extends JPanel
 
         // RITA UPP VERTICES
         g2.setColor(Color.RED);
-        if (isShowVertices && vertexGraph != null)
-        {
-            for (Vertex<T> v : vertices)
-            {
+        if (isShowVertices && vertexGraph != null) {
+            for (Vertex<T> v : vertices) {
                 double coordX = v.getX();
                 double coordY = v.getY();
 
@@ -323,8 +305,7 @@ public class MapGraphPanel<T> extends JPanel
         }
 
         // RITA UPP QUADTREE STRUKTUR
-        if (isShowQuadTreeBound && qt != null)
-        {
+        if (isShowQuadTreeBound && qt != null) {
             g2.setColor(Color.BLACK);
             for (Quadtree.Rectangle r : qt.getAllBoundaries()) {
                 double x1 = (r.x - r.width / 2 - MAP_MIN_X) * scaleX;
@@ -349,11 +330,9 @@ public class MapGraphPanel<T> extends JPanel
         }
 
         // RITA UPP MST
-        if (isShowMST && mstGraph != null)
-        {
+        if (isShowMST && mstGraph != null) {
             g2.setColor(Color.GREEN);
-            for (Edge<T> edge : mstGraph.getAllEdges())
-            {
+            for (Edge<T> edge : mstGraph.getAllEdges()) {
                 Vertex<T> from = edge.getFrom();
                 Vertex<T> to = edge.getTo();
 
@@ -365,8 +344,7 @@ public class MapGraphPanel<T> extends JPanel
                 g2.drawLine(x1, y1, x2, y2);
             }
             g2.setColor(Color.RED);
-            for (Vertex<T> v : mstGraph.getAllVertices())
-            {
+            for (Vertex<T> v : mstGraph.getAllVertices()) {
                 double coordX = v.getX();
                 double coordY = v.getY();
 
@@ -395,7 +373,7 @@ public class MapGraphPanel<T> extends JPanel
             g2.fillOval(x - 6, y - 6, 12, 12);
         }
 
-        if(isShowDijkstra && dijkstraGraph != null) {
+        if (isShowDijkstra && dijkstraGraph != null) {
             g2.setColor(Color.PINK);
             g2.setStroke(new BasicStroke(2));
             for (Edge<T> edge : dijkstraGraph.getAllEdges()) {

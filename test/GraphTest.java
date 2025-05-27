@@ -3,29 +3,27 @@ import model.graph.Graph;
 import model.graph.Vertex;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class GraphTest
-{
+public class GraphTest {
 
     public Graph<String> graph;
 
     @BeforeEach
-    public void setup()
-    {
+    public void setup() {
         graph = new Graph<>();
     }
 
 
     @Test
-    public void testGetAllVertices()
-    {
+    public void testGetAllVertices() {
         graph.addVertex(100, 100, "A");
-        graph.addVertex(200, 150,"B");
-        graph.addVertex(300, 100,"C");
+        graph.addVertex(200, 150, "B");
+        graph.addVertex(300, 100, "C");
 
         List<Vertex<String>> vertices = graph.getAllVertices();
 
@@ -35,8 +33,7 @@ public class GraphTest
 
 
     @Test
-    public void testGetEdges()
-    {
+    public void testGetEdges() {
         graph.addVertex(100, 100, "A");
         graph.addVertex(100, 100, "B");
         graph.addEdge("A", "B");
@@ -52,9 +49,8 @@ public class GraphTest
 
 
     @Test
-    public void testRemoveNonExisting()
-    {
-        graph.addVertex(10,10, "A");
+    public void testRemoveNonExisting() {
+        graph.addVertex(10, 10, "A");
         graph.remove("B");
 
         assertEquals(1, graph.numberOfVertices());
@@ -62,9 +58,8 @@ public class GraphTest
 
 
     @Test
-    public void testRemoveExisting()
-    {
-        graph.addVertex(10,10, "A");
+    public void testRemoveExisting() {
+        graph.addVertex(10, 10, "A");
         graph.remove("A");
 
         assertEquals(0, graph.numberOfVertices());
@@ -72,11 +67,10 @@ public class GraphTest
 
 
     @Test
-    public void testNumberOfEdges()
-    {
+    public void testNumberOfEdges() {
         graph.addVertex(10, 10, "A");
-        graph.addVertex(20, 15,"B");
-        graph.addVertex(40, 10,"C");
+        graph.addVertex(20, 15, "B");
+        graph.addVertex(40, 10, "C");
 
         graph.addEdge("A", "B");
         graph.addEdge("B", "C");
@@ -87,11 +81,10 @@ public class GraphTest
 
 
     @Test
-    public void testNumberOfVertices()
-    {
+    public void testNumberOfVertices() {
         graph.addVertex(10, 10, "A");
-        graph.addVertex(20, 15,"B");
-        graph.addVertex(40, 10,"C");
+        graph.addVertex(20, 15, "B");
+        graph.addVertex(40, 10, "C");
 
         assertEquals(3, graph.numberOfVertices());
     }

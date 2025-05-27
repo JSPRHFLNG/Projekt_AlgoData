@@ -2,8 +2,7 @@ package view;
 
 import model.quadtree.Quadtree;
 
-public class MapCoordinateConfig
-{
+public class MapCoordinateConfig {
     public static final double MAP_MIN_X = 258000;
     public static final double MAP_MAX_X = 930000;
     public static final double MAP_MIN_Y = 6120000;

@@ -8,26 +8,20 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JsonToVertex
-{
+public class JsonToVertex {
     private static final String jsonFilePath = "data/svenska-servrar.json";
     private static final String jsonFilePathTestData = "data/mockup-data-10000-unique.json";
 
-    public static List<Vertex<String>> readJson(boolean test) throws Exception
-    {
+    public static List<Vertex<String>> readJson(boolean test) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         File file;
-        if(test)
-        {
+        if (test) {
             file = new File(jsonFilePathTestData);
-        }
-        else
-        {
+        } else {
             file = new File(jsonFilePath);
         }
 
-        if (!file.exists())
-        {
+        if (!file.exists()) {
             throw new FileNotFoundException("File not found: " + file.getAbsolutePath());
         }
 

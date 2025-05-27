@@ -18,13 +18,12 @@ import java.util.Map;
  * The implementation of a Delaunay triangulation algorithm.
  * Based on JTS Core 1.19.0 (lib), utilizes Bowyer-Watson algorithm an enclosing super triangle.
  * The result is a new graph object holding the triangulated mesh.
+ *
  * @param <T> the type of the graph object, the generic class type T.
  */
-public class Delaunay<T>
-{
+public class Delaunay<T> {
 
-    public Graph<T> triangulate(Graph<T> graph)
-    {
+    public Graph<T> triangulate(Graph<T> graph) {
         Graph<T> triangulatedGraph = new Graph<>();
 
         GeometryFactory geomFactory = new GeometryFactory();
@@ -33,8 +32,7 @@ public class Delaunay<T>
         List<Coordinate> coords = new ArrayList<>();
         Map<String, Vertex<T>> coordToVertex = new HashMap<>();
 
-        for (Vertex<T> v : graph.getAllVertices())
-        {
+        for (Vertex<T> v : graph.getAllVertices()) {
             Coordinate coord = new Coordinate(v.getX(), v.getY());
             coords.add(coord);
 
@@ -45,8 +43,7 @@ public class Delaunay<T>
         triangulator.setSites(coords);
         GeometryCollection edgeLines = (GeometryCollection) triangulator.getEdges(geomFactory);
 
-        for (int i = 0; i < edgeLines.getNumGeometries(); i++)
-        {
+        for (int i = 0; i < edgeLines.getNumGeometries(); i++) {
             LineString line = (LineString) edgeLines.getGeometryN(i);
             Coordinate[] points = line.getCoordinates();
 
@@ -56,8 +53,7 @@ public class Delaunay<T>
             Vertex<T> from = coordToVertex.get(key1);
             Vertex<T> to = coordToVertex.get(key2);
 
-            if (from != null && to != null)
-            {
+            if (from != null && to != null) {
                 triangulatedGraph.addVertex(from);
                 triangulatedGraph.addVertex(to);
                 triangulatedGraph.addEdge(from.getInfo(), to.getInfo());

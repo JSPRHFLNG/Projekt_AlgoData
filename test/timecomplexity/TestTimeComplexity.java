@@ -14,8 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestTimeComplexity
-{
+public class TestTimeComplexity {
     private static final Vertex<String> origoVertex = new Vertex<>(594000, 6910000, "origo");
     private static final ArrayList<Vertex<String>> theOrigo = new ArrayList<>();
     private static final int testRepeater = 10000;
@@ -24,8 +23,7 @@ public class TestTimeComplexity
     private static long quadtreeBuildTime;
     private static long quadtreeSearchTime;
 
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         //Quadtree.Rectangle boundary = new Quadtree.Rectangle(594000, 6910000, 672000, 1580000);
         //Quadtree.Rectangle testArea = new Quadtree.Rectangle(594000, 6910000, 10000, 10000);
 
@@ -36,8 +34,7 @@ public class TestTimeComplexity
 
         testGraph.prepareGraphs(sizes);
 
-        try (FileWriter csvWriter = new FileWriter(csvFile))
-        {
+        try (FileWriter csvWriter = new FileWriter(csvFile)) {
             // CSV Head.
             csvWriter.append("Size,Delaunay,Dijkstra,QuadtreeBuild,QuadtreeSearch,MST\n");
 
@@ -46,8 +43,7 @@ public class TestTimeComplexity
                     "Size", "Delaunay", "Dijkstra", "Quadtree (build)", "Quadtree (search)", "MST");
             System.out.println("  --------------------    Nanoseconds    ------------------------------");
 
-            for (int size : sizes)
-            {
+            for (int size : sizes) {
                 Graph<String> originalGraph = testGraph.getGraph(size);
                 if (originalGraph == null) continue;
 
@@ -57,15 +53,13 @@ public class TestTimeComplexity
                 long delaunayTime = 0;
                 Graph<String> triangulatedGraph = null;
 
-                for (int i = 0; i < testRepeater; i++)
-                {
+                for (int i = 0; i < testRepeater; i++) {
                     Delaunay<String> dt = new Delaunay<>();
                     long startTime = System.nanoTime();
                     Graph<String> temp = dt.triangulate(originalGraph);
                     long endTime = System.nanoTime();
                     delaunayTime += (endTime - startTime);
-                    if (triangulatedGraph == null)
-                    {
+                    if (triangulatedGraph == null) {
                         triangulatedGraph = temp;
                     }
                 }
@@ -91,11 +85,9 @@ public class TestTimeComplexity
     }
 
 
-    private static long measureDijkstra(Graph<String> graph, Vertex<String> start, Vertex<String> end)
-    {
+    private static long measureDijkstra(Graph<String> graph, Vertex<String> start, Vertex<String> end) {
         long total = 0;
-        for (int i = 0; i < testRepeater; i++)
-        {
+        for (int i = 0; i < testRepeater; i++) {
             Dijkstra<String> dijkstra = new Dijkstra<>();
             long startTime = System.nanoTime();
             dijkstra.getLowWeightPathGraph(graph, start, end);
@@ -106,17 +98,14 @@ public class TestTimeComplexity
     }
 
 
-    private static Quadtree<String> measureQuadtreeBuild(Graph<String> graph)
-    {
+    private static Quadtree<String> measureQuadtreeBuild(Graph<String> graph) {
         long total = 0;
         Quadtree<String> firstQuadtree = null;
 
-        for (int i = 0; i < testRepeater; i++)
-        {
+        for (int i = 0; i < testRepeater; i++) {
             Quadtree<String> qt = new Quadtree<>(MapCoordinateConfig.getDefaultBoundary());
             long startTime = System.nanoTime();
-            for (Vertex<String> v : graph.getAllVertices())
-            {
+            for (Vertex<String> v : graph.getAllVertices()) {
                 qt.insert(v);
             }
             long endTime = System.nanoTime();
@@ -129,12 +118,10 @@ public class TestTimeComplexity
     }
 
 
-    private static long measureQuadtreeSearch(Quadtree<String> qt, Quadtree.Rectangle boundary, ArrayList<Vertex<String>> origo)
-    {
+    private static long measureQuadtreeSearch(Quadtree<String> qt, Quadtree.Rectangle boundary, ArrayList<Vertex<String>> origo) {
         long total = 0;
 
-        for (int i = 0; i < testRepeater; i++)
-        {
+        for (int i = 0; i < testRepeater; i++) {
             long startTime = System.nanoTime();
             qt.query(boundary, origo);
             long endTime = System.nanoTime();
@@ -144,11 +131,9 @@ public class TestTimeComplexity
     }
 
 
-    private static long measureMST(Graph<String> graph, Vertex<String> root)
-    {
+    private static long measureMST(Graph<String> graph, Vertex<String> root) {
         long total = 0;
-        for (int i = 0; i < testRepeater; i++)
-        {
+        for (int i = 0; i < testRepeater; i++) {
             MST<String> mst = new MST<>();
             long startTime = System.nanoTime();
             mst.createMST(graph, root);

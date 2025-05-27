@@ -1,21 +1,19 @@
 package model.prioQ;
 
-public class MinHeap<T extends Comparable<? super T>> implements MinHeapInterface<T>
-{
+public class MinHeap<T extends Comparable<? super T>> implements MinHeapInterface<T> {
 
     private T[] storage;
     private int maxSize;
     private int size;
 
-    public MinHeap(T[] array)
-    {
+    public MinHeap(T[] array) {
         this.storage = array;
         this.maxSize = array.length;
         this.size = 0;
     }
 
     private int parent(int idx) {
-        if(idx == 0) {
+        if (idx == 0) {
             return -1; // ingen förälder
         }
         return (idx - 1) / 2;
@@ -24,7 +22,7 @@ public class MinHeap<T extends Comparable<? super T>> implements MinHeapInterfac
     private int leftChild(int idx) {
         int leftIdx = 2 * idx + 1;
 
-        if(leftIdx >= size) {
+        if (leftIdx >= size) {
             return -1;
         }
         return leftIdx;
@@ -33,8 +31,7 @@ public class MinHeap<T extends Comparable<? super T>> implements MinHeapInterfac
     private int rightChild(int idx) {
         int rightIdx = 2 * idx + 2;
 
-        if(rightIdx >= size)
-        {
+        if (rightIdx >= size) {
             return -1;
         }
         return rightIdx;
@@ -83,8 +80,8 @@ public class MinHeap<T extends Comparable<? super T>> implements MinHeapInterfac
 
     @Override
     public void insert(T data) {
-        if(size >= maxSize) {
-           throw new IllegalArgumentException("Heap is full!");
+        if (size >= maxSize) {
+            throw new IllegalArgumentException("Heap is full!");
         }
 
         storage[size] = data;
@@ -94,14 +91,14 @@ public class MinHeap<T extends Comparable<? super T>> implements MinHeapInterfac
 
     @Override
     public T extract() {
-        if(size <= 0) {
+        if (size <= 0) {
             throw new IllegalArgumentException("Heap is empty");
         }
 
         T min = storage[0];
         storage[0] = storage[size - 1];
         size--;
-        if(size > 0) {
+        if (size > 0) {
             reHeapDown(0);
         }
         return min;
