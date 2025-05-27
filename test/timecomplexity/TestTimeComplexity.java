@@ -26,7 +26,9 @@ public class TestTimeComplexity
 
     public static void main(String[] args) throws Exception
     {
-        Quadtree.Rectangle boundary = new Quadtree.Rectangle(594000, 6910000, 672000, 1580000);
+        //Quadtree.Rectangle boundary = new Quadtree.Rectangle(594000, 6910000, 672000, 1580000);
+        //Quadtree.Rectangle testArea = new Quadtree.Rectangle(594000, 6910000, 10000, 10000);
+
         theOrigo.add(origoVertex);
         List<Vertex<String>> allVertices = JsonToVertex.readJson(true);
         TestGraphSizeN<String> testGraph = new TestGraphSizeN<>(allVertices);

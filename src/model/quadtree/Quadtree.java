@@ -11,7 +11,7 @@ import java.util.List;
  */
 
 public class Quadtree<T> {
-    private static final int CAPACITY = 4;
+    private static final int CAPACITY = 8;
     private final Rectangle boundary;
     private final List<Vertex<T>> vertices;
     public boolean divided;

@@ -37,7 +37,8 @@ public class GuiAppLauncher
             }
 
             Graph<String> graph = new Graph<>();
-            for (Vertex<String> v : vtxList) {
+            for (Vertex<String> v : vtxList)
+            {
                 graph.addVertex(v);
             }
 
